@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<dm initsize="430,330" minsize="200,200" bresize="0" btranslucent="1">
+	<root clrbg="pbgra(f9,f2,eb,ff)">
+		<gif pos="0,0,@430,@180" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" badjust="0" gifskin="gif:qqbg" bdrag="1">
+			<Button name="closebtn" pos="-30,0,@30,@27" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:close" />
+			<Button name="minibtn" pos="-60,0,@30,@27" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:mini" />
+			<Static pos="150,65,@130,@60" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:QQlogin" />
+		</gif>
+		<Static pos="42,190,@80,@80" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:QQ" />
+		<Button pos="6,-30,@24,@24" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:QQleft" />
+		<Button pos="-30,-30,@22,@22" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:QQright" />
+		<Window pos="134,190,@194,@59" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:QQcbxbg" />
+		<checkbox pos="133,256,@66,@20" text="记住密码" clrnc="pbgra(00,00,00,ff)" checkskin="png:QQcheckbox" align="left" clrbg="pbgra(dd,dd,dd,00)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:新宋体" clrtext="pbgra(80,80,80,ff)" />
+		<checkbox pos="261,256,@66,@20" text="自动登陆" clrnc="pbgra(00,00,00,ff)" checkskin="png:QQcheckbox" align="left" clrbg="pbgra(dd,dd,dd,00)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:新宋体" clrtext="pbgra(80,80,80,ff)" />
+		<Button pos="334,190,@90,@20" text="注册账号" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,00)" align="left" clrtext="pbgra(ff,80,00,ff)" clrnchover="pbgra(c0,80,00,ff)" clrbgpush="pbgra(ff,00,00,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:新宋体" />
+		<Button pos="335,220,@90,@20" text="找回密码" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,00)" align="left" clrtext="pbgra(ff,80,00,ff)" clrnchover="pbgra(c0,80,00,ff)" clrbgpush="pbgra(ff,00,00,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:新宋体" />
+		<Button pos="134,-44,@194,@30" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="png:QQbtn" />
+	</root>
+</dm>

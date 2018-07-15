@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<resource>
+	<gif>
+		<file name="qqbg" path="themes\theme0\qqbg.gif" />
+	</gif>
+	<png>
+		<file name="close" path="themes\theme0\image\close.png" />
+		<file name="mini" path="themes\theme0\image\mini.png" />
+		<file name="QQlogin" path="themes\theme0\image\QQlogin.png" />
+		<file name="QQ" path="themes\theme0\image\QQ.png" />
+		<file name="QQleft" path="themes\theme0\image\QQleft.png" />
+		<file name="QQright" path="themes\theme0\image\QQright.png" />
+		<file name="QQcbxbg" path="themes\theme0\image\QQcbxbg.png" />
+		<file name="QQcheckbox" path="themes\theme0\image\QQcheckbox.png" />
+		<file name="QQbtn" path="themes\theme0\image\QQbtn.png" />
+	</png>
+</resource>

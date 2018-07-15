@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<global font="face:宋体,size:14,weight:400,charset:0,underline:0,italic:0,strike:0">
+	<skin name="baseskin">
+		<imglist id="close" src="png:close" states="3" bvert="0" btitle="0" />
+		<imglist id="mini" src="png:mini" states="3" bvert="0" btitle="0" />
+		<imglist id="QQlogin" src="png:QQlogin" states="1" bvert="0" btitle="0" />
+		<imglist id="QQ" src="png:QQ" states="1" bvert="0" btitle="0" />
+		<imglist id="QQleft" src="png:QQleft" states="3" bvert="0" btitle="0" />
+		<imglist id="QQright" src="png:QQright" states="3" bvert="0" btitle="0" />
+		<imglist id="QQcbxbg" src="png:QQcbxbg" states="1" bvert="0" btitle="0" />
+		<imglist id="QQcheckbox" src="png:QQcheckbox" states="8" bvert="0" btitle="0" />
+		<imglist id="QQbtn" src="png:QQbtn" states="3" bvert="0" btitle="0" />
+	</skin>
+	<style />
+</global>
