@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<dm initsize="1416,768" minsize="200,200" bresize="1" btranslucent="1">
+	<root clrbg="pbgra(3a,3a,3a,ff)" skin="">
+		<Window pos="8,40,-8,-8" text="Window" ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="sceneselectbg">
+			<Window pos="165,2,-2,-2" text="" ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="sceneselectbg1">
+				<Static pos="0,0,-0,@23" text="    场景" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="sceneselectstaticbg2" ncmargin="-1,-1,-1,-1" align="left" clrtext="pbgra(ff,ff,ff,ff)" />
+				<Static pos="0,-0,-0,-50" text="" ncmargin="-1,-1,-1,01" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="sceneselectstaticbg1">
+					<Button pos="-120,14,@92,@30" text="全选拍摄" skin="scenechoosebtn" clrtext="pbgra(ff,ff,ff,ff)" ncmargin="0,0,0,0" />
+					<Button pos="-220,14,@92,@30" text="选择拍摄" skin="scenechoosebtn" clrtext="pbgra(ff,ff,ff,ff)" ncmargin="0,0,0,0" />
+					<Button pos="-320,14,@92,@30" text="清除预选" skin="scenechoosebtn" clrtext="pbgra(ff,ff,ff,ff)" ncmargin="0,0,0,0" />
+					<Button pos="-420,14,@92,@30" text="加入预选" skin="scenechoosebtn" clrtext="pbgra(ff,ff,ff,ff)" ncmargin="0,0,0,0" />
+				</Static>
+			</Window>
+			<Window pos="2,2,@160,-2" text="" ncmargin="00,00,00,00" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="scenechoosetreeframe">
+				<treectrl pos="0,27,-0,-25" childoffset="20" clrnc="pbgra(e2,b2,3e,ff)" clritembg="pbgra(ff,ff,ff,00)" clritemselbg="pbgra(ff,80,00,ff)" itemheight="20" checkskin="" toggleskin="tree_toggle" iconskin="menu_icons" sbskin="" itemmargin="7" clrtext="pbgra(ff,ff,ff,ff)" clritemtext="pbgra(ff,ff,ff,ff)" skin="scenechoosetreebg">
+					<item text="儿童" bcollapsed="1">
+						<item text="精美内景" icon="1">
+							<item text="欧式简约" icon="1" />
+							<item text="唯美田园" icon="1" />
+						</item>
+						<item text="时尚街拍" icon="1" />
+					</item>
+					<item text="婚纱">
+						<item text="精美内景" icon="1" />
+						<item text="时尚街拍" icon="1" />
+					</item>
+				</treectrl>
+				<Static pos="0,0,-0,@25" text="  目录" align="left" clrtext="pbgra(ff,ff,ff,ff)" font="weight:400,charset:134,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" />
+			</Window>
+		</Window>
+		<window clrbg="pbgra(59,59,59,ff)" pos="0,0,-0,@33" bdrag="1">
+			<static pos="5,2,@180,-0" text="选择场景" align="left" font="weight:700,charset:0,underline:0,italic:0,strike:0,size:-24,face:宋体" clrtext="pbgra(ff,ff,ff,ff)" />
+			<button name="scenechoose_closebtn" pos="-40,7,@22,@23" skin="closebtnskin" tiptext="关闭" />
+			<button name="restorebutton" pos="-42,1,@20,@15" skin="dg:dg_restorebtn" bvisible="0" tiptext="向下还原" />
+			<button name="scenechoose_retbtn" pos="-70,7,@22,@23" skin="returnbtn" tiptext="返回" />
+		</window>
+	</root>
+</dm>

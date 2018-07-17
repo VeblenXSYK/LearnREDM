@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<global font="face:宋体,size:14,weight:400,charset:0,underline:0,italic:0,strike:0">
+	<style />
+	<skin name="dg">
+		<img9 id="dg_channel_hz" src="designer:dg_channel_hz" states="1" bvert="0" btitle="0" margin="1,1,1,1" />
+		<imglist id="dg_checkbtn" src="designer:dg_checkbtn" states="8" bvert="0" btitle="0" />
+		<imglist id="dg_closebtn" src="designer:dg_closebtn" states="3" bvert="0" btitle="0" />
+		<imglist id="dg_comboxbtn" src="designer:dg_comboxbtn" states="3" bvert="0" btitle="0" />
+		<img9 id="dg_custombtn" src="designer:dg_custombtn" states="3" bvert="0" btitle="0" margin="2,2,2,2" />
+		<img9 id="dg_headerctrl" src="designer:dg_headerctrl" states="4" bvert="0" btitle="0" margin="2,2,2,2" />
+		<imglist id="dg_maxbtn" src="designer:dg_maxbtn" states="3" bvert="0" btitle="0" />
+		<imglist id="dg_minbtn" src="designer:dg_minbtn" states="3" bvert="0" btitle="0" />
+		<img9 id="dg_processchannel_hz" src="designer:dg_processchannel_hz" states="1" bvert="0" btitle="0" margin="2,2,2,2" />
+		<imglist id="dg_radiobtn" src="designer:dg_radiobtn" states="8" bvert="0" btitle="0" />
+		<imglist id="dg_restorebtn" src="designer:dg_restorebtn" states="3" bvert="0" btitle="0" />
+		<scrollbar id="dg_scrollbar" src="designer:dg_scrollbar" states="1" bvert="0" btitle="0" margin="2,2,2,2" />
+		<img9 id="dg_selprocess_hz" src="designer:dg_selprocess_hz" states="1" bvert="0" btitle="0" margin="2,2,2,2" />
+		<imglist id="dg_splith" src="designer:dg_splith" states="1" bvert="0" btitle="0" />
+		<imglist id="dg_thumb_hz" src="designer:dg_thumb_hz" states="4" bvert="0" btitle="0" />
+	</skin>
+	<skin name="duilogin">
+		<imglist id="loginbg" src="png:loginbg" states="1" bvert="0" btitle="0" />
+		<imglist id="loginwinskin" src="png:loginwinskin" states="1" bvert="0" btitle="0" />
+		<imglist id="loginshootbtnskin" src="png:loginshootbtnskin" states="4" bvert="0" btitle="0" />
+		<imglist id="loginuploadbtnskin" src="png:loginuploadbtnskin" states="4" bvert="0" btitle="0" />
+	</skin>
+	<skin name="duisceneselect">
+		<imglist id="sceneselectbg" src="png:sceneselectbg" states="1" bvert="0" btitle="0" />
+		<imglist id="returnbtn" src="png:returnbtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneselectstaticbg1" src="png:sceneselectstaticbg1" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneselectstaticbg2" src="png:sceneselectstaticbg2" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneselectbg1" src="png:sceneselectbg1" states="1" bvert="0" btitle="0" />
+		<imglist id="tree_toggle" src="png:tree_toggle" states="6" bvert="0" btitle="0" />
+		<imglist id="menu_icons" src="png:menu_icons" states="12" bvert="0" btitle="0" />
+		<imglist id="scenechoosebtn" src="png:scenechoosebtn" states="1" bvert="0" btitle="0" />
+		<imglist id="scenechoosetreeframe" src="png:scenechoosetreeframe" states="1" bvert="0" btitle="0" />
+		<imglist id="scenechoosetreebg" src="png:scenechoosetreebg" states="1" bvert="0" btitle="0" />
+	</skin>
+	<skin name="common">
+		<imglist id="closebtnskin" src="png:closebtnskin" states="1" bvert="0" btitle="0" />
+	</skin>
+</global>

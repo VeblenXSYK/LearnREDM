@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<resource>
+	<png>
+		<file name="loginbg" path="themes\theme1\image\loginbg.png" />
+		<file name="loginwinskin" path="themes\theme1\image\loginwinskin.png" />
+		<file name="loginshootbtnskin" path="themes\theme1\image\loginshootbtnskin.png" />
+		<file name="loginuploadbtnskin" path="themes\theme1\image\loginuploadbtnskin.png" />
+	</png>
+</resource>

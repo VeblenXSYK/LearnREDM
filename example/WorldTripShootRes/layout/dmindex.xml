@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<resource>
+	<global>
+		<file name="global" path="layout\xml\global.xml" />
+	</global>
+	<layout>
+		<file name="main" path="layout\xml\main.xml" />
+		<file name="sceneselect" path="layout\xml\sceneselect.xml" />
+	</layout>
+</resource>
