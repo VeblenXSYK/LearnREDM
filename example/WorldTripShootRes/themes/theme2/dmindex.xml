@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 <resource>
 	<png>
-		<file name="sceneselectbg" path="themes\theme2\image\sceneselectbg.png" />
-		<file name="returnbtn" path="themes\theme2\image\returnbtn.png" />
-		<file name="sceneselectstaticbg1" path="themes\theme2\image\sceneselectstaticbg1.png" />
-		<file name="sceneselectstaticbg2" path="themes\theme2\image\sceneselectstaticbg2.png" />
 		<file name="sceneselectbg1" path="themes\theme2\image\sceneselectbg1.png" />
 		<file name="tree_toggle" path="themes\theme2\image\tree_toggle.png" />
 		<file name="menu_icons" path="themes\theme2\image\menu_icons.png" />
 		<file name="scenechoosebtn" path="themes\theme2\image\scenechoosebtn.png" />
-		<file name="scenechoosetreeframe" path="themes\theme2\image\scenechoosetreeframe.png" />
 		<file name="scenechoosetreebg" path="themes\theme2\image\scenechoosetreebg.png" />
+		<file name="scenechoosebg" path="themes\theme2\image\scenechoosebg.png" />
+		<file name="scenechoosestaticbg1" path="themes\theme2\image\scenechoosestaticbg1.png" />
+		<file name="scenechoosestaticbg2" path="themes\theme2\image\scenechoosestaticbg2.png" />
 	</png>
 </resource>

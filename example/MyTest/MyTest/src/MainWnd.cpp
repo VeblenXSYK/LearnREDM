@@ -26,7 +26,8 @@ void CMainWnd::OnLeftClickBtn(UINT nFlags, CPoint pt)
 {
 	// DUIWindow* pLoginShootBtn = FindChildByName(L"loginshootbtn");
 	// pLoginShootBtn->DV_SetWindowText(L"nimmei");
-	SetMsgHandled(FALSE);  // 由DMHWnd继续处理OnLeftClickBtn消息
+	// 由DMHWnd继续处理OnLeftClickBtn消息
+	SetMsgHandled(FALSE);
 }
 
 void CMainWnd::OnSize(UINT nType, CSize size)
@@ -46,12 +47,14 @@ void CMainWnd::OnSize(UINT nType, CSize size)
 			pRestoreBtn->DM_SetVisible(false);
 		}
 	}
-	SetMsgHandled(FALSE);  // 由DMHWnd继续处理OnSize消息
+	// 由DMHWnd继续处理OnSize消息
+	SetMsgHandled(FALSE);
 }
 
 DMCode CMainWnd::OnClose()
 {
-	DestroyWindow();		// 所有关闭窗口统一使用DestroyWindow()，不要使用PostMessage(WM_QUIT)
+	// 所有关闭窗口统一使用DestroyWindow()，不要使用PostMessage(WM_QUIT)
+	DestroyWindow();
 	return DM_ECODE_OK;
 }
 
@@ -67,13 +70,10 @@ DMCode CMainWnd::OnShootSystem()
 		m_pSceneChoose.Attach(new CSceneChoose(this));
 
 		// 创建主窗口
-		m_pSceneChoose->DM_CreateWindow(L"sceneselect", 0, 0, 0, 0, m_hWnd);
+		m_pSceneChoose->DM_CreateWindow(L"scenechoose", 0, 0, 0, 0, m_hWnd);
 		m_pSceneChoose->SendMessage(WM_INITDIALOG);
 		m_pSceneChoose->CenterWindow();
 		m_pSceneChoose->ShowWindow(SW_SHOW);
-
-		DUIWindow* pLoginShootBtn = FindChildByName(L"loginshootbtn");
-		//pLoginShootBtn->DV_SetWindowText(L"nimmei");
 
 		// 隐藏原来的窗口
 		this->ShowWindow(SW_HIDE);

@@ -5,6 +5,6 @@
 	</global>
 	<layout>
 		<file name="main" path="layout\xml\main.xml" />
-		<file name="sceneselect" path="layout\xml\sceneselect.xml" />
+		<file name="scenechoose" path="layout\xml\scenechoose.xml" />
 	</layout>
 </resource>

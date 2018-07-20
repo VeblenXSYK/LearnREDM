@@ -20,5 +20,8 @@
 	</designer>
 	<png>
 		<file name="closebtnskin" path="themes\theme0\image\closebtnskin.png" />
+		<file name="returnbtnskin" path="themes\theme0\image\returnbtnskin.png" />
+		<file name="prepagebtnskin" path="themes\theme0\image\prepagebtnskin.png" />
+		<file name="nextpagebtnskin" path="themes\theme0\image\nextpagebtnskin.png" />
 	</png>
 </resource>
