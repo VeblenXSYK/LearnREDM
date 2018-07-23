@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<resource>
+	<png>
+		<file name="sceneshootbtn" path="themes\theme4\image\sceneshootbtn.png" />
+		<file name="sceneshootfore" path="themes\theme4\image\sceneshootfore.png" />
+		<file name="sceneshootleftbtn" path="themes\theme4\image\sceneshootleftbtn.png" />
+		<file name="sceneshootrightbtn" path="themes\theme4\image\sceneshootrightbtn.png" />
+		<file name="sceneshootdelbtn" path="themes\theme4\image\sceneshootdelbtn.png" />
+		<file name="sceneshootsavebtn" path="themes\theme4\image\sceneshootsavebtn.png" />
+		<file name="sceneshootsizeslide" path="themes\theme4\image\sceneshootsizeslide.png" />
+		<file name="sceneshootlightslide" path="themes\theme4\image\sceneshootlightslide.png" />
+		<file name="sceneshootctslide" path="themes\theme4\image\sceneshootctslide.png" />
+		<file name="sceneshootchslide" path="themes\theme4\image\sceneshootchslide.png" />
+		<file name="sceneshootstraw" path="themes\theme4\image\sceneshootstraw.png" />
+		<file name="sceneshootcolour" path="themes\theme4\image\sceneshootcolour.png" />
+		<file name="sceneshootadd" path="themes\theme4\image\sceneshootadd.png" />
+		<file name="sceneshootstatic1bg" path="themes\theme4\image\sceneshootstatic1bg.png" />
+	</png>
+</resource>

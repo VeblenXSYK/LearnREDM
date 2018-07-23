@@ -46,4 +46,20 @@
 		<imglist id="scenedetailbg1" src="png:scenedetailbg1" states="1" bvert="0" btitle="0" />
 		<imglist id="scenedetaillamplevelbg" src="png:scenedetaillamplevelbg" states="1" bvert="0" btitle="0" />
 	</skin>
+	<skin name="duisceneshoot">
+		<imglist id="sceneshootbtn" src="png:sceneshootbtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootfore" src="png:sceneshootfore" states="2" bvert="0" btitle="0" />
+		<imglist id="sceneshootleftbtn" src="png:sceneshootleftbtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootrightbtn" src="png:sceneshootrightbtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootdelbtn" src="png:sceneshootdelbtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootsavebtn" src="png:sceneshootsavebtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootsizeslide" src="png:sceneshootsizeslide" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootlightslide" src="png:sceneshootlightslide" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootctslide" src="png:sceneshootctslide" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootchslide" src="png:sceneshootchslide" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootstraw" src="png:sceneshootstraw" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootcolour" src="png:sceneshootcolour" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootadd" src="png:sceneshootadd" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootstatic1bg" src="png:sceneshootstatic1bg" states="1" bvert="0" btitle="0" />
+	</skin>
 </global>
