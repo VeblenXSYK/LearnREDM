@@ -40,4 +40,10 @@
 		<imglist id="prepagebtnskin" src="png:prepagebtnskin" states="1" bvert="0" btitle="0" />
 		<imglist id="nextpagebtnskin" src="png:nextpagebtnskin" states="1" bvert="0" btitle="0" />
 	</skin>
+	<skin name="duiscenedetail">
+		<imglist id="scenedetailbg" src="png:scenedetailbg" states="1" bvert="0" btitle="0" />
+		<imglist id="scenedetailstatic1bg" src="png:scenedetailstatic1bg" states="1" bvert="0" btitle="0" />
+		<imglist id="scenedetailbg1" src="png:scenedetailbg1" states="1" bvert="0" btitle="0" />
+		<imglist id="scenedetaillamplevelbg" src="png:scenedetaillamplevelbg" states="1" bvert="0" btitle="0" />
+	</skin>
 </global>
