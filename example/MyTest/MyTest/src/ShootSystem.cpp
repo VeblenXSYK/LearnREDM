@@ -1,33 +1,58 @@
 #include "StdAfx.h"
-#include "DUIStatic.h"
-#include "DUIEdit.h"
-
 #include "MainWnd.h"
 #include "ImagePreview.h"
-#include "SceneChoose.h"
+#include "ShootSystem.h"
 
 #include <atlconv.h>
 #include <direct.h>
 #include <io.h>
 #include <fstream>
 
-BEGIN_MSG_MAP(CSceneChoose)
+BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
-	MSG_WM_SIZE(OnSize)
 	CHAIN_MSG_MAP(DMHWnd)// 将未处理的消息交由DMHWnd处理
 END_MSG_MAP()
-BEGIN_EVENT_MAP(CSceneChoose)
+BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_HANDLER(L"scenechoose_tree", DMEventTCSelChangedArgs::EventID, OnTreeSelChanged)
-	EVENT_NAME_COMMAND(L"scenechoose_retbtn", OnReturn)
-	EVENT_NAME_COMMAND(L"scenechoose_prepagebtn", OnPrepage)
-	EVENT_NAME_COMMAND(L"scenechoose_nextpagebtn", OnNextpage)
-	EVENT_NAME_COMMAND(L"scenechoose_closebtn", OnClose)
+	EVENT_NAME_COMMAND(L"returnbtn", OnReturn)
+	EVENT_NAME_COMMAND(L"prevpagebtn", OnPrepage)
+	EVENT_NAME_COMMAND(L"nextpagebtn", OnNextpage)
+	EVENT_NAME_COMMAND(L"closebtn", OnClose)
 END_EVENT_MAP()
 
 
-BOOL CSceneChoose::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
+BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 {
-	// 获取窗口的名称
+	// 获取窗口标题
+	//pWndTitle = FindChildByNameT<DUIEdit>(L"wndtitle");
+	pWndTitle = FindChildByNameT<DUIWindow>(L"wndtitle");
+
+	// 获取窗口地址并保存
+	pSceneChooseWnd = FindChildByNameT<DUIWindow>(L"scenechoosewin");
+	if (pSceneChooseWnd != NULL)
+	{
+		m_vecWndPtr.push_back(pSceneChooseWnd);
+		m_vecWndTitle.push_back(L"选择场景");
+	}
+
+	pSceneDetailWnd = FindChildByNameT<DUIWindow>(L"scenedetailwin");
+	if (pSceneDetailWnd != NULL)
+	{ 
+		m_vecWndPtr.push_back(pSceneDetailWnd);
+		m_vecWndTitle.push_back(L"场景详情");
+	}
+
+	pSceneShootWnd = FindChildByNameT<DUIWindow>(L"sceneshootwin");
+	if (pSceneShootWnd != NULL)
+	{ 
+		m_vecWndPtr.push_back(pSceneShootWnd);
+		m_vecWndTitle.push_back(L"场景拍摄");
+	}
+
+	// 设置当前显示的窗口
+	m_curWndType = SCENE_CHOOSE;
+
+	// 获取控件名称
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
 	pWrapLayout = FindChildByNameT<DUIWindow>(L"wraplayout");
 
@@ -46,7 +71,7 @@ BOOL CSceneChoose::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
-DMCode CSceneChoose::OnTreeSelChanged(DMEventArgs *pEvt)
+DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 {
 	DMEventTCSelChangedArgs *pSelEvt = (DMEventTCSelChangedArgs*)pEvt;
 	HDMTREEITEM hSelItem = pSelEvt->m_hNewSel;
@@ -74,61 +99,70 @@ DMCode CSceneChoose::OnTreeSelChanged(DMEventArgs *pEvt)
 	return DM_ECODE_OK;
 }
 
-DMCode CSceneChoose::OnReturn()
+DMCode CShootSystem::OnReturn()
 {
 	DestroyWindow();
-	m_pMainWnd->ShowWindow(SW_SHOW);
 
-	return DM_ECODE_OK;
-}
-
-DMCode CSceneChoose::OnPrepage()
-{
-	if (m_curPageNum_Wrap != 0)
+	if (m_pMainWnd && m_pMainWnd->IsWindow())
 	{
-		unsigned int preStart = (m_curPageNum_Wrap - 1) * PicNumOfPage;
-
-		ClearImageOfWrap();
-		ShowImageOfWrap(preStart);
-
-		m_curPageNum_Wrap--;
+		m_pMainWnd->ShowWindow(SW_SHOW);
 	}
 
 	return DM_ECODE_OK;
 }
 
-DMCode CSceneChoose::OnNextpage()
+DMCode CShootSystem::OnPrepage()
 {
-	unsigned int nextStart = (m_curPageNum_Wrap + 1) * PicNumOfPage;
-	if (nextStart < m_vecPicPath_European.size())
-	{
-		ClearImageOfWrap();
-		ShowImageOfWrap(nextStart);
+	// 设置当前窗口不可见
+	m_vecWndPtr[m_curWndType]->DM_SetVisible(FALSE);
 
-		m_curPageNum_Wrap++;
+	// 重新设置当前窗口
+	m_curWndType = m_curWndType - 1;
+	if (m_curWndType == -1)
+	{
+		m_curWndType = SCENE_UNDEF - 1;
 	}
+	m_vecWndPtr[m_curWndType]->DM_SetVisible(TRUE, TRUE);
+	pWndTitle->DV_SetWindowText(m_vecWndTitle[m_curWndType].c_str());
 
 	return DM_ECODE_OK;
 }
 
-DMCode CSceneChoose::OnClose()
+DMCode CShootSystem::OnNextpage()
+{
+	m_vecWndPtr[m_curWndType]->DM_SetVisible(FALSE);
+
+	m_curWndType = m_curWndType + 1;
+	if (m_curWndType == SCENE_UNDEF)
+	{
+		m_curWndType = SCENE_CHOOSE;
+	}
+	m_vecWndPtr[m_curWndType]->DM_SetVisible(TRUE, TRUE);
+	pWndTitle->DV_SetWindowText(m_vecWndTitle[m_curWndType].c_str());
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnClose()
 {
 	if (m_pMainWnd && m_pMainWnd->IsWindow())
 	{
 		m_pMainWnd->OnClose();
 	}
 
+	DestroyWindow();
+
 	return DM_ECODE_OK;
 }
 
-CSceneChoose::CSceneChoose(CMainWnd *pMainWnd)
+CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 {
 	m_pMainWnd = pMainWnd;
 	m_curPageNum_Wrap = 0;
 }
 
 // 显示WrapLayout中的图片
-void CSceneChoose::ShowImageOfWrap(int sindex)
+void CShootSystem::ShowImageOfWrap(int sindex)
 {
 	std::vector<std::wstring> files;
 	if (m_curShowPicType == EUROPEAN)
@@ -171,7 +205,7 @@ void CSceneChoose::ShowImageOfWrap(int sindex)
 }
 
 // 清空WrapLayout中的图片
-void CSceneChoose::ClearImageOfWrap(void)
+void CShootSystem::ClearImageOfWrap(void)
 {
 	while (!m_vecChildPtr_Wrap.empty())
 	{
@@ -184,7 +218,7 @@ void CSceneChoose::ClearImageOfWrap(void)
 	}
 }
 
-//void CSceneChoose::ShowImage(const wchar_t *pFilePath, const wchar_t *lpszName, LPCWSTR lpszSkin)
+//void CShootSystem::ShowImage(const wchar_t *pFilePath, const wchar_t *lpszName, LPCWSTR lpszSkin)
 //{
 //	DWORD dwSize = DM::GetFileSizeW(pFilePath);
 //	if (dwSize != 0)
@@ -226,7 +260,7 @@ void CSceneChoose::ClearImageOfWrap(void)
 //}
 
 // 获取指定目录下特定格式的所有文件路径
-void CSceneChoose::GetFilePathOfFmt(std::wstring dirpath, std::vector<std::wstring> &files, std::wstring fmt)
+void CShootSystem::GetFilePathOfFmt(std::wstring dirpath, std::vector<std::wstring> &files, std::wstring fmt)
 {
 	//文件句柄
 	long hFile = 0;

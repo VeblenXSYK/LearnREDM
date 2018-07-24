@@ -8,7 +8,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 					   int       nCmdShow)
 {   
 	OleInitialize(NULL);
-	DMApp theApp(hInstance);   
+	DMApp theApp(hInstance);												// 声明全局唯一对象theApp，之后使用g_pDMApp调用它 
 
 	theApp.LoadResPack((WPARAM)(L"WorldTripShootRes"),NULL,NULL);			// 路径总是相对于生成目录
 	theApp.InitGlobal();													// 初始化指定的全局skin、style、默认字体

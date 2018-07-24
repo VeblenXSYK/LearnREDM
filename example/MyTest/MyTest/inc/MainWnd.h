@@ -1,6 +1,6 @@
 #pragma once  
 
-#include "SceneChoose.h"
+#include "ShootSystem.h"
 
 class CMainWnd : public DMHWnd
 {
@@ -13,7 +13,6 @@ public:
 	//---------------------------------------------------
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
 	void OnSize(UINT nType, CSize size);
-	void OnLeftClickBtn(UINT nFlags, CPoint pt);
 
 	//---------------------------------------------------
 	// Function Des: 事件分发系列函数
@@ -23,5 +22,5 @@ public:
 	DMCode OnUploadSystem();
 
 public:
-	DMSmartPtrT<CSceneChoose>         m_pSceneChoose;
+	DMSmartPtrT<CShootSystem>         m_pShootSystem;
 };

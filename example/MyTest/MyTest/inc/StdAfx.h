@@ -14,3 +14,8 @@
 #endif
 
 using namespace DM;
+
+#include "DUITreeCtrl.h"
+#include "DUIEdit.h"
+//#include "DUIStatic.h"
+

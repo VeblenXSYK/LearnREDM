@@ -5,8 +5,6 @@
 	</global>
 	<layout>
 		<file name="main" path="layout\xml\main.xml" />
-		<file name="scenechoose" path="layout\xml\scenechoose.xml" />
-		<file name="scenedetail" path="layout\xml\scenedetail.xml" />
-		<file name="sceneshoot" path="layout\xml\sceneshoot.xml" />
+		<file name="shootsystem" path="layout\xml\shootsystem.xml" />
 	</layout>
 </resource>
