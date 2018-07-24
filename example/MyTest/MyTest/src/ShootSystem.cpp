@@ -54,7 +54,9 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 
 	// 获取控件名称
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
-	pWrapLayout = FindChildByNameT<DUIWindow>(L"wraplayout");
+	pWrapLayout = FindChildByNameT<DUIWindow>(L"wraplayout", TRUE);
+	pListBoxEx = FindChildByNameT<DUIListBoxEx>(L"scenechoose_listboxex");
+	pListBoxEx->SetItemHeight(0, 800, true);
 
 	// 获取图片目录路径
 	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\European", m_wcPicDirPath_European, MAX_PATH);

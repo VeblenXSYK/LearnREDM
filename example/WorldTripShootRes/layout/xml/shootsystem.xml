@@ -33,7 +33,11 @@
 					<vlayout pos="0,0,-0,-0" childpaddLen="0">
 						<Static text="    场景" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" height="23" skin="scenechoosestaticbg2" ncmargin="-1,-1,-1,-1" align="left" clrtext="pbgra(ff,ff,ff,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" />
 						<Window name="" text="" ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)">
-							<WrapLayout name="wraplayout" pos="10,10,-10,-10" itemsize="200,200" childpaddLen="10" colcount="5" />
+							<listboxex name="scenechoose_listboxex" pos="0,0,-0,-0" cursel="1" clritembg="rgba(FF,FF,FF,FF)" clritemselbg="rgba(FF,00,FF,FF)" sbskin="dg_scrollbar">
+								<item height="-1">
+									<WrapLayout name="wraplayout" pos="10,10,-10,-10" itemsize="200,200" childpaddLen="10" colcount="5" />
+								</item>
+							</listboxex>
 						</Window>
 						<Window height="50" text="" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" skin="scenechoosestaticbg1" ncmargin="0,0,0,0">
 							<Button pos="-120,14,@92,@30" text="全选拍摄" skin="scenechoosebtn" clrtext="pbgra(ff,ff,ff,ff)" ncmargin="0,0,0,0" />

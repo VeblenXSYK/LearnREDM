@@ -3,8 +3,6 @@
 #include <vector>
 #include <string>
 
-
-
 class CMainWnd;
 class ImagePreview;
 class CShootSystem : public DMHWnd
@@ -36,9 +34,9 @@ public:
 private:
 	DUITreeCtrl					  *m_pTreeCtrl;
 	DUIWindow					  *pWrapLayout;
+	DUIListBoxEx				  *pListBoxEx;
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口
-	//DUIEdit						  *pWndTitle;			// 窗口标题编辑框
-	DUIWindow						  *pWndTitle;
+	DUIWindow					  *pWndTitle;			// 窗口标题编辑框
 	DUIWindow					  *pSceneChooseWnd;		// 场景选择窗口
 	DUIWindow					  *pSceneDetailWnd;		// 场景详情窗口
 	DUIWindow					  *pSceneShootWnd;		// 场景拍摄窗口
@@ -58,7 +56,7 @@ private:
 		PASTORAL
 	};
 
-	static const int PicNumOfPage = 15;					// WrapLayout中一页的图片数目
+	static const int PicNumOfPage = 17;					// WrapLayout中一页的图片数目
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
 	std::vector<std::wstring> m_vecWndTitle;			// 保存所有的窗口的标题
