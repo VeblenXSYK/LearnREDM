@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <resource>
 	<png>
-		<file name="sceneshootbtn" path="themes\theme4\image\sceneshootbtn.png" />
-		<file name="sceneshootfore" path="themes\theme4\image\sceneshootfore.png" />
 		<file name="sceneshootleftbtn" path="themes\theme4\image\sceneshootleftbtn.png" />
 		<file name="sceneshootrightbtn" path="themes\theme4\image\sceneshootrightbtn.png" />
 		<file name="sceneshootdelbtn" path="themes\theme4\image\sceneshootdelbtn.png" />
@@ -15,5 +13,12 @@
 		<file name="sceneshootcolour" path="themes\theme4\image\sceneshootcolour.png" />
 		<file name="sceneshootadd" path="themes\theme4\image\sceneshootadd.png" />
 		<file name="sceneshootstatic1bg" path="themes\theme4\image\sceneshootstatic1bg.png" />
+		<file name="sceneshootbtn" path="themes\theme4\image\sceneshootbtn.png" />
+		<file name="sceneshootthumb" path="themes\theme4\image\sceneshootthumb.png" />
+		<file name="sceneshootfore" path="themes\theme4\image\sceneshootfore.png" />
+		<file name="sceneshootpersonbtn" path="themes\theme4\image\sceneshootpersonbtn.png" />
+		<file name="sceneshootsavesetbtn" path="themes\theme4\image\sceneshootsavesetbtn.png" />
+		<file name="sceneshootcomboxbtn" path="themes\theme4\image\sceneshootcomboxbtn.png" />
+		<file name="sceneshootcustomcombox" path="themes\theme4\image\sceneshootcustomcombox.png" />
 	</png>
 </resource>

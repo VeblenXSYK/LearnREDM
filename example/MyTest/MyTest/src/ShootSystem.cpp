@@ -56,7 +56,6 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
 	pWrapLayout = FindChildByNameT<DUIWindow>(L"wraplayout", TRUE);
 	pListBoxEx = FindChildByNameT<DUIListBoxEx>(L"scenechoose_listboxex");
-	pListBoxEx->SetItemHeight(0, 800, true);
 
 	// 获取图片目录路径
 	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\European", m_wcPicDirPath_European, MAX_PATH);
@@ -68,7 +67,7 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 
 	// 显示欧式简约图片
 	m_curShowPicType = EUROPEAN;
-	ShowImageOfWrap(0);
+	ShowImageOfWrap();
 
 	return TRUE;
 }
@@ -85,7 +84,7 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 			m_curShowPicType = EUROPEAN;
 
 			ClearImageOfWrap();
-			ShowImageOfWrap(0);
+			ShowImageOfWrap();
 			m_curPageNum_Wrap = 0;
 		}
 		else if (text == L"唯美田园")
@@ -93,7 +92,7 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 			m_curShowPicType = PASTORAL;
 
 			ClearImageOfWrap();
-			ShowImageOfWrap(0);
+			ShowImageOfWrap();
 			m_curPageNum_Wrap = 0;
 		}
 	}
@@ -164,7 +163,7 @@ CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 }
 
 // 显示WrapLayout中的图片
-void CShootSystem::ShowImageOfWrap(int sindex)
+void CShootSystem::ShowImageOfWrap()
 {
 	std::vector<std::wstring> files;
 	if (m_curShowPicType == EUROPEAN)
@@ -173,13 +172,7 @@ void CShootSystem::ShowImageOfWrap(int sindex)
 		files = m_vecPicPath_Pastoral;
 
 	int filenum = files.size();
-	int eindex;
-	if (sindex + PicNumOfPage > filenum - 1)
-		eindex = filenum - 1;
-	else
-		eindex = sindex + PicNumOfPage;
-
-	for (int i = sindex; i < eindex; i++)
+	for (int i = 0; i < filenum; i++)
 	{
 		const wchar_t *szFilePath = files[i].c_str();
 		size_t ulSize = DM::GetFileSizeW(szFilePath);
@@ -203,6 +196,11 @@ void CShootSystem::ShowImageOfWrap(int sindex)
 			m_vecChildPtr_Wrap.push_back(pChild);
 		}
 	}
+
+	// 根据需要调整ListBoxEx的高度
+	if (ceil(filenum / 5.0) * PICHEIGHT_ONE > PICHEIGHT_AREA)
+		pListBoxEx->SetItemHeight(0, ceil(filenum / 5.0) * PICHEIGHT_ONE, true);
+
 	pWrapLayout->DV_UpdateChildLayout();
 }
 

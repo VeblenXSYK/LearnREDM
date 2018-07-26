@@ -21,33 +21,35 @@
 	<skin name="duilogin">
 		<imglist id="loginbg" src="png:loginbg" states="1" bvert="0" btitle="0" />
 		<imglist id="loginwinskin" src="png:loginwinskin" states="1" bvert="0" btitle="0" />
-		<imglist id="loginshootbtnskin" src="png:loginshootbtnskin" states="4" bvert="0" btitle="0" />
 		<imglist id="loginuploadbtnskin" src="png:loginuploadbtnskin" states="4" bvert="0" btitle="0" />
+		<imglist id="loginshootbtnskin" src="png:loginshootbtnskin" states="4" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duiscenechoose">
 		<imglist id="sceneselectbg1" src="png:sceneselectbg1" states="1" bvert="0" btitle="0" />
-		<imglist id="tree_toggle" src="png:tree_toggle" states="6" bvert="0" btitle="0" />
-		<imglist id="menu_icons" src="png:menu_icons" states="12" bvert="0" btitle="0" />
-		<imglist id="scenechoosebtn" src="png:scenechoosebtn" states="1" bvert="0" btitle="0" />
 		<imglist id="scenechoosetreebg" src="png:scenechoosetreebg" states="1" bvert="0" btitle="0" />
 		<imglist id="scenechoosebg" src="png:scenechoosebg" states="1" bvert="0" btitle="0" />
 		<imglist id="scenechoosestaticbg1" src="png:scenechoosestaticbg1" states="1" bvert="0" btitle="0" />
 		<imglist id="scenechoosestaticbg2" src="png:scenechoosestaticbg2" states="1" bvert="0" btitle="0" />
+		<imglist id="menu_icons" src="png:menu_icons" states="2" bvert="0" btitle="0" />
+		<imglist id="tree_toggle" src="png:tree_toggle" states="6" bvert="0" btitle="0" />
+		<scrollbar id="scenechoosescrollbar" src="png:scenechoosescrollbar" states="1" bvert="0" btitle="0" margin="4,4,3,4" />
+		<imglist id="scenechoosebtn" src="png:scenechoosebtn" states="4" bvert="0" btitle="0" />
 	</skin>
 	<skin name="common">
-		<imglist id="closebtnskin" src="png:closebtnskin" states="1" bvert="0" btitle="0" />
-		<imglist id="returnbtnskin" src="png:returnbtnskin" states="1" bvert="0" btitle="0" />
-		<imglist id="prepagebtnskin" src="png:prepagebtnskin" states="1" bvert="0" btitle="0" />
+		<imglist id="returnbtnskin" src="png:returnbtnskin" states="4" bvert="0" btitle="0" />
+		<imglist id="prevpagebtnskin" src="png:prevpagebtnskin" states="1" bvert="0" btitle="0" />
 		<imglist id="nextpagebtnskin" src="png:nextpagebtnskin" states="1" bvert="0" btitle="0" />
+		<imglist id="closebtnskin" src="png:closebtnskin" states="1" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duiscenedetail">
 		<imglist id="scenedetailstatic1bg" src="png:scenedetailstatic1bg" states="1" bvert="0" btitle="0" />
 		<imglist id="scenedetailbg1" src="png:scenedetailbg1" states="1" bvert="0" btitle="0" />
-		<imglist id="scenedetaillamplevelbg" src="png:scenedetaillamplevelbg" states="1" bvert="0" btitle="0" />
+		<imglist id="scenedetailbtn" src="png:scenedetailbtn" states="4" bvert="0" btitle="0" />
+		<imglist id="scenedetaillplane1bg" src="png:scenedetaillplane1bg" states="1" bvert="0" btitle="0" />
+		<imglist id="scenedetaillplane2bg" src="png:scenedetaillplane2bg" states="1" bvert="0" btitle="0" />
+		<imglist id="scenedetaillplane3bg" src="png:scenedetaillplane3bg" states="1" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duisceneshoot">
-		<imglist id="sceneshootbtn" src="png:sceneshootbtn" states="1" bvert="0" btitle="0" />
-		<imglist id="sceneshootfore" src="png:sceneshootfore" states="2" bvert="0" btitle="0" />
 		<imglist id="sceneshootleftbtn" src="png:sceneshootleftbtn" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootrightbtn" src="png:sceneshootrightbtn" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootdelbtn" src="png:sceneshootdelbtn" states="1" bvert="0" btitle="0" />
@@ -60,5 +62,12 @@
 		<imglist id="sceneshootcolour" src="png:sceneshootcolour" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootadd" src="png:sceneshootadd" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootstatic1bg" src="png:sceneshootstatic1bg" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootbtn" src="png:sceneshootbtn" states="4" bvert="0" btitle="0" margin="" />
+		<imglist id="sceneshootthumb" src="png:sceneshootthumb" states="4" bvert="0" btitle="0" />
+		<imglist id="sceneshootfore" src="png:sceneshootfore" states="4" bvert="0" btitle="0" />
+		<imglist id="sceneshootpersonbtn" src="png:sceneshootpersonbtn" states="4" bvert="0" btitle="0" />
+		<imglist id="sceneshootsavesetbtn" src="png:sceneshootsavesetbtn" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootcomboxbtn" src="png:sceneshootcomboxbtn" states="3" bvert="0" btitle="0" margin="" />
+		<imglist id="sceneshootcustomcombox" src="png:sceneshootcustomcombox" states="1" bvert="0" btitle="0" />
 	</skin>
 </global>

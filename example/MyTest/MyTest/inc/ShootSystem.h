@@ -9,7 +9,7 @@ class CShootSystem : public DMHWnd
 {
 public:
 	CShootSystem::CShootSystem(CMainWnd *);
-	void ShowImageOfWrap(int sindex);
+	void ShowImageOfWrap();
 	void ClearImageOfWrap(void);
 	void GetFilePathOfFmt(std::wstring dirpath, std::vector<std::wstring> &files, std::wstring fmt);
 
@@ -56,7 +56,8 @@ private:
 		PASTORAL
 	};
 
-	static const int PicNumOfPage = 17;					// WrapLayout中一页的图片数目
+	static const int PICHEIGHT_ONE = 200;				// 每张图片的高度
+	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
 	std::vector<std::wstring> m_vecWndTitle;			// 保存所有的窗口的标题

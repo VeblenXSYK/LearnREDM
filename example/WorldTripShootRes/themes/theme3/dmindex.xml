@@ -3,6 +3,9 @@
 	<png>
 		<file name="scenedetailstatic1bg" path="themes\theme3\image\scenedetailstatic1bg.png" />
 		<file name="scenedetailbg1" path="themes\theme3\image\scenedetailbg1.png" />
-		<file name="scenedetaillamplevelbg" path="themes\theme3\image\scenedetaillamplevelbg.png" />
+		<file name="scenedetailbtn" path="themes\theme3\image\scenedetailbtn.png" />
+		<file name="scenedetaillplane1bg" path="themes\theme3\image\scenedetaillplane1bg.png" />
+		<file name="scenedetaillplane2bg" path="themes\theme3\image\scenedetaillplane2bg.png" />
+		<file name="scenedetaillplane3bg" path="themes\theme3\image\scenedetaillplane3bg.png" />
 	</png>
 </resource>

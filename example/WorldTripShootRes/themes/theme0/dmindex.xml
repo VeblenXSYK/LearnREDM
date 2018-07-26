@@ -19,9 +19,9 @@
 		<file name="dg_thumb_hz" path="themes\theme0\designer\dg_thumb_hz.png" />
 	</designer>
 	<png>
-		<file name="closebtnskin" path="themes\theme0\image\closebtnskin.png" />
 		<file name="returnbtnskin" path="themes\theme0\image\returnbtnskin.png" />
-		<file name="prepagebtnskin" path="themes\theme0\image\prepagebtnskin.png" />
+		<file name="prevpagebtnskin" path="themes\theme0\image\prevpagebtnskin.png" />
 		<file name="nextpagebtnskin" path="themes\theme0\image\nextpagebtnskin.png" />
+		<file name="closebtnskin" path="themes\theme0\image\closebtnskin.png" />
 	</png>
 </resource>
