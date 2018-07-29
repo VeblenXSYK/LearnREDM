@@ -60,14 +60,18 @@
 		<imglist id="sceneshootchslide" src="png:sceneshootchslide" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootstraw" src="png:sceneshootstraw" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootcolour" src="png:sceneshootcolour" states="1" bvert="0" btitle="0" />
-		<imglist id="sceneshootadd" src="png:sceneshootadd" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootstatic1bg" src="png:sceneshootstatic1bg" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootbtn" src="png:sceneshootbtn" states="4" bvert="0" btitle="0" margin="" />
 		<imglist id="sceneshootthumb" src="png:sceneshootthumb" states="4" bvert="0" btitle="0" />
-		<imglist id="sceneshootfore" src="png:sceneshootfore" states="4" bvert="0" btitle="0" />
 		<imglist id="sceneshootpersonbtn" src="png:sceneshootpersonbtn" states="4" bvert="0" btitle="0" />
 		<imglist id="sceneshootsavesetbtn" src="png:sceneshootsavesetbtn" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootcomboxbtn" src="png:sceneshootcomboxbtn" states="3" bvert="0" btitle="0" margin="" />
 		<imglist id="sceneshootcustomcombox" src="png:sceneshootcustomcombox" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootforeon" src="png:sceneshootforeon" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootforeoff" src="png:sceneshootforeoff" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootadd" src="png:sceneshootadd" states="1" bvert="0" btitle="0" />
+	</skin>
+	<skin name="duiprechoose">
+		<imglist id="addprechooseclosebtn" src="png:addprechooseclosebtn" states="1" bvert="0" btitle="0" />
 	</skin>
 </global>

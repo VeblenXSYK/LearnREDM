@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<dm initsize="350,150" minsize="350,150" maxsize="-1,-1" bresize="0" btranslucent="1" alpha="255">
+	<root clrbg="pbgra(54,54,54,ff)">
+		<window pos="0,0,-0,@27" bdrag="1">
+			<Button name="addprechoose_closebtn" pos="-40,0,@29,@25" text="" skin="addprechooseclosebtn" />
+		</window>
+		<window pos="5,[0,-5,-5" bdrag="1" clrbg="pbgra(f0,f0,f0,ff)">
+			<static name="" pos="20,10,@71,@28" text="设置名称:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+			<edit name="prechoose_nameedit" pos="90,14,-15,@23" ncmargin="1,1,1,1" clrnc="pbgra(bf,94,57,ff)" clrbg="pbgra(ff,ff,ff,ff)" text=" NO:001" />
+			<static pos="20,45,@71,@28" text="   文件夹:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+			<combobox pos="90,46,-15,@25" ncmargin="1,1,1,1" clrnc="pbgra(70,70,70,ff)" btnskin="dg:dg_comboxbtn" clrbg="pbgra(dd,dd,dd,ff)" clrtext="pbgra(00,00,00,ff)" textoffset="5" bhideedit="1" dropheight="100">
+				<subedit font="weight:400,charset:0,underline:1,italic:0,strike:0,size:-14,face:新宋体" />
+				<sublistbox ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clritembg="pbgra(dd,dd,dd,ff)" clritemhoverbg="pbgra(44,44,44,ff)" clritemtext="pbgra(00,00,00,ff)" clritemselbg="pbgra(c8,c8,c8,ff)" cursel="0" itemheight="22" bhottrack="1" textpoint="10,-1" sbskin="dg:dg_scrollbar">
+					<item text="I LOVE" />
+					<item text="I HATE" />
+					<item text="YOU LOVE" />
+				</sublistbox>
+			</combobox>
+			<Button name="addprechoose_confirm" pos="-150,-35,-90,@24" text="确定" skin="" ncmargin="01,01,01,01" clrnc="pbgra(70,70,70,e1)" />
+			<Button name="addprechoose_cancel" pos="-75,-35,-15,@24" text="取消" skin="" ncmargin="01,01,01,01" clrnc="pbgra(70,70,70,e1)" />
+		</window>
+	</root>
+</dm>

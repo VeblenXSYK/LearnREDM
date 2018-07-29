@@ -5,6 +5,8 @@
 
 class CMainWnd;
 class ImagePreview;
+class CPreChoose;
+class CSceneShoot;
 class CShootSystem : public DMHWnd
 {
 public:
@@ -20,19 +22,27 @@ public:
 	// Function Des: 消息分发系列函数
 	//---------------------------------------------------
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
+	void OnLButtonDbClick(UINT nFlags, CPoint pt);
+	void OnHScroll(INT nSBCode, SHORT nPos, HWND lParam);
 	//void OnSize(UINT nType, CSize size);
 
 	//---------------------------------------------------
 	// Function Des: 事件分发系列函数
 	//---------------------------------------------------
 	DMCode OnTreeSelChanged(DMEventArgs *pEvt);
+	DMCode OnAddPreChoose();
+	DMCode OnDelPreChoose();
+	DMCode OnForeground();
+	DMCode OnExport();
+	DMCode OnImport();
 	DMCode OnReturn();
 	DMCode OnPrepage();
 	DMCode OnNextpage();
 	DMCode OnClose();
 
-private:
 	DUITreeCtrl					  *m_pTreeCtrl;
+
+private:
 	DUIWindow					  *pWrapLayout;
 	DUIListBoxEx				  *pListBoxEx;
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口
@@ -40,6 +50,7 @@ private:
 	DUIWindow					  *pSceneChooseWnd;		// 场景选择窗口
 	DUIWindow					  *pSceneDetailWnd;		// 场景详情窗口
 	DUIWindow					  *pSceneShootWnd;		// 场景拍摄窗口
+	CSceneShoot					  *pSceneShoot;			// 场景拍摄对象
 
 	enum WNDTYPE
 	{
@@ -55,6 +66,8 @@ private:
 		EUROPEAN,
 		PASTORAL
 	};
+
+	HDMTREEITEM m_hSelItem_tree;						// 保存选取的tree项
 
 	static const int PICHEIGHT_ONE = 200;				// 每张图片的高度
 	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度

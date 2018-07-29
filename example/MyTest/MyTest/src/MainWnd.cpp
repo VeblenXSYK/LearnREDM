@@ -58,7 +58,7 @@ DMCode CMainWnd::OnShootSystem()
 		m_pShootSystem.Attach(new CShootSystem(this));
 
 		// 创建拍摄系统窗口
-		m_pShootSystem->DM_CreateWindow(L"shootsystem", 0, 0, 0, 0, m_hWnd);
+		m_pShootSystem->DM_CreateWindow(L"shootsystem", 0, 0, 0, 0, false);
 		m_pShootSystem->SendMessage(WM_INITDIALOG);
 		m_pShootSystem->CenterWindow();
 		m_pShootSystem->ShowWindow(SW_SHOW);

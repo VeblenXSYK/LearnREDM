@@ -16,6 +16,10 @@
 using namespace DM;
 
 #include "DUITreeCtrl.h"
+#include "DUIStatic.h"
 #include "DUIEdit.h"
 #include "DUIListBoxEx.h"
+#include "DUISliderCtrl.h"
+#include "DUIButton.h"
+#include "DUIScrollBase.h"
 

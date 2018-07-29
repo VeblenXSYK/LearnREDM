@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<dm initsize="280,300" minsize="280,300" maxsize="-1,-1" bresize="0" btranslucent="1" alpha="255">
+	<root clrbg="pbgra(54,54,54,ff)">
+		<window pos="0,0,-0,@27" bdrag="1">
+			<Button name="exportset_closebtn" pos="-40,0,@29,@25" text="" skin="addprechooseclosebtn" />
+		</window>
+		<window pos="5,[0,-5,-5" bdrag="1" clrbg="pbgra(f0,f0,f0,ff)">
+			<vlayout pos="0,0,-0,-0" childpaddLen="5">
+				<Window height="-1">
+					<vlayout pos="0,0,-0,-0" childpaddLen="5">
+						<Window height="-1">
+							<static name="" pos="10,10,@71,@28" text="导出设置:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+							<checkbox pos="116,12,@55,@16" text="PSD" checkskin="dg:dg_checkbtn" align="left" textoffset="0" brightbox="1" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bchecked="1" />
+						</Window>
+						<Window height="-1">
+							<static pos="10,10,@41,@23" text="尺寸:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+							<combobox pos="70,-2,-10,5" ncmargin="1,1,1,1" clrnc="pbgra(70,70,70,ff)" btnskin="dg:dg_comboxbtn" clrbg="pbgra(dd,dd,dd,ff)" clrtext="pbgra(00,00,00,ff)" textoffset="0" bhideedit="1" dropheight="55">
+								<subedit font="weight:400,charset:0,underline:1,italic:0,strike:0,size:-14,face:新宋体" />
+								<sublistbox ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clritembg="pbgra(dd,dd,dd,ff)" clritemhoverbg="pbgra(44,44,44,ff)" clritemtext="pbgra(00,00,00,ff)" clritemselbg="pbgra(c8,c8,c8,ff)" cursel="0" itemheight="22" bhottrack="1" textpoint="10,-1" sbskin="dg:dg_scrollbar">
+									<item text="6000*4000" />
+								</sublistbox>
+							</combobox>
+						</Window>
+						<Window height="-1">
+							<static pos="10,2,@50,@28" text="导出到:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+							<combobox pos="70,-2,-10,5" ncmargin="1,1,1,1" clrnc="pbgra(70,70,70,ff)" btnskin="dg:dg_comboxbtn" clrbg="pbgra(dd,dd,dd,ff)" clrtext="pbgra(00,00,00,ff)" textoffset="0" bhideedit="1" dropheight="55">
+								<subedit font="weight:400,charset:0,underline:1,italic:0,strike:0,size:-14,face:新宋体" />
+								<sublistbox ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clritembg="pbgra(dd,dd,dd,ff)" clritemhoverbg="pbgra(44,44,44,ff)" clritemtext="pbgra(00,00,00,ff)" clritemselbg="pbgra(c8,c8,c8,ff)" cursel="0" itemheight="22" bhottrack="1" textpoint="10,-1" sbskin="dg:dg_scrollbar">
+									<item text="2018.3.22-006-P" />
+								</sublistbox>
+								<checkbox pos="311,286,@441,@289" text="checkbox" ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" checkskin="dg:dg_checkbtn" align="left" />
+							</combobox>
+						</Window>
+					</vlayout>
+				</Window>
+				<Window height="-1">
+					<vlayout pos="0,0,-0,-0" childpaddLen="5">
+						<Window height="-1">
+							<checkbox pos="116,12,@55,@16" text="JPG" checkskin="dg:dg_checkbtn" align="left" textoffset="0" brightbox="1" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bchecked="1" />
+						</Window>
+						<Window height="-1">
+							<static pos="10,10,@41,@23" text="尺寸:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+							<combobox pos="70,-2,-10,5" ncmargin="1,1,1,1" clrnc="pbgra(70,70,70,ff)" btnskin="dg:dg_comboxbtn" clrbg="pbgra(dd,dd,dd,ff)" clrtext="pbgra(00,00,00,ff)" textoffset="0" bhideedit="1" dropheight="55">
+								<subedit font="weight:400,charset:0,underline:1,italic:0,strike:0,size:-14,face:新宋体" />
+								<sublistbox ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clritembg="pbgra(dd,dd,dd,ff)" clritemhoverbg="pbgra(44,44,44,ff)" clritemtext="pbgra(00,00,00,ff)" clritemselbg="pbgra(c8,c8,c8,ff)" cursel="0" itemheight="22" bhottrack="1" textpoint="10,-1" sbskin="dg:dg_scrollbar">
+									<item text="6000*4000" />
+								</sublistbox>
+							</combobox>
+						</Window>
+						<Window height="-1">
+							<static pos="10,2,@50,@28" text="导出到:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
+							<combobox pos="70,-2,-10,5" ncmargin="1,1,1,1" clrnc="pbgra(70,70,70,ff)" btnskin="dg:dg_comboxbtn" clrbg="pbgra(dd,dd,dd,ff)" clrtext="pbgra(00,00,00,ff)" textoffset="0" bhideedit="1" dropheight="55">
+								<subedit font="weight:400,charset:0,underline:1,italic:0,strike:0,size:-14,face:新宋体" />
+								<sublistbox ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clritembg="pbgra(dd,dd,dd,ff)" clritemhoverbg="pbgra(44,44,44,ff)" clritemtext="pbgra(00,00,00,ff)" clritemselbg="pbgra(c8,c8,c8,ff)" cursel="0" itemheight="22" bhottrack="1" textpoint="10,-1" sbskin="dg:dg_scrollbar">
+									<item text="2018.3.22-006-P" />
+								</sublistbox>
+							</combobox>
+						</Window>
+					</vlayout>
+				</Window>
+				<Window height="40">
+					<Button name="exportset_confirm" pos="-160,-35,@62,@24" text="确定" skin="" ncmargin="01,01,01,01" clrnc="pbgra(70,70,70,e1)" />
+					<Button name="exportset_cancel" pos="-85,-35,@62,@24" text="取消" skin="" ncmargin="01,01,01,01" clrnc="pbgra(70,70,70,e1)" />
+				</Window>
+			</vlayout>
+		</window>
+	</root>
+</dm>

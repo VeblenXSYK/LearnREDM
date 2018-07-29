@@ -1,6 +1,9 @@
 #include "StdAfx.h"
 #include "MainWnd.h"
 #include "ImagePreview.h"
+#include "PreChoose.h"
+#include "ExportSet.h"
+#include "SceneShoot.h"
 #include "ShootSystem.h"
 
 #include <atlconv.h>
@@ -10,10 +13,17 @@
 
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
+	MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
+	MSG_WM_HSCROLL(OnHScroll)
 	CHAIN_MSG_MAP(DMHWnd)// 将未处理的消息交由DMHWnd处理
 END_MSG_MAP()
 BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_HANDLER(L"scenechoose_tree", DMEventTCSelChangedArgs::EventID, OnTreeSelChanged)
+	EVENT_NAME_COMMAND(L"scenechoose_addbtn", OnAddPreChoose)
+	EVENT_NAME_COMMAND(L"scenechoose_delbtn", OnDelPreChoose)
+	EVENT_NAME_COMMAND(L"sceneshoot_forebtn", OnForeground)
+	EVENT_NAME_COMMAND(L"sceneshoot_exportbtn", OnExport)
+	EVENT_NAME_COMMAND(L"sceneshoot_importbtn", OnImport)
 	EVENT_NAME_COMMAND(L"returnbtn", OnReturn)
 	EVENT_NAME_COMMAND(L"prevpagebtn", OnPrepage)
 	EVENT_NAME_COMMAND(L"nextpagebtn", OnNextpage)
@@ -72,10 +82,26 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
+void CShootSystem::OnLButtonDbClick(UINT nFlags, CPoint pt)
+{
+	do
+	{
+		SetMsgHandled(FALSE);
+		SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE);
+		SetActiveWindow();
+	} while (false);
+}
+
+void CShootSystem::OnHScroll(INT nSBCode, SHORT nPos, HWND lParam)
+{
+	//pSceneShoot->HandleHScroll();
+}
+
 DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 {
 	DMEventTCSelChangedArgs *pSelEvt = (DMEventTCSelChangedArgs*)pEvt;
 	HDMTREEITEM hSelItem = pSelEvt->m_hNewSel;
+	m_hSelItem_tree = hSelItem;
 	if (hSelItem)
 	{
 		CStringW text = m_pTreeCtrl->GetItemText(hSelItem);
@@ -96,6 +122,67 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 			m_curPageNum_Wrap = 0;
 		}
 	}
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnAddPreChoose()
+{
+	DMCode iErr = DM_ECODE_FAIL;
+
+	do
+	{
+		// 创建预选窗口（模式对话框）
+		DMSmartPtrT<CPreChoose> pDlg; pDlg.Attach(new CPreChoose(this));
+		pDlg->DoModal(L"prechoose", this->m_hWnd, true);
+
+		iErr = DM_ECODE_OK;
+	} while (false);
+	return iErr;
+}
+
+DMCode CShootSystem::OnDelPreChoose()
+{
+	if (m_hSelItem_tree != NULL)
+	{
+		// 只有父项为“预选”的项才能被删除
+		HDMTREEITEM hParentItem = m_pTreeCtrl->GetParentItem(m_hSelItem_tree);
+		if (m_pTreeCtrl->GetItemText(hParentItem) == L"预选")
+		{
+			m_pTreeCtrl->RemoveItem(m_hSelItem_tree);
+			m_hSelItem_tree = NULL;
+		}
+	}
+	
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnForeground()
+{
+	pSceneShoot->HandleForeground();
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnExport()
+{
+	DMCode iErr = DM_ECODE_FAIL;
+
+	do
+	{
+		// 创建预选窗口（模式对话框）
+		DMSmartPtrT<CExportSet> pDlg; pDlg.Attach(new CExportSet(this));
+		pDlg->DoModal(L"exportset", this->m_hWnd, true);
+
+		iErr = DM_ECODE_OK;
+	} while (false);
+	return iErr;
+}
+
+DMCode CShootSystem::OnImport()
+{
+	pSceneShoot->HandleImport();
 
 	return DM_ECODE_OK;
 }
@@ -141,6 +228,11 @@ DMCode CShootSystem::OnNextpage()
 	m_vecWndPtr[m_curWndType]->DM_SetVisible(TRUE, TRUE);
 	pWndTitle->DV_SetWindowText(m_vecWndTitle[m_curWndType].c_str());
 
+	if (m_curWndType == SCENE_SHOOT)
+	{
+		pSceneShoot->Init();
+	}
+
 	return DM_ECODE_OK;
 }
 
@@ -160,6 +252,8 @@ CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 {
 	m_pMainWnd = pMainWnd;
 	m_curPageNum_Wrap = 0;
+	m_hSelItem_tree = NULL;
+	pSceneShoot = new CSceneShoot(this);
 }
 
 // 显示WrapLayout中的图片
@@ -185,7 +279,7 @@ void CShootSystem::ShowImageOfWrap()
 		DMSmartPtrT<IDMSkin> pSkin;
 		g_pDMApp->CreateRegObj((void**)&pSkin, L"imglist", DMREG_Skin);
 		pSkin->SetBitmap(pBuf, ulSize, L"png");
-
+		
 		// 创建ImagePreview子控件
 		ImagePreview *pChild = NULL;
 		g_pDMApp->CreateRegObj((void**)&pChild, L"ImagePreview", DMREG_Window);

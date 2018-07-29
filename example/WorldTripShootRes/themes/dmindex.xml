@@ -6,5 +6,6 @@
 		<file name="theme2" path="themes\theme2\dmindex.xml" />
 		<file name="theme3" path="themes\theme3\dmindex.xml" />
 		<file name="theme4" path="themes\theme4\dmindex.xml" />
+		<file name="theme5" path="themes\theme5\dmindex.xml" />
 	</themes>
 </resource>

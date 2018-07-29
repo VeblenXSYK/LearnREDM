@@ -6,5 +6,7 @@
 	<layout>
 		<file name="main" path="layout\xml\main.xml" />
 		<file name="shootsystem" path="layout\xml\shootsystem.xml" />
+		<file name="prechoose" path="layout\xml\prechoose.xml" />
+		<file name="exportset" path="layout\xml\exportset.xml" />
 	</layout>
 </resource>
