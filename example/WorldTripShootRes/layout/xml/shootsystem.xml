@@ -109,17 +109,6 @@
 						<Window height="-1" skin="scenedetailbg1">
 							<Window pos="11,10,-10,@40">
 								<richedit pos="0,0,@80,@35" text="人物调节" bmultilines="1" bwordwrap="1" bautowscroll="1" bwantreturn="1" benabledrag="1" sbskin="dg:dg_scrollbar" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-19,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
-								<Button pos="85,2,@32,@34" text="" skin="sceneshootpersonbtn" />
-								<Button pos="129,6,@69,@25" text="保存设置" skin="sceneshootsavesetbtn" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
-								<combobox pos="214,5,@65,@25" btnskin="sceneshootcomboxbtn" clrtext="pbgra(ff,ff,ff,ff)" textoffset="10" bhideedit="1" dropheight="100" skin="sceneshootcustomcombox" btnsize="-1,-1" text="自定义" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" cursel="0">
-									<subedit font="weight:400,charset:0,underline:1,italic:0,strike:0,size:-14,face:新宋体" />
-									<sublistbox ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clritembg="pbgra(dd,dd,dd,ff)" clritemhoverbg="pbgra(44,44,44,ff)" clritemtext="pbgra(00,00,00,ff)" clritemselbg="pbgra(c8,c8,c8,ff)" cursel="0" itemheight="22" bhottrack="1" textpoint="10,-1" sbskin="dg:dg_scrollbar">
-										<item text="自定义1" />
-										<item text="自定义2" />
-										<item text="自定义3" />
-										<item text="默认" />
-									</sublistbox>
-								</combobox>
 							</Window>
 							<Window pos="10,[5,-10,@75" skin="" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
 								<sliderctrl name="lightshadeslider" pos="44,10,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" channelskin="sceneshootsizeslide" range="-100,100" value="-5" thumbwidth="12" channelhei="15" />

@@ -4,10 +4,9 @@
 #include <commdlg.h>
 
 
-CSceneShoot::CSceneShoot(CShootSystem *ShootSystem)
+CSceneShoot::CSceneShoot(CShootSystem *pShoot)
 {
-	pShootSystem = ShootSystem;
-	p_LightshadeSlider = NULL;
+	pShootSystem = pShoot;
 }
 
 void CSceneShoot::Init(void)
@@ -26,76 +25,34 @@ void CSceneShoot::Init(void)
 
 	p_ForegroundButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_forebtn");
 
-	// 设置明暗
-	SetLightshade();
-	// 设置对比度
-	SetContrast();
-	// 设置色温
-	SetColourtemp();
-	// 设置色差
-	SetColourdiff();
+	// 显示明暗
+	m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
+	// 显示对比度
+	m_contrastnum = ShowSDValue(p_ContrastSlider, p_ContrastStatic);
+	// 显示色温
+	m_colourtempnum = ShowSDValue(p_ColourtempSlider, p_ColourtempStatic);
+	// 显示色差
+	m_colourdiffnum = ShowSDValue(p_ColourdiffSlider, p_ColourdiffStatic);
 
+	// 前景开
 	m_foregroundstat = FOREON;
 }
 
-void CSceneShoot::SetLightshade(void)
+int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
 {
-	int value = p_LightshadeSlider->m_iValue;
+	// 获取SliderCtrl当前值
+	int value = pSlider->m_iValue;
 
 	CStringW strValue;
-	if (value < 0)
+	if (value <= 0)
 		strValue.Format(L"%d", value);
 	else
 		strValue.Format(L"+%d", value);
 
-	p_LightshadeStatic->DV_SetWindowText(strValue);
+	// 在Static控件中显示当前值
+	pStatic->DV_SetWindowText(strValue);
 
-	m_lightshadenum = value;
-}
-
-void CSceneShoot::SetContrast(void)
-{
-	int value = p_ContrastSlider->m_iValue;
-
-	CStringW strValue;
-	if (value < 0)
-		strValue.Format(L"%d", value);
-	else 
-		strValue.Format(L"+%d", value);
-
-	p_ContrastStatic->DV_SetWindowText(strValue);
-
-	m_contrastnum = value;
-}
-
-void CSceneShoot::SetColourtemp(void)
-{
-	int value = p_ColourtempSlider->m_iValue;
-
-	CStringW strValue;
-	if (value < 0)
-		strValue.Format(L"%d", value);
-	else
-		strValue.Format(L"+%d", value);
-
-	p_ColourtempStatic->DV_SetWindowText(strValue);
-
-	m_colourtempnum = value;
-}
-
-void CSceneShoot::SetColourdiff(void)
-{
-	int value = p_ColourdiffSlider->m_iValue;
-
-	CStringW strValue;
-	if (value < 0)
-		strValue.Format(L"%d", value);
-	else
-		strValue.Format(L"+%d", value);
-
-	p_ColourdiffStatic->DV_SetWindowText(strValue);
-
-	m_colourdiffnum = value;
+	return value;
 }
 
 void CSceneShoot::HandleForeground(void)
@@ -153,9 +110,15 @@ void CSceneShoot::HandleImport(void)
 	} while (false);
 }
 
-void CSceneShoot::HandleHScroll(void)
+void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 {
-	if (p_LightshadeSlider != NULL)
-		SetLightshade();
+	if(0 == _wcsicmp(pEvt->m_szNameFrom, L"lightshadeslider"))
+		m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
+	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"contrastslider"))
+		m_contrastnum = ShowSDValue(p_ContrastSlider, p_ContrastStatic);
+	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"colourtempslider"))
+		m_colourtempnum = ShowSDValue(p_ColourtempSlider, p_ColourtempStatic);
+	else
+		m_colourdiffnum = ShowSDValue(p_ColourdiffSlider, p_ColourdiffStatic);
 }
 

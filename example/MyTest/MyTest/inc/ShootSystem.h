@@ -23,13 +23,13 @@ public:
 	//---------------------------------------------------
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
 	void OnLButtonDbClick(UINT nFlags, CPoint pt);
-	void OnHScroll(INT nSBCode, SHORT nPos, HWND lParam);
 	//void OnSize(UINT nType, CSize size);
 
 	//---------------------------------------------------
 	// Function Des: 事件分发系列函数
 	//---------------------------------------------------
 	DMCode OnTreeSelChanged(DMEventArgs *pEvt);
+	DMCode OnLightSDChanged(DMEventArgs *pEvt);
 	DMCode OnAddPreChoose();
 	DMCode OnDelPreChoose();
 	DMCode OnForeground();

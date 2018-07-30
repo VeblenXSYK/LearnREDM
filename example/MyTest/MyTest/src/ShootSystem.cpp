@@ -14,11 +14,14 @@
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
-	MSG_WM_HSCROLL(OnHScroll)
 	CHAIN_MSG_MAP(DMHWnd)// 将未处理的消息交由DMHWnd处理
 END_MSG_MAP()
 BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_HANDLER(L"scenechoose_tree", DMEventTCSelChangedArgs::EventID, OnTreeSelChanged)
+	EVENT_NAME_HANDLER(L"lightshadeslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
+	EVENT_NAME_HANDLER(L"contrastslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
+	EVENT_NAME_HANDLER(L"colourtempslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
+	EVENT_NAME_HANDLER(L"colourdiffslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
 	EVENT_NAME_COMMAND(L"scenechoose_addbtn", OnAddPreChoose)
 	EVENT_NAME_COMMAND(L"scenechoose_delbtn", OnDelPreChoose)
 	EVENT_NAME_COMMAND(L"sceneshoot_forebtn", OnForeground)
@@ -92,11 +95,6 @@ void CShootSystem::OnLButtonDbClick(UINT nFlags, CPoint pt)
 	} while (false);
 }
 
-void CShootSystem::OnHScroll(INT nSBCode, SHORT nPos, HWND lParam)
-{
-	//pSceneShoot->HandleHScroll();
-}
-
 DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 {
 	DMEventTCSelChangedArgs *pSelEvt = (DMEventTCSelChangedArgs*)pEvt;
@@ -122,6 +120,13 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 			m_curPageNum_Wrap = 0;
 		}
 	}
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnLightSDChanged(DMEventArgs *pEvt)
+{
+	pSceneShoot->HandleSDChanged(pEvt);
 
 	return DM_ECODE_OK;
 }

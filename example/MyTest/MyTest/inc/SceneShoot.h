@@ -3,23 +3,21 @@
 class CShootSystem;
 class CSceneShoot
 {
+	// Ç°¾°×´Ì¬
 	enum FORESTAT
 	{
-		FOREON,
-		FOREOFF
+		FOREON,		// ¿ª
+		FOREOFF		// ¹Ø
 	};
 
 public:
 	CSceneShoot(CShootSystem *);
 
 	void Init(void);
-	void SetLightshade(void);
-	void SetContrast(void);
-	void SetColourtemp(void);
-	void SetColourdiff(void);
+	int ShowSDValue(DUISliderCtrl *, DUIStatic *);
 	void HandleForeground(void);
 	void HandleImport(void);
-	void HandleHScroll(void);
+	void HandleSDChanged(DMEventArgs *pEvt);
 
 private:
 	DUIStatic * p_LightshadeStatic;
