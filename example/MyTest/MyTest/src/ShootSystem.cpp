@@ -22,48 +22,28 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_HANDLER(L"contrastslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
 	EVENT_NAME_HANDLER(L"colourtempslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
 	EVENT_NAME_HANDLER(L"colourdiffslider", DMEventSDChangedArgs::EventID, OnLightSDChanged)
+	EVENT_NAME_COMMAND(L"closebtn", OnClose)
+	EVENT_NAME_COMMAND(L"scenechoose_returnbtn", OnSceneChooseReturn)
 	EVENT_NAME_COMMAND(L"scenechoose_addbtn", OnAddPreChoose)
 	EVENT_NAME_COMMAND(L"scenechoose_delbtn", OnDelPreChoose)
+	EVENT_NAME_COMMAND(L"scenechoose_onebtn", OnOneShootChoose)
+	EVENT_NAME_COMMAND(L"scenedetail_returnbtn", OnSceneDetailReturn)
+	EVENT_NAME_COMMAND(L"scenedetail_shootbtn", OnSceneDetailShoot)
+	EVENT_NAME_COMMAND(L"sceneshoot_returnbtn", OnSceneShootReturn)
 	EVENT_NAME_COMMAND(L"sceneshoot_forebtn", OnForeground)
 	EVENT_NAME_COMMAND(L"sceneshoot_exportbtn", OnExport)
 	EVENT_NAME_COMMAND(L"sceneshoot_importbtn", OnImport)
-	EVENT_NAME_COMMAND(L"returnbtn", OnReturn)
 	EVENT_NAME_COMMAND(L"prevpagebtn", OnPrepage)
 	EVENT_NAME_COMMAND(L"nextpagebtn", OnNextpage)
-	EVENT_NAME_COMMAND(L"closebtn", OnClose)
 END_EVENT_MAP()
 
 
 BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 {
-	// 获取窗口标题
-	//pWndTitle = FindChildByNameT<DUIEdit>(L"wndtitle");
-	pWndTitle = FindChildByNameT<DUIWindow>(L"wndtitle");
-
 	// 获取窗口地址并保存
-	pSceneChooseWnd = FindChildByNameT<DUIWindow>(L"scenechoosewin");
-	if (pSceneChooseWnd != NULL)
-	{
-		m_vecWndPtr.push_back(pSceneChooseWnd);
-		m_vecWndTitle.push_back(L"选择场景");
-	}
-
-	pSceneDetailWnd = FindChildByNameT<DUIWindow>(L"scenedetailwin");
-	if (pSceneDetailWnd != NULL)
-	{ 
-		m_vecWndPtr.push_back(pSceneDetailWnd);
-		m_vecWndTitle.push_back(L"场景详情");
-	}
-
-	pSceneShootWnd = FindChildByNameT<DUIWindow>(L"sceneshootwin");
-	if (pSceneShootWnd != NULL)
-	{ 
-		m_vecWndPtr.push_back(pSceneShootWnd);
-		m_vecWndTitle.push_back(L"场景拍摄");
-	}
-
-	// 设置当前显示的窗口
-	m_curWndType = SCENE_CHOOSE;
+	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"scenechoosewin"));
+	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"scenedetailwin"));
+	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"sceneshootwin"));
 
 	// 获取控件名称
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
@@ -158,7 +138,17 @@ DMCode CShootSystem::OnDelPreChoose()
 			m_hSelItem_tree = NULL;
 		}
 	}
-	
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnOneShootChoose()
+{
+	// 关闭“选择场景”窗口
+	m_vecWndPtr[SCENE_CHOOSE]->DM_SetVisible(FALSE);
+
+	// 显示“场景详情”窗口
+	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
 
 	return DM_ECODE_OK;
 }
@@ -192,7 +182,7 @@ DMCode CShootSystem::OnImport()
 	return DM_ECODE_OK;
 }
 
-DMCode CShootSystem::OnReturn()
+DMCode CShootSystem::OnSceneChooseReturn()
 {
 	DestroyWindow();
 
@@ -204,40 +194,49 @@ DMCode CShootSystem::OnReturn()
 	return DM_ECODE_OK;
 }
 
+DMCode CShootSystem::OnSceneDetailReturn()
+{
+	// 关闭“场景详情”窗口
+	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(FALSE);
+
+	// 显示“选择场景”窗口
+	m_vecWndPtr[SCENE_CHOOSE]->DM_SetVisible(TRUE, TRUE);
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnSceneDetailShoot()
+{
+	// 关闭“场景详情”窗口
+	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(FALSE);
+
+	// 显示“场景拍摄”窗口
+	m_vecWndPtr[SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
+
+	// 初始化“场景拍摄”
+	pSceneShoot->Init();
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnSceneShootReturn()
+{
+	// 关闭“场景拍摄”窗口
+	m_vecWndPtr[SCENE_SHOOT]->DM_SetVisible(FALSE);
+
+	// 显示“场景详情”窗口
+	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+
+	return DM_ECODE_OK;
+}
+
 DMCode CShootSystem::OnPrepage()
 {
-	// 设置当前窗口不可见
-	m_vecWndPtr[m_curWndType]->DM_SetVisible(FALSE);
-
-	// 重新设置当前窗口
-	m_curWndType = m_curWndType - 1;
-	if (m_curWndType == -1)
-	{
-		m_curWndType = SCENE_UNDEF - 1;
-	}
-	m_vecWndPtr[m_curWndType]->DM_SetVisible(TRUE, TRUE);
-	pWndTitle->DV_SetWindowText(m_vecWndTitle[m_curWndType].c_str());
-
 	return DM_ECODE_OK;
 }
 
 DMCode CShootSystem::OnNextpage()
 {
-	m_vecWndPtr[m_curWndType]->DM_SetVisible(FALSE);
-
-	m_curWndType = m_curWndType + 1;
-	if (m_curWndType == SCENE_UNDEF)
-	{
-		m_curWndType = SCENE_CHOOSE;
-	}
-	m_vecWndPtr[m_curWndType]->DM_SetVisible(TRUE, TRUE);
-	pWndTitle->DV_SetWindowText(m_vecWndTitle[m_curWndType].c_str());
-
-	if (m_curWndType == SCENE_SHOOT)
-	{
-		pSceneShoot->Init();
-	}
-
 	return DM_ECODE_OK;
 }
 

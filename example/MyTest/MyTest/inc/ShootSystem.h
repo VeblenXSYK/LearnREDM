@@ -30,12 +30,16 @@ public:
 	//---------------------------------------------------
 	DMCode OnTreeSelChanged(DMEventArgs *pEvt);
 	DMCode OnLightSDChanged(DMEventArgs *pEvt);
+	DMCode OnSceneChooseReturn();
 	DMCode OnAddPreChoose();
 	DMCode OnDelPreChoose();
+	DMCode OnOneShootChoose();
 	DMCode OnForeground();
 	DMCode OnExport();
 	DMCode OnImport();
-	DMCode OnReturn();
+	DMCode OnSceneDetailReturn();
+	DMCode OnSceneDetailShoot();
+	DMCode OnSceneShootReturn();
 	DMCode OnPrepage();
 	DMCode OnNextpage();
 	DMCode OnClose();
@@ -46,10 +50,6 @@ private:
 	DUIWindow					  *pWrapLayout;
 	DUIListBoxEx				  *pListBoxEx;
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口
-	DUIWindow					  *pWndTitle;			// 窗口标题编辑框
-	DUIWindow					  *pSceneChooseWnd;		// 场景选择窗口
-	DUIWindow					  *pSceneDetailWnd;		// 场景详情窗口
-	DUIWindow					  *pSceneShootWnd;		// 场景拍摄窗口
 	CSceneShoot					  *pSceneShoot;			// 场景拍摄对象
 
 	enum WNDTYPE
@@ -73,10 +73,8 @@ private:
 	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
-	std::vector<std::wstring> m_vecWndTitle;			// 保存所有的窗口的标题
 	int m_curPageNum_Wrap;								// WrapLayout中的当前显示页
 	int m_curShowPicType;								// 当前显示的图片类型
-	int m_curWndType;									// 当前窗口类型
 
 	wchar_t m_wcPicDirPath_European[MAX_PATH];			// 欧式简约图片目录路径
 	wchar_t m_wcPicDirPath_Pastoral[MAX_PATH];			// 唯美田园图片目录路径
