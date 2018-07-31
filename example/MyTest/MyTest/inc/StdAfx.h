@@ -22,4 +22,5 @@ using namespace DM;
 #include "DUISliderCtrl.h"
 #include "DUIButton.h"
 #include "DUIScrollBase.h"
+#include "DUIFlowLayout.h"
 

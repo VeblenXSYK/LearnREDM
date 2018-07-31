@@ -47,20 +47,18 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 
 	// 获取控件名称
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
-	pWrapLayout = FindChildByNameT<DUIWindow>(L"wraplayout", TRUE);
+	pWrapLayout = FindChildByNameT<DUIWrapLayout>(L"scenechoose_wrap", TRUE);
 	pListBoxEx = FindChildByNameT<DUIListBoxEx>(L"scenechoose_listboxex");
 
-	// 获取图片目录路径
-	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\European", m_wcPicDirPath_European, MAX_PATH);
-	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\Pastoral", m_wcPicDirPath_Pastoral, MAX_PATH);
+	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\", m_wcPicRootDir, MAX_PATH);
 
-	// 保存目录下所有的文件路径
-	GetFilePathOfFmt(m_wcPicDirPath_European, m_vecPicPath_European, L"png");
-	GetFilePathOfFmt(m_wcPicDirPath_Pastoral, m_vecPicPath_Pastoral, L"png");
-
-	// 显示欧式简约图片
-	m_curShowPicType = EUROPEAN;
-	ShowImageOfWrap();
+	// 初始化显示“儿童-精美内景-欧式简约”图片
+	CStringW key = L"儿童\\精美内景\\欧式简约";
+	std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
+	m_mapPicInfo[key] = pSet;
+	CStringW strPath = m_wcPicRootDir + key;
+	GetFilePathOfFmt(strPath, *m_mapPicInfo[key], L"png");
+	ShowImageOfWrap(*m_mapPicInfo[key]);
 
 	return TRUE;
 }
@@ -79,26 +77,58 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 {
 	DMEventTCSelChangedArgs *pSelEvt = (DMEventTCSelChangedArgs*)pEvt;
 	HDMTREEITEM hSelItem = pSelEvt->m_hNewSel;
-	m_hSelItem_tree = hSelItem;
 	if (hSelItem)
 	{
-		CStringW text = m_pTreeCtrl->GetItemText(hSelItem);
-		 if (text == L"欧式简约")
-		{
-			m_curShowPicType = EUROPEAN;
+		// 保存选中的项
+		m_hSelItem_tree = hSelItem;
 
-			ClearImageOfWrap();
-			ShowImageOfWrap();
-			m_curPageNum_Wrap = 0;
-		}
-		else if (text == L"唯美田园")
-		{
-			m_curShowPicType = PASTORAL;
+		int iChildNum = m_pTreeCtrl->GetChildrenCount(hSelItem);
 
-			ClearImageOfWrap();
-			ShowImageOfWrap();
-			m_curPageNum_Wrap = 0;
+		// 有子项说明不符合要求
+		if(iChildNum > 0)
+			return DM_ECODE_FAIL;
+
+		// 没有父项说明不符合要求
+		HDMTREEITEM hPSelItem = m_pTreeCtrl->GetParentItem(hSelItem);
+		if(hPSelItem == NULL)
+			return DM_ECODE_FAIL;
+
+		ClearImageOfWrap();
+
+		// 获取选中项的文件名
+		CStringW Seltext = m_pTreeCtrl->GetItemText(hSelItem);
+		// 获取选中项的父项文件名
+		CStringW PSeltext = m_pTreeCtrl->GetItemText(hPSelItem);
+
+		// 获取完全的选择名
+		CStringW total_Seltext;
+		HDMTREEITEM hPPSelItem = m_pTreeCtrl->GetParentItem(hPSelItem);
+		if (hPPSelItem != NULL)
+		{
+			// 获取选中项的父项父项文件名
+			CStringW PPSeltext = m_pTreeCtrl->GetItemText(hPPSelItem);
+			total_Seltext = PPSeltext + L"\\" + PSeltext + L"\\" + Seltext;
 		}
+		else
+			total_Seltext = PSeltext + L"\\" + Seltext;
+
+		// 确认是否已经点击过
+		if (m_mapPicInfo.find(total_Seltext) == m_mapPicInfo.end())
+		{
+			// 没点击则动态创建set
+			std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
+			m_mapPicInfo[total_Seltext] = pSet;
+
+			if (PSeltext != L"预选")
+			{
+				// 获取查找资源的路径
+				CStringW strPath = m_wcPicRootDir + total_Seltext;
+				GetFilePathOfFmt(strPath, *m_mapPicInfo[total_Seltext], L"png");
+			}
+		}
+
+		// 显示图片
+		ShowImageOfWrap(*(m_mapPicInfo[total_Seltext]));
 	}
 
 	return DM_ECODE_OK;
@@ -119,7 +149,19 @@ DMCode CShootSystem::OnAddPreChoose()
 	{
 		// 创建预选窗口（模式对话框）
 		DMSmartPtrT<CPreChoose> pDlg; pDlg.Attach(new CPreChoose(this));
-		pDlg->DoModal(L"prechoose", this->m_hWnd, true);
+		int stat = pDlg->DoModal(L"prechoose", this->m_hWnd, true);
+		if (stat == IDOK)
+		{
+			// 插入预选信息
+			CStringW key = L"预选\\" + pDlg->m_preChooseName;
+			if (m_mapPicInfo.find(key) == m_mapPicInfo.end())
+			{
+				// 没找到则动态创建set
+				std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
+				m_mapPicInfo[key] = pSet;
+			}
+			m_mapPicInfo[key]->insert(this->p_SelImage->m_picPath);
+		}
 
 		iErr = DM_ECODE_OK;
 	} while (false);
@@ -130,12 +172,44 @@ DMCode CShootSystem::OnDelPreChoose()
 {
 	if (m_hSelItem_tree != NULL)
 	{
-		// 只有父项为“预选”的项才能被删除
-		HDMTREEITEM hParentItem = m_pTreeCtrl->GetParentItem(m_hSelItem_tree);
-		if (m_pTreeCtrl->GetItemText(hParentItem) == L"预选")
+		// 没有父项说明不符合要求
+		HDMTREEITEM hPSelItem = m_pTreeCtrl->GetParentItem(m_hSelItem_tree);
+		if (hPSelItem == NULL)
+			return DM_ECODE_FAIL;
+
+		// 没有选中说明不符合要求
+		if (p_SelImage == NULL)
+			return DM_ECODE_FAIL;
+
+		// 获取选中项的父项文件名
+		CStringW PSeltext = m_pTreeCtrl->GetItemText(hPSelItem);
+
+		// 只有父项为“预选”的项才能进行预选删除
+		if (PSeltext == L"预选")
 		{
-			m_pTreeCtrl->RemoveItem(m_hSelItem_tree);
-			m_hSelItem_tree = NULL;
+			// 获取选中项的文件名
+			CStringW Seltext = m_pTreeCtrl->GetItemText(m_hSelItem_tree);
+			CStringW keymap = PSeltext + L"\\" + Seltext;
+
+			// 擦除选中的图片控件
+			std::set<std::wstring> &selset = *m_mapPicInfo[keymap];
+			std::set<std::wstring>::iterator it = selset.begin();
+			for (; it != selset.end(); it++)
+			{
+				if (*it == p_SelImage->m_picPath)
+				{
+					selset.erase(it);
+
+					// 重新显示图片
+					ClearImageOfWrap();
+					ShowImageOfWrap(selset);
+
+					break;
+				}
+			}
+
+			// m_pTreeCtrl->RemoveItem(m_hSelItem_tree);
+			// m_hSelItem_tree = NULL;
 		}
 	}
 
@@ -255,24 +329,18 @@ DMCode CShootSystem::OnClose()
 CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 {
 	m_pMainWnd = pMainWnd;
-	m_curPageNum_Wrap = 0;
 	m_hSelItem_tree = NULL;
+	p_SelImage = NULL;
 	pSceneShoot = new CSceneShoot(this);
 }
 
 // 显示WrapLayout中的图片
-void CShootSystem::ShowImageOfWrap()
+void CShootSystem::ShowImageOfWrap(std::set<std::wstring> &filepaths)
 {
-	std::vector<std::wstring> files;
-	if (m_curShowPicType == EUROPEAN)
-		files = m_vecPicPath_European;
-	else
-		files = m_vecPicPath_Pastoral;
-
-	int filenum = files.size();
-	for (int i = 0; i < filenum; i++)
+	std::set<std::wstring>::iterator it = filepaths.begin();
+	for (; it != filepaths.end(); it++)
 	{
-		const wchar_t *szFilePath = files[i].c_str();
+		const wchar_t *szFilePath = (*it).c_str();
 		size_t ulSize = DM::GetFileSizeW(szFilePath);
 
 		DWORD dwReadSize = 0;
@@ -283,19 +351,22 @@ void CShootSystem::ShowImageOfWrap()
 		DMSmartPtrT<IDMSkin> pSkin;
 		g_pDMApp->CreateRegObj((void**)&pSkin, L"imglist", DMREG_Skin);
 		pSkin->SetBitmap(pBuf, ulSize, L"png");
-		
+
 		// 创建ImagePreview子控件
 		ImagePreview *pChild = NULL;
 		g_pDMApp->CreateRegObj((void**)&pChild, L"ImagePreview", DMREG_Window);
 		if (pChild)
 		{
 			pChild->m_pSkin = pSkin;
+			pChild->m_picPath = *it;					// 保存图片的路径
+			pChild->m_pShootSystem = this;				// 保存ShootSystem对象的地址
 			pWrapLayout->DM_InsertChild(pChild);
 			m_vecChildPtr_Wrap.push_back(pChild);
 		}
 	}
 
 	// 根据需要调整ListBoxEx的高度
+	int filenum = filepaths.size();
 	if (ceil(filenum / 5.0) * PICHEIGHT_ONE > PICHEIGHT_AREA)
 		pListBoxEx->SetItemHeight(0, ceil(filenum / 5.0) * PICHEIGHT_ONE, true);
 
@@ -313,6 +384,8 @@ void CShootSystem::ClearImageOfWrap(void)
 			pWrapLayout->DM_DestroyChildWnd(pChild);
 			m_vecChildPtr_Wrap.pop_back();
 		}
+
+		p_SelImage = NULL;
 	}
 }
 
@@ -357,8 +430,27 @@ void CShootSystem::ClearImageOfWrap(void)
 //	}
 //}
 
+//// 获取指定目录下特定格式的所有文件路径
+//void CShootSystem::GetFilePathOfFmt(std::wstring dirpath, std::set<std::wstring> &filepaths, std::wstring fmt)
+//{
+//	//文件句柄
+//	long hFile = 0;
+//
+//	//文件信息
+//	struct _wfinddata_t fileinfo;
+//	std::wstring p;
+//	if ((hFile = _wfindfirst(p.assign(dirpath).append(L"\\*" + fmt).c_str(), &fileinfo)) != -1)
+//	{
+//		do
+//		{
+//			filepaths.insert(p.assign(dirpath).append(L"\\").append(fileinfo.name));
+//		} while (_wfindnext(hFile, &fileinfo) == 0);
+//		_findclose(hFile);
+//	}
+//}
+
 // 获取指定目录下特定格式的所有文件路径
-void CShootSystem::GetFilePathOfFmt(std::wstring dirpath, std::vector<std::wstring> &files, std::wstring fmt)
+void CShootSystem::GetFilePathOfFmt(CStringW dirpath, std::set<std::wstring> &filepaths, std::wstring fmt)
 {
 	//文件句柄
 	long hFile = 0;
@@ -370,7 +462,7 @@ void CShootSystem::GetFilePathOfFmt(std::wstring dirpath, std::vector<std::wstri
 	{
 		do
 		{
-			files.push_back(p.assign(dirpath).append(L"\\").append(fileinfo.name));
+			filepaths.insert(p.assign(dirpath).append(L"\\").append(fileinfo.name));
 		} while (_wfindnext(hFile, &fileinfo) == 0);
 		_findclose(hFile);
 	}

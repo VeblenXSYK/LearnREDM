@@ -16,12 +16,29 @@
 								<item text="精美内景" icon="1">
 									<item text="欧式简约" icon="1" />
 									<item text="唯美田园" icon="1" />
+									<item text="欧式浪漫" icon="1" />
+									<item text="欧美风情" icon="1" />
 								</item>
-								<item text="时尚街拍" icon="1" />
+								<item text="时尚街拍" icon="1">
+									<item text="欧式简约" icon="1" />
+									<item text="唯美田园" icon="1" />
+									<item text="欧式浪漫" icon="1" />
+									<item text="欧美风情" icon="1" />
+								</item>
 							</item>
 							<item text="婚纱" icon="-1">
-								<item text="精美内景" icon="1" />
-								<item text="时尚街拍" icon="1" />
+								<item text="精美内景" icon="1">
+									<item text="欧式简约" icon="1" />
+									<item text="唯美田园" icon="1" />
+									<item text="欧式浪漫" icon="1" />
+									<item text="欧美风情" icon="1" />
+								</item>
+								<item text="时尚街拍" icon="1">
+									<item text="欧式简约" icon="1" />
+									<item text="唯美田园" icon="1" />
+									<item text="欧式浪漫" icon="1" />
+									<item text="欧美风情" icon="1" />
+								</item>
 							</item>
 							<item text="预选" icon="-1">
 								<item text="NO:001" icon="1" />
@@ -35,7 +52,7 @@
 							<Window name="" text="" ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)">
 								<listboxex name="scenechoose_listboxex" pos="0,0,-0,-0" cursel="1" sbskin="scenechoosescrollbar" sbwidth="12" arrowwidth="0" minithumblen="5">
 									<item height="-1">
-										<WrapLayout name="wraplayout" pos="10,10,-10,-10" itemsize="200,200" childpaddLen="10" colcount="5" />
+										<WrapLayout name="scenechoose_wrap" pos="10,10,-10,-10" itemsize="200,200" childpaddLen="10" colcount="5" />
 									</item>
 								</listboxex>
 							</Window>

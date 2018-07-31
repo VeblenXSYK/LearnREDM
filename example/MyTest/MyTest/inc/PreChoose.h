@@ -1,5 +1,7 @@
 #pragma once  
 
+#include <string>
+
 class CShootSystem;
 class CPreChoose : public DMHDialog
 {
@@ -21,6 +23,8 @@ public:
 	DMCode OnClose();
 	DMCode OnConfirm();
 	DMCode OnCancel();
+
+	CStringW m_preChooseName;
 
 private:
 	DMSmartPtrT<CShootSystem>  m_pShootSystem;

@@ -2,6 +2,8 @@
 #include "PreChoose.h"
 #include "ShootSystem.h"
 
+#include <atlconv.h>
+
 BEGIN_MSG_MAP(CPreChoose)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_SIZE(OnSize)
@@ -63,7 +65,8 @@ DMCode CPreChoose::OnConfirm()
 		if (pTreeCtrl->GetItemText(hTree) == L"预选")
 		{
 			// 获取设置名称
-			CStringW name =pNameEdit->GetWindowText().Trim();
+			CStringW name = pNameEdit->GetWindowText().Trim();
+			m_preChooseName = name;
 
 			// 检查是否已经存在
 			bool exist = false;
@@ -79,6 +82,7 @@ DMCode CPreChoose::OnConfirm()
 				hchild = pTreeCtrl->GetNextSiblingItem(hchild);
 			}
 
+			// 不存在则插入
 			if(!exist)
 				pTreeCtrl->InsertItem(name, 1, 1, (LPARAM)-1, hTree);
 		}

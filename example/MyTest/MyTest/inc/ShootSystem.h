@@ -1,7 +1,11 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
+#include <set>
+#include <map>
+#include <memory>
+
 
 class CMainWnd;
 class ImagePreview;
@@ -11,9 +15,9 @@ class CShootSystem : public DMHWnd
 {
 public:
 	CShootSystem::CShootSystem(CMainWnd *);
-	void ShowImageOfWrap();
+	void ShowImageOfWrap(std::set<std::wstring> &);
 	void ClearImageOfWrap(void);
-	void GetFilePathOfFmt(std::wstring dirpath, std::vector<std::wstring> &files, std::wstring fmt);
+	void GetFilePathOfFmt(CStringW dirpath, std::set<std::wstring> &, std::wstring);
 
 	DECLARE_MESSAGE_MAP()// 仿MFC消息映射宏
 	DECLARE_EVENT_MAP()
@@ -45,9 +49,12 @@ public:
 	DMCode OnClose();
 
 	DUITreeCtrl					  *m_pTreeCtrl;
+	HDMTREEITEM					  m_hSelItem_tree;		// 保存选取的tree项
+	ImagePreview				  *p_SelImage;			// 当前选中的图片控件
 
 private:
-	DUIWindow					  *pWrapLayout;
+	
+	DUIWrapLayout				  *pWrapLayout;
 	DUIListBoxEx				  *pListBoxEx;
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口
 	CSceneShoot					  *pSceneShoot;			// 场景拍摄对象
@@ -59,27 +66,15 @@ private:
 		SCENE_SHOOT = 2,
 		SCENE_UNDEF
 	};
-	wchar_t m_WndTitle[SCENE_UNDEF];
-
-	enum PICTYPE
-	{
-		EUROPEAN,
-		PASTORAL
-	};
-
-	HDMTREEITEM m_hSelItem_tree;						// 保存选取的tree项
 
 	static const int PICHEIGHT_ONE = 200;				// 每张图片的高度
 	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
-	int m_curPageNum_Wrap;								// WrapLayout中的当前显示页
-	int m_curShowPicType;								// 当前显示的图片类型
+	wchar_t m_wcPicRootDir[MAX_PATH];					// 图片根目录
 
-	wchar_t m_wcPicDirPath_European[MAX_PATH];			// 欧式简约图片目录路径
-	wchar_t m_wcPicDirPath_Pastoral[MAX_PATH];			// 唯美田园图片目录路径
-	std::vector<std::wstring> m_vecPicPath_European;	// 保存欧式简约所有图片的路径
-	std::vector<std::wstring> m_vecPicPath_Pastoral;	// 保存唯美田园所有图片的路径
+	// 图片信息 <图片目录路径名，该路径下所有文件路径名>
+	std::map<CStringW, std::shared_ptr<std::set<std::wstring>>> m_mapPicInfo;
 };
 
 
