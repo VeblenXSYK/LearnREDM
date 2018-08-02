@@ -27,6 +27,8 @@ public:
 	//---------------------------------------------------
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
 	void OnLButtonDbClick(UINT nFlags, CPoint pt);
+	void OnLButtonUP(UINT nFlags, CPoint pt);
+	bool OnSetCursor(HWND hWnd, UINT nHitTest, UINT message);
 	//void OnSize(UINT nType, CSize size);
 
 	//---------------------------------------------------
@@ -44,6 +46,7 @@ public:
 	DMCode OnSceneDetailReturn();
 	DMCode OnSceneDetailShoot();
 	DMCode OnSceneShootReturn();
+	DMCode OnSceneShootStraw();
 	DMCode OnPrepage();
 	DMCode OnNextpage();
 	DMCode OnClose();
@@ -72,6 +75,8 @@ private:
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
 	wchar_t m_wcPicRootDir[MAX_PATH];					// 图片根目录
+
+	bool m_strawcolor;									// 吸管是否开启
 
 	// 图片信息 <图片目录路径名，该路径下所有文件路径名>
 	std::map<CStringW, std::shared_ptr<std::set<std::wstring>>> m_mapPicInfo;

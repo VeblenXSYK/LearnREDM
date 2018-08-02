@@ -24,6 +24,8 @@ void CSceneShoot::Init(void)
 	p_ColourdiffSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"colourdiffslider");
 
 	p_ForegroundButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_forebtn");
+	p_StrawButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
+	p_ColorStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
 
 	// ÏÔÊ¾Ã÷°µ
 	m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
@@ -53,6 +55,17 @@ int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
 	pStatic->DV_SetWindowText(strValue);
 
 	return value;
+}
+
+void CSceneShoot::ShowStaticColor(COLORREF RGBcolor)
+{
+	int red = GetRValue(RGBcolor);
+	int green = GetGValue(RGBcolor);
+	int blue = GetBValue(RGBcolor);
+
+	CStringW strClrbg;
+	strClrbg.Format(L"pbgra(%x,%x,%x,ff)", blue, green, red);
+	p_ColorStatic->SetAttribute(L"clrbg", strClrbg);
 }
 
 void CSceneShoot::HandleForeground(void)

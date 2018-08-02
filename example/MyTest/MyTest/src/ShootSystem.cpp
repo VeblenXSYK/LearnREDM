@@ -14,6 +14,8 @@
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
+	MSG_WM_LBUTTONUP(OnLButtonUP)
+	MSG_WM_SETCURSOR(OnSetCursor)
 	CHAIN_MSG_MAP(DMHWnd)// 将未处理的消息交由DMHWnd处理
 END_MSG_MAP()
 BEGIN_EVENT_MAP(CShootSystem)
@@ -30,6 +32,7 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"scenedetail_returnbtn", OnSceneDetailReturn)
 	EVENT_NAME_COMMAND(L"scenedetail_shootbtn", OnSceneDetailShoot)
 	EVENT_NAME_COMMAND(L"sceneshoot_returnbtn", OnSceneShootReturn)
+	EVENT_NAME_COMMAND(L"sceneshoot_strawbtn", OnSceneShootStraw)
 	EVENT_NAME_COMMAND(L"sceneshoot_forebtn", OnForeground)
 	EVENT_NAME_COMMAND(L"sceneshoot_exportbtn", OnExport)
 	EVENT_NAME_COMMAND(L"sceneshoot_importbtn", OnImport)
@@ -71,6 +74,50 @@ void CShootSystem::OnLButtonDbClick(UINT nFlags, CPoint pt)
 		SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE);
 		SetActiveWindow();
 	} while (false);
+}
+
+void CShootSystem::OnLButtonUP(UINT nFlags, CPoint pt)
+{
+	if (m_strawcolor)
+	{
+		m_strawcolor = false;
+
+		//// 得到鼠标当前位置的颜色
+		//CPoint point;
+		//GetCursorPos(&point);
+		//HDC hDC = ::GetDC(NULL);
+		//COLORREF RGBcolor = ::GetPixel(hDC, point.x, point.y);
+		//::ReleaseDC(NULL, hDC);
+
+		//if (RGBcolor != RGB(255, 255, 255))
+		//{
+		//	pSceneShoot->ShowStaticColor(RGB(255, 255, 255));
+		//}
+		//else
+		//{
+		//	pSceneShoot->ShowStaticColor(RGB(151, 103, 61));
+		//}
+
+		// 得到鼠标当前位置的颜色
+		DMAutoDC hDC;
+
+		CPoint point;
+		GetCursorPos(&point);
+
+		COLORREF RGBcolor = ::GetPixel(hDC, point.x, point.y);
+		pSceneShoot->ShowStaticColor(RGBcolor);
+	}
+	SetMsgHandled(FALSE);
+}
+
+bool CShootSystem::OnSetCursor(HWND hWnd, UINT nHitTest, UINT message)
+{
+	if (m_strawcolor)
+		::SetCursor(::LoadCursor(NULL, IDC_CROSS));
+	else
+		::SetCursor(::LoadCursor(NULL, IDC_ARROW));
+
+	return true;
 }
 
 DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
@@ -304,6 +351,13 @@ DMCode CShootSystem::OnSceneShootReturn()
 	return DM_ECODE_OK;
 }
 
+DMCode CShootSystem::OnSceneShootStraw()
+{
+	m_strawcolor = true;
+
+	return DM_ECODE_OK;
+}
+
 DMCode CShootSystem::OnPrepage()
 {
 	return DM_ECODE_OK;
@@ -331,6 +385,7 @@ CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 	m_pMainWnd = pMainWnd;
 	m_hSelItem_tree = NULL;
 	p_SelImage = NULL;
+	m_strawcolor = false;
 	pSceneShoot = new CSceneShoot(this);
 }
 

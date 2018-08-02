@@ -15,6 +15,7 @@ public:
 
 	void Init(void);
 	int ShowSDValue(DUISliderCtrl *, DUIStatic *);
+	void ShowStaticColor(COLORREF RGBcolor);
 	void HandleForeground(void);
 	void HandleImport(void);
 	void HandleSDChanged(DMEventArgs *pEvt);
@@ -32,7 +33,9 @@ private:
 	DUIStatic *p_ColourdiffStatic;
 	DUISliderCtrl *p_ColourdiffSlider;
 
-	DUIButton *p_ForegroundButton;
+	DUIButton *p_ForegroundButton;		// 前景按钮
+	DUIButton *p_StrawButton;			// 吸管按钮
+	DUIStatic *p_ColorStatic;			// 环境色
 
 private:
 	int m_lightshadenum;

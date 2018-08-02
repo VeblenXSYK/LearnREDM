@@ -160,11 +160,11 @@
 									<Static name="colourtempstatic" pos="-0,5,-50,@30" text="0" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 									<Static name="colourdiffstatic" pos="-0,-40,-50,@30" text="0" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								</Window>
-								<Window pos="10,[10,-10,@55" text="" skin="" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
-									<Button pos="63,10,@24,@25" text="" skin="sceneshootstraw" />
+								<Window pos="10,[10,-10,@55" text="" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
+									<Button name="sceneshoot_strawbtn" pos="63,10,@24,@25" text="" skin="sceneshootstraw" />
 									<Static pos="3,11,@37,@21" text="环境色" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
-									<Button pos="117,11,@23,@23" text="" skin="sceneshootcolour" />
-									<Button pos="215,8,@30,@30" text="" skin="sceneshootadd" />
+									<Static name="sceneshoot_colorstatic" pos="117,11,@23,@23" text="" clrbg="pbgra(3d,67,97,ff)" ncmargin="01,01,01,01" clrnc="pbgra(ff,ff,ff,ff)" />
+									<Button name="sceneshoot_addbtn" pos="215,8,@30,@30" text="" skin="sceneshootadd" />
 									<Static pos="163,10,@37,@24" text="添 加" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								</Window>
 							</Window>
