@@ -11,7 +11,6 @@
 		<file name="sceneshootchslide" path="themes\theme4\image\sceneshootchslide.png" />
 		<file name="sceneshootstraw" path="themes\theme4\image\sceneshootstraw.png" />
 		<file name="sceneshootcolour" path="themes\theme4\image\sceneshootcolour.png" />
-		<file name="sceneshootstatic1bg" path="themes\theme4\image\sceneshootstatic1bg.png" />
 		<file name="sceneshootbtn" path="themes\theme4\image\sceneshootbtn.png" />
 		<file name="sceneshootthumb" path="themes\theme4\image\sceneshootthumb.png" />
 		<file name="sceneshootpersonbtn" path="themes\theme4\image\sceneshootpersonbtn.png" />
@@ -21,5 +20,7 @@
 		<file name="sceneshootforeon" path="themes\theme4\image\sceneshootforeon.png" />
 		<file name="sceneshootforeoff" path="themes\theme4\image\sceneshootforeoff.png" />
 		<file name="sceneshootadd" path="themes\theme4\image\sceneshootadd.png" />
+		<file name="sceneshootstatic1bg" path="themes\theme4\image\sceneshootstatic1bg.png" />
+		<file name="sceneshootperson" path="themes\theme4\image\sceneshootperson.png" />
 	</png>
 </resource>

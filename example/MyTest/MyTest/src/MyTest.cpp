@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "MainWnd.h"
 #include "ImagePreview.h"
+#include "PersonPreview.h"
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 					   HINSTANCE hPrevInstance,
@@ -13,6 +14,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	theApp.LoadResPack((WPARAM)(L"WorldTripShootRes"),NULL,NULL);			// 路径总是相对于生成目录
 	theApp.InitGlobal();													// 初始化指定的全局skin、style、默认字体
 	theApp.Register(DMRegHelperT<ImagePreview>(), true);					// 注册自定义控件
+	theApp.Register(DMRegHelperT<PersonPreview>(), true);	
 
 	DMSmartPtrT<CMainWnd> pMainWnd;
 	pMainWnd.Attach(new CMainWnd());

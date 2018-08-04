@@ -125,7 +125,7 @@
 			</window>
 			<Window pos="8,50,-8,-40" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
 				<hlayout pos="4,4,-4,-4" childpaddLen="5">
-					<Window text="" width="" skin="scenedetailbg1">
+					<Window name="sceneshoot_win" text="" width="" skin="scenedetailbg1">
 						<Static text="" pos="0,0,-0,-0" skin="sceneshootstatic1bg" />
 					</Window>
 					<Window text="" skin="" width="300">

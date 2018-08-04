@@ -40,6 +40,8 @@
 		<imglist id="prevpagebtnskin" src="png:prevpagebtnskin" states="1" bvert="0" btitle="0" />
 		<imglist id="nextpagebtnskin" src="png:nextpagebtnskin" states="1" bvert="0" btitle="0" />
 		<imglist id="closebtnskin" src="png:closebtnskin" states="1" bvert="0" btitle="0" />
+		<imglist id="ds_tool_drag" src="png:ds_tool_drag" states="1" bvert="0" btitle="0" />
+		<imglist id="ds_tool_move" src="png:ds_tool_move" states="1" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duiscenedetail">
 		<imglist id="scenedetailstatic1bg" src="png:scenedetailstatic1bg" states="1" bvert="0" btitle="0" />
@@ -60,7 +62,6 @@
 		<imglist id="sceneshootchslide" src="png:sceneshootchslide" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootstraw" src="png:sceneshootstraw" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootcolour" src="png:sceneshootcolour" states="1" bvert="0" btitle="0" />
-		<imglist id="sceneshootstatic1bg" src="png:sceneshootstatic1bg" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootbtn" src="png:sceneshootbtn" states="4" bvert="0" btitle="0" margin="" />
 		<imglist id="sceneshootthumb" src="png:sceneshootthumb" states="4" bvert="0" btitle="0" />
 		<imglist id="sceneshootpersonbtn" src="png:sceneshootpersonbtn" states="4" bvert="0" btitle="0" />
@@ -70,6 +71,8 @@
 		<imglist id="sceneshootforeon" src="png:sceneshootforeon" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootforeoff" src="png:sceneshootforeoff" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootadd" src="png:sceneshootadd" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootstatic1bg" src="png:sceneshootstatic1bg" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootperson" src="png:sceneshootperson" states="1" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duiprechoose">
 		<imglist id="addprechooseclosebtn" src="png:addprechooseclosebtn" states="1" bvert="0" btitle="0" />

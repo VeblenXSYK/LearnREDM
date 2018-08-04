@@ -21,6 +21,8 @@ public:
 	void HandleSDChanged(DMEventArgs *pEvt);
 
 private:
+	DUIWindow * p_Win;
+
 	DUIStatic * p_LightshadeStatic;
 	DUISliderCtrl *p_LightshadeSlider;
 

@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "ShootSystem.h"
+#include "PersonPreview.h"
 #include "SceneShoot.h"
 #include <commdlg.h>
 
@@ -10,7 +11,9 @@ CSceneShoot::CSceneShoot(CShootSystem *pShoot)
 }
 
 void CSceneShoot::Init(void)
-{
+{	
+	p_Win = pShootSystem->FindChildByNameT<DUIWindow>(L"sceneshoot_win");
+
 	p_LightshadeStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"lightshadestatic");
 	p_LightshadeSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"lightshadeslider");
 
@@ -38,6 +41,20 @@ void CSceneShoot::Init(void)
 
 	// 前景开
 	m_foregroundstat = FOREON;
+
+	// 显示人物
+	DMSmartPtrT<IDMSkin> pSkin = g_pDMApp->GetSkin(L"sceneshootperson");
+
+	PersonPreview *pChild = NULL;
+	g_pDMApp->CreateRegObj((void**)&pChild, L"PersonPreview", DMREG_Window);
+	if (pChild)
+	{
+		pChild->SetAttribute(L"pos", L"|0,|0,@300,@400");
+		pChild->m_pSkin = pSkin;
+		pChild->p_Parent = p_Win;
+		p_Win->DM_InsertChild(pChild);
+	}
+	p_Win->DV_UpdateChildLayout();
 }
 
 int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)

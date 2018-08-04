@@ -23,5 +23,7 @@
 		<file name="prevpagebtnskin" path="themes\theme0\image\prevpagebtnskin.png" />
 		<file name="nextpagebtnskin" path="themes\theme0\image\nextpagebtnskin.png" />
 		<file name="closebtnskin" path="themes\theme0\image\closebtnskin.png" />
+		<file name="ds_tool_drag" path="themes\theme0\image\ds_tool_drag.png" />
+		<file name="ds_tool_move" path="themes\theme0\image\ds_tool_move.png" />
 	</png>
 </resource>
