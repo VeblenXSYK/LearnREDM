@@ -1,13 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
 class CShootSystem;
+class PersonPreview;
 class CSceneShoot
 {
-	// Ç°¾°×´Ì¬
+	// å‰æ™¯çŠ¶æ€
 	enum FORESTAT
 	{
-		FOREON,		// ¿ª
-		FOREOFF		// ¹Ø
+		FOREON,		// å¼€
+		FOREOFF		// å…³
 	};
 
 public:
@@ -22,6 +23,7 @@ public:
 
 private:
 	DUIWindow * p_Win;
+	PersonPreview *p_Person;
 
 	DUIStatic * p_LightshadeStatic;
 	DUISliderCtrl *p_LightshadeSlider;
@@ -35,9 +37,9 @@ private:
 	DUIStatic *p_ColourdiffStatic;
 	DUISliderCtrl *p_ColourdiffSlider;
 
-	DUIButton *p_ForegroundButton;		// Ç°¾°°´Å¥
-	DUIButton *p_StrawButton;			// Îü¹Ü°´Å¥
-	DUIStatic *p_ColorStatic;			// »·¾³É«
+	DUIButton *p_ForegroundButton;		// å‰æ™¯æŒ‰é’®
+	DUIButton *p_StrawButton;			// å¸ç®¡æŒ‰é’®
+	DUIStatic *p_ColorStatic;			// ç¯å¢ƒè‰²
 
 private:
 	int m_lightshadenum;

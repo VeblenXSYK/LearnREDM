@@ -1,22 +1,21 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "MainWnd.h"
 #include "ImagePreview.h"
 #include "PreChoose.h"
 #include "ExportSet.h"
 #include "SceneShoot.h"
 #include "ShootSystem.h"
-
-#include <atlconv.h>
 #include <direct.h>
 #include <io.h>
 #include <fstream>
+#include <atlconv.h>
 
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
 	MSG_WM_LBUTTONUP(OnLButtonUP)
 	MSG_WM_SETCURSOR(OnSetCursor)
-	CHAIN_MSG_MAP(DMHWnd)// ½«Î´´¦ÀíµÄÏûÏ¢½»ÓÉDMHWnd´¦Àí
+	CHAIN_MSG_MAP(DMHWnd)// å°†æœªå¤„ç†çš„æ¶ˆæ¯äº¤ç”±DMHWndå¤„ç†
 END_MSG_MAP()
 BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_HANDLER(L"scenechoose_tree", DMEventTCSelChangedArgs::EventID, OnTreeSelChanged)
@@ -29,6 +28,7 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"scenechoose_addbtn", OnAddPreChoose)
 	EVENT_NAME_COMMAND(L"scenechoose_delbtn", OnDelPreChoose)
 	EVENT_NAME_COMMAND(L"scenechoose_onebtn", OnOneShootChoose)
+	EVENT_NAME_COMMAND(L"scenechoose_allbtn", OnAllShootChoose)
 	EVENT_NAME_COMMAND(L"scenedetail_returnbtn", OnSceneDetailReturn)
 	EVENT_NAME_COMMAND(L"scenedetail_shootbtn", OnSceneDetailShoot)
 	EVENT_NAME_COMMAND(L"sceneshoot_returnbtn", OnSceneShootReturn)
@@ -43,20 +43,20 @@ END_EVENT_MAP()
 
 BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 {
-	// »ñÈ¡´°¿ÚµØÖ·²¢±£´æ
+	// è·å–çª—å£åœ°å€å¹¶ä¿å­˜
 	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"scenechoosewin"));
 	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"scenedetailwin"));
 	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"sceneshootwin"));
 
-	// »ñÈ¡¿Ø¼şÃû³Æ
+	// è·å–æ§ä»¶åç§°
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
 	pWrapLayout = FindChildByNameT<DUIWrapLayout>(L"scenechoose_wrap", TRUE);
 	pListBoxEx = FindChildByNameT<DUIListBoxEx>(L"scenechoose_listboxex");
 
 	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\", m_wcPicRootDir, MAX_PATH);
 
-	// ³õÊ¼»¯ÏÔÊ¾¡°¶ùÍ¯-¾«ÃÀÄÚ¾°-Å·Ê½¼òÔ¼¡±Í¼Æ¬
-	CStringW key = L"¶ùÍ¯\\¾«ÃÀÄÚ¾°\\Å·Ê½¼òÔ¼";
+	// åˆå§‹åŒ–æ˜¾ç¤ºâ€œå„¿ç«¥-ç²¾ç¾å†…æ™¯-æ¬§å¼ç®€çº¦â€å›¾ç‰‡
+	CStringW key = L"å„¿ç«¥\\ç²¾ç¾å†…æ™¯\\æ¬§å¼ç®€çº¦";
 	std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
 	m_mapPicInfo[key] = pSet;
 	CStringW strPath = m_wcPicRootDir + key;
@@ -82,7 +82,7 @@ void CShootSystem::OnLButtonUP(UINT nFlags, CPoint pt)
 	{
 		m_strawcolor = false;
 
-		//// µÃµ½Êó±êµ±Ç°Î»ÖÃµÄÑÕÉ«
+		//// å¾—åˆ°é¼ æ ‡å½“å‰ä½ç½®çš„é¢œè‰²
 		//CPoint point;
 		//GetCursorPos(&point);
 		//HDC hDC = ::GetDC(NULL);
@@ -98,7 +98,7 @@ void CShootSystem::OnLButtonUP(UINT nFlags, CPoint pt)
 		//	pSceneShoot->ShowStaticColor(RGB(151, 103, 61));
 		//}
 
-		// µÃµ½Êó±êµ±Ç°Î»ÖÃµÄÑÕÉ«
+		// å¾—åˆ°é¼ æ ‡å½“å‰ä½ç½®çš„é¢œè‰²
 		DMAutoDC hDC;
 
 		CPoint point;
@@ -126,56 +126,56 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 	HDMTREEITEM hSelItem = pSelEvt->m_hNewSel;
 	if (hSelItem)
 	{
-		// ±£´æÑ¡ÖĞµÄÏî
+		// ä¿å­˜é€‰ä¸­çš„é¡¹
 		m_hSelItem_tree = hSelItem;
 
 		int iChildNum = m_pTreeCtrl->GetChildrenCount(hSelItem);
 
-		// ÓĞ×ÓÏîËµÃ÷²»·ûºÏÒªÇó
+		// æœ‰å­é¡¹è¯´æ˜ä¸ç¬¦åˆè¦æ±‚
 		if(iChildNum > 0)
 			return DM_ECODE_FAIL;
 
-		// Ã»ÓĞ¸¸ÏîËµÃ÷²»·ûºÏÒªÇó
+		// æ²¡æœ‰çˆ¶é¡¹è¯´æ˜ä¸ç¬¦åˆè¦æ±‚
 		HDMTREEITEM hPSelItem = m_pTreeCtrl->GetParentItem(hSelItem);
 		if(hPSelItem == NULL)
 			return DM_ECODE_FAIL;
 
 		ClearImageOfWrap();
 
-		// »ñÈ¡Ñ¡ÖĞÏîµÄÎÄ¼şÃû
+		// è·å–é€‰ä¸­é¡¹çš„æ–‡ä»¶å
 		CStringW Seltext = m_pTreeCtrl->GetItemText(hSelItem);
-		// »ñÈ¡Ñ¡ÖĞÏîµÄ¸¸ÏîÎÄ¼şÃû
+		// è·å–é€‰ä¸­é¡¹çš„çˆ¶é¡¹æ–‡ä»¶å
 		CStringW PSeltext = m_pTreeCtrl->GetItemText(hPSelItem);
 
-		// »ñÈ¡ÍêÈ«µÄÑ¡ÔñÃû
+		// è·å–å®Œå…¨çš„é€‰æ‹©å
 		CStringW total_Seltext;
 		HDMTREEITEM hPPSelItem = m_pTreeCtrl->GetParentItem(hPSelItem);
 		if (hPPSelItem != NULL)
 		{
-			// »ñÈ¡Ñ¡ÖĞÏîµÄ¸¸Ïî¸¸ÏîÎÄ¼şÃû
+			// è·å–é€‰ä¸­é¡¹çš„çˆ¶é¡¹çˆ¶é¡¹æ–‡ä»¶å
 			CStringW PPSeltext = m_pTreeCtrl->GetItemText(hPPSelItem);
 			total_Seltext = PPSeltext + L"\\" + PSeltext + L"\\" + Seltext;
 		}
 		else
 			total_Seltext = PSeltext + L"\\" + Seltext;
 
-		// È·ÈÏÊÇ·ñÒÑ¾­µã»÷¹ı
+		// ç¡®è®¤æ˜¯å¦å·²ç»ç‚¹å‡»è¿‡
 		if (m_mapPicInfo.find(total_Seltext) == m_mapPicInfo.end())
 		{
-			// Ã»µã»÷Ôò¶¯Ì¬´´½¨set
+			// æ²¡ç‚¹å‡»åˆ™åŠ¨æ€åˆ›å»ºset
 			std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
 			m_mapPicInfo[total_Seltext] = pSet;
 
-			if (PSeltext != L"Ô¤Ñ¡")
+			if (PSeltext != L"é¢„é€‰")
 			{
-				// »ñÈ¡²éÕÒ×ÊÔ´µÄÂ·¾¶
+				// è·å–æŸ¥æ‰¾èµ„æºçš„è·¯å¾„
 				CStringW strPath = m_wcPicRootDir + total_Seltext;
-				GetFilePathOfFmt(strPath, *m_mapPicInfo[total_Seltext], L"png");
+				GetFilePathOfFmt(strPath, *m_mapPicInfo[total_Seltext], L"psd");
 			}
 		}
 
-		// ÏÔÊ¾Í¼Æ¬
-		ShowImageOfWrap(*(m_mapPicInfo[total_Seltext]));
+		// æ˜¾ç¤ºå›¾ç‰‡
+		ShowImageOfWrap(*(m_mapPicInfo[total_Seltext]), 1);
 	}
 
 	return DM_ECODE_OK;
@@ -194,16 +194,16 @@ DMCode CShootSystem::OnAddPreChoose()
 
 	do
 	{
-		// ´´½¨Ô¤Ñ¡´°¿Ú£¨Ä£Ê½¶Ô»°¿ò£©
+		// åˆ›å»ºé¢„é€‰çª—å£ï¼ˆæ¨¡å¼å¯¹è¯æ¡†ï¼‰
 		DMSmartPtrT<CPreChoose> pDlg; pDlg.Attach(new CPreChoose(this));
 		int stat = pDlg->DoModal(L"prechoose", this->m_hWnd, true);
 		if (stat == IDOK)
 		{
-			// ²åÈëÔ¤Ñ¡ĞÅÏ¢
-			CStringW key = L"Ô¤Ñ¡\\" + pDlg->m_preChooseName;
+			// æ’å…¥é¢„é€‰ä¿¡æ¯
+			CStringW key = L"é¢„é€‰\\" + pDlg->m_preChooseName;
 			if (m_mapPicInfo.find(key) == m_mapPicInfo.end())
 			{
-				// Ã»ÕÒµ½Ôò¶¯Ì¬´´½¨set
+				// æ²¡æ‰¾åˆ°åˆ™åŠ¨æ€åˆ›å»ºset
 				std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
 				m_mapPicInfo[key] = pSet;
 			}
@@ -219,26 +219,26 @@ DMCode CShootSystem::OnDelPreChoose()
 {
 	if (m_hSelItem_tree != NULL)
 	{
-		// Ã»ÓĞ¸¸ÏîËµÃ÷²»·ûºÏÒªÇó
+		// æ²¡æœ‰çˆ¶é¡¹è¯´æ˜ä¸ç¬¦åˆè¦æ±‚
 		HDMTREEITEM hPSelItem = m_pTreeCtrl->GetParentItem(m_hSelItem_tree);
 		if (hPSelItem == NULL)
 			return DM_ECODE_FAIL;
 
-		// Ã»ÓĞÑ¡ÖĞËµÃ÷²»·ûºÏÒªÇó
+		// æ²¡æœ‰é€‰ä¸­è¯´æ˜ä¸ç¬¦åˆè¦æ±‚
 		if (p_SelImage == NULL)
 			return DM_ECODE_FAIL;
 
-		// »ñÈ¡Ñ¡ÖĞÏîµÄ¸¸ÏîÎÄ¼şÃû
+		// è·å–é€‰ä¸­é¡¹çš„çˆ¶é¡¹æ–‡ä»¶å
 		CStringW PSeltext = m_pTreeCtrl->GetItemText(hPSelItem);
 
-		// Ö»ÓĞ¸¸ÏîÎª¡°Ô¤Ñ¡¡±µÄÏî²ÅÄÜ½øĞĞÔ¤Ñ¡É¾³ı
-		if (PSeltext == L"Ô¤Ñ¡")
+		// åªæœ‰çˆ¶é¡¹ä¸ºâ€œé¢„é€‰â€çš„é¡¹æ‰èƒ½è¿›è¡Œé¢„é€‰åˆ é™¤
+		if (PSeltext == L"é¢„é€‰")
 		{
-			// »ñÈ¡Ñ¡ÖĞÏîµÄÎÄ¼şÃû
+			// è·å–é€‰ä¸­é¡¹çš„æ–‡ä»¶å
 			CStringW Seltext = m_pTreeCtrl->GetItemText(m_hSelItem_tree);
 			CStringW keymap = PSeltext + L"\\" + Seltext;
 
-			// ²Á³ıÑ¡ÖĞµÄÍ¼Æ¬¿Ø¼ş
+			// æ“¦é™¤é€‰ä¸­çš„å›¾ç‰‡æ§ä»¶
 			std::set<std::wstring> &selset = *m_mapPicInfo[keymap];
 			std::set<std::wstring>::iterator it = selset.begin();
 			for (; it != selset.end(); it++)
@@ -247,7 +247,7 @@ DMCode CShootSystem::OnDelPreChoose()
 				{
 					selset.erase(it);
 
-					// ÖØĞÂÏÔÊ¾Í¼Æ¬
+					// é‡æ–°æ˜¾ç¤ºå›¾ç‰‡
 					ClearImageOfWrap();
 					ShowImageOfWrap(selset);
 
@@ -265,11 +265,61 @@ DMCode CShootSystem::OnDelPreChoose()
 
 DMCode CShootSystem::OnOneShootChoose()
 {
-	// ¹Ø±Õ¡°Ñ¡Ôñ³¡¾°¡±´°¿Ú
+	m_shootmode = ONE_CHOOSE;
+
+	if (p_SelImage == NULL)
+	{
+		return DM_ECODE_FAIL;
+	}
+
+	// å°†è¯¥é€‰æ‹©åœºæ™¯è·¯å¾„ä¼ ç»™dllä¸­å¤„ç†
+	LOG_USER("%s\n", p_SelImage->m_picPath.c_str());
+	
+	// å…³é—­â€œé€‰æ‹©åœºæ™¯â€çª—å£
 	m_vecWndPtr[SCENE_CHOOSE]->DM_SetVisible(FALSE);
 
-	// ÏÔÊ¾¡°³¡¾°ÏêÇé¡±´°¿Ú
+	// æ˜¾ç¤ºâ€œåœºæ™¯è¯¦æƒ…â€çª—å£
 	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnAllShootChoose()
+{
+	// ç¡®ä¿ç‚¹å‡»TreeCtrl
+	if(m_hSelItem_tree == NULL)
+		return DM_ECODE_FAIL;
+
+	// æ²¡æœ‰çˆ¶é¡¹è¯´æ˜ä¸ç¬¦åˆè¦æ±‚
+	HDMTREEITEM hPSelItem = m_pTreeCtrl->GetParentItem(m_hSelItem_tree);
+	if (hPSelItem == NULL)
+		return DM_ECODE_FAIL;
+
+	// è·å–é€‰ä¸­é¡¹çš„çˆ¶é¡¹æ–‡ä»¶å
+	CStringW PSeltext = m_pTreeCtrl->GetItemText(hPSelItem);
+	// åªæœ‰çˆ¶é¡¹ä¸ºâ€œé¢„é€‰â€çš„é¡¹æ‰èƒ½è¿›è¡Œâ€œå…¨é€‰æ‹æ‘„â€
+	if (PSeltext == L"é¢„é€‰")
+	{
+		// è·å–é€‰ä¸­é¡¹çš„æ–‡ä»¶å
+		CStringW Seltext = m_pTreeCtrl->GetItemText(m_hSelItem_tree);
+		CStringW keymap = PSeltext + L"\\" + Seltext;
+
+		// ä»æ‰€æœ‰é€‰å–çš„è·¯å¾„åä¸­å–ç¬¬ä¸€ä¸ªç»™dllå¤„ç†
+		m_pPathAllShoot = m_mapPicInfo[keymap];
+		if (m_pPathAllShoot->size() != 0)
+		{
+			m_ItorAllShoot = m_pPathAllShoot->begin();
+			LOG_USER("%s\n", m_ItorAllShoot->c_str());
+
+			// å…³é—­â€œé€‰æ‹©åœºæ™¯â€çª—å£
+			m_vecWndPtr[SCENE_CHOOSE]->DM_SetVisible(FALSE);
+
+			// æ˜¾ç¤ºâ€œåœºæ™¯è¯¦æƒ…â€çª—å£
+			m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+
+			m_shootmode = ALL_CHOOSE;
+		}
+	}
 
 	return DM_ECODE_OK;
 }
@@ -287,7 +337,7 @@ DMCode CShootSystem::OnExport()
 
 	do
 	{
-		// ´´½¨Ô¤Ñ¡´°¿Ú£¨Ä£Ê½¶Ô»°¿ò£©
+		// åˆ›å»ºé¢„é€‰çª—å£ï¼ˆæ¨¡å¼å¯¹è¯æ¡†ï¼‰
 		DMSmartPtrT<CExportSet> pDlg; pDlg.Attach(new CExportSet(this));
 		pDlg->DoModal(L"exportset", this->m_hWnd, true);
 
@@ -317,10 +367,10 @@ DMCode CShootSystem::OnSceneChooseReturn()
 
 DMCode CShootSystem::OnSceneDetailReturn()
 {
-	// ¹Ø±Õ¡°³¡¾°ÏêÇé¡±´°¿Ú
+	// å…³é—­â€œåœºæ™¯è¯¦æƒ…â€çª—å£
 	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(FALSE);
 
-	// ÏÔÊ¾¡°Ñ¡Ôñ³¡¾°¡±´°¿Ú
+	// æ˜¾ç¤ºâ€œé€‰æ‹©åœºæ™¯â€çª—å£
 	m_vecWndPtr[SCENE_CHOOSE]->DM_SetVisible(TRUE, TRUE);
 
 	return DM_ECODE_OK;
@@ -328,13 +378,13 @@ DMCode CShootSystem::OnSceneDetailReturn()
 
 DMCode CShootSystem::OnSceneDetailShoot()
 {
-	// ¹Ø±Õ¡°³¡¾°ÏêÇé¡±´°¿Ú
+	// å…³é—­â€œåœºæ™¯è¯¦æƒ…â€çª—å£
 	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(FALSE);
 
-	// ÏÔÊ¾¡°³¡¾°ÅÄÉã¡±´°¿Ú
+	// æ˜¾ç¤ºâ€œåœºæ™¯æ‹æ‘„â€çª—å£
 	m_vecWndPtr[SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
 
-	// ³õÊ¼»¯¡°³¡¾°ÅÄÉã¡±
+	// åˆå§‹åŒ–â€œåœºæ™¯æ‹æ‘„â€
 	pSceneShoot->Init();
 
 	return DM_ECODE_OK;
@@ -342,10 +392,10 @@ DMCode CShootSystem::OnSceneDetailShoot()
 
 DMCode CShootSystem::OnSceneShootReturn()
 {
-	// ¹Ø±Õ¡°³¡¾°ÅÄÉã¡±´°¿Ú
+	// å…³é—­â€œåœºæ™¯æ‹æ‘„â€çª—å£
 	m_vecWndPtr[SCENE_SHOOT]->DM_SetVisible(FALSE);
 
-	// ÏÔÊ¾¡°³¡¾°ÏêÇé¡±´°¿Ú
+	// æ˜¾ç¤ºâ€œåœºæ™¯è¯¦æƒ…â€çª—å£
 	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
 
 	return DM_ECODE_OK;
@@ -360,11 +410,34 @@ DMCode CShootSystem::OnSceneShootStraw()
 
 DMCode CShootSystem::OnPrepage()
 {
+	if (m_shootmode == ALL_CHOOSE)
+	{
+		if (m_ItorAllShoot != m_pPathAllShoot->begin())
+		{
+			m_ItorAllShoot--;
+		}
+		else
+		{
+			// æŒ‡å‘æœ€åä¸€ä¸ªå…ƒç´ 
+			m_ItorAllShoot = --(m_pPathAllShoot->end());
+		}
+		LOG_USER("%s", m_ItorAllShoot->c_str());
+	}
+
 	return DM_ECODE_OK;
 }
 
 DMCode CShootSystem::OnNextpage()
 {
+	if (m_shootmode == ALL_CHOOSE)
+	{
+		m_ItorAllShoot++;
+		if (m_ItorAllShoot == m_pPathAllShoot->end())
+		{
+			m_ItorAllShoot = m_pPathAllShoot->begin();
+		}
+		LOG_USER("%s", m_ItorAllShoot->c_str());
+	}
 	return DM_ECODE_OK;
 }
 
@@ -383,44 +456,58 @@ DMCode CShootSystem::OnClose()
 CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 {
 	m_pMainWnd = pMainWnd;
+	m_shootmode = UNDEF_CHOOSE;
 	m_hSelItem_tree = NULL;
 	p_SelImage = NULL;
 	m_strawcolor = false;
 	pSceneShoot = new CSceneShoot(this);
 }
 
-// ÏÔÊ¾WrapLayoutÖĞµÄÍ¼Æ¬
-void CShootSystem::ShowImageOfWrap(std::set<std::wstring> &filepaths)
+// æ˜¾ç¤ºWrapLayoutä¸­çš„å›¾ç‰‡
+void CShootSystem::ShowImageOfWrap(std::set<std::wstring> &filepaths, int default)
 {
 	std::set<std::wstring>::iterator it = filepaths.begin();
 	for (; it != filepaths.end(); it++)
 	{
 		const wchar_t *szFilePath = (*it).c_str();
-		size_t ulSize = DM::GetFileSizeW(szFilePath);
+		
+		size_t ulSize;
+		DMBufT<byte>pBuf;
+		if (default == 0)
+		{
+			ulSize = DM::GetFileSizeW(szFilePath);
+			DWORD dwReadSize = 0;
+			pBuf.Allocate(ulSize);
+			DM::GetFileBufW(szFilePath, (void **)&pBuf, ulSize, dwReadSize);
+		}
+		else
+		{
+			USES_CONVERSION;
+			// åŠ è½½psdæ–‡ä»¶
+			PsdParser parser(W2A(szFilePath));
+			// ç”Ÿæˆç¼©ç•¥å›¾
+			ulSize = parser.thumbnail((void **)&pBuf);
+		}
 
-		DWORD dwReadSize = 0;
-		DMBufT<byte>pBuf; pBuf.Allocate(ulSize);
-		DM::GetFileBufW(szFilePath, (void **)&pBuf, ulSize, dwReadSize);
-
-		// ´´½¨Ô¤ÀÀskin
+		// åˆ›å»ºé¢„è§ˆskin
 		DMSmartPtrT<IDMSkin> pSkin;
 		g_pDMApp->CreateRegObj((void**)&pSkin, L"imglist", DMREG_Skin);
 		pSkin->SetBitmap(pBuf, ulSize, L"png");
 
-		// ´´½¨ImagePreview×Ó¿Ø¼ş
+		// åˆ›å»ºImagePreviewå­æ§ä»¶
 		ImagePreview *pChild = NULL;
 		g_pDMApp->CreateRegObj((void**)&pChild, L"ImagePreview", DMREG_Window);
 		if (pChild)
 		{
 			pChild->m_pSkin = pSkin;
-			pChild->m_picPath = *it;					// ±£´æÍ¼Æ¬µÄÂ·¾¶
-			pChild->m_pShootSystem = this;				// ±£´æShootSystem¶ÔÏóµÄµØÖ·
+			pChild->m_picPath = *it;					// ä¿å­˜å›¾ç‰‡çš„è·¯å¾„
+			pChild->m_pShootSystem = this;				// ä¿å­˜ShootSystemå¯¹è±¡çš„åœ°å€
 			pWrapLayout->DM_InsertChild(pChild);
 			m_vecChildPtr_Wrap.push_back(pChild);
 		}
 	}
 
-	// ¸ù¾İĞèÒªµ÷ÕûListBoxExµÄ¸ß¶È
+	// æ ¹æ®éœ€è¦è°ƒæ•´ListBoxExçš„é«˜åº¦
 	int filenum = filepaths.size();
 	if (ceil(filenum / 5.0) * PICHEIGHT_ONE > PICHEIGHT_AREA)
 		pListBoxEx->SetItemHeight(0, ceil(filenum / 5.0) * PICHEIGHT_ONE, true);
@@ -428,7 +515,7 @@ void CShootSystem::ShowImageOfWrap(std::set<std::wstring> &filepaths)
 	pWrapLayout->DV_UpdateChildLayout();
 }
 
-// Çå¿ÕWrapLayoutÖĞµÄÍ¼Æ¬
+// æ¸…ç©ºWrapLayoutä¸­çš„å›¾ç‰‡
 void CShootSystem::ClearImageOfWrap(void)
 {
 	while (!m_vecChildPtr_Wrap.empty())
@@ -455,8 +542,8 @@ void CShootSystem::ClearImageOfWrap(void)
 //
 //		DMSmartPtrT<IDMSkin> pSkin = g_pDMApp->GetSkin(lpszSkin);
 //		if (pSkin)
-//		{// Èç¹ûskin´æÔÚ£¬ÔòÖ±½ÓÉ¾³ı
-//#if 0// Èç¹ûskin´æÔÚ£¬ÔòÖ±½Ó¸ÄÄÚ´æ
+//		{// å¦‚æœskinå­˜åœ¨ï¼Œåˆ™ç›´æ¥åˆ é™¤
+//#if 0// å¦‚æœskinå­˜åœ¨ï¼Œåˆ™ç›´æ¥æ”¹å†…å­˜
 //			DMSmartPtrT<IDMBitmap> pBitmap;
 //			pSkin->GetBitmap(&pBitmap);
 //			if (pBitmap)
@@ -469,10 +556,10 @@ void CShootSystem::ClearImageOfWrap(void)
 //			g_pDMApp->RemoveSkin(lpszSkin, L"ccskinpool");
 //#endif
 //		}
-//		// Èç¹ûskin²»´æÔÚ£¬Ôò´´½¨skin
+//		// å¦‚æœskinä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºskin
 //		CStringW strWXml;
-//		strWXml.Format(L"<imglist id=\"%s\" states=\"3\"/>", lpszSkin);								// xmlÖĞ²»ÒªÅäsrcÁË		
-//		g_pDMApp->AddSkin(pBuf, dwSize, L"png", strWXml, L"ccskinpool");							// ¼ÓÈëµ½ccskinpoolÕâ¸öskin³Ø
+//		strWXml.Format(L"<imglist id=\"%s\" states=\"3\"/>", lpszSkin);								// xmlä¸­ä¸è¦é…srcäº†		
+//		g_pDMApp->AddSkin(pBuf, dwSize, L"png", strWXml, L"ccskinpool");							// åŠ å…¥åˆ°ccskinpoolè¿™ä¸ªskinæ± 
 //		
 //		CStringW strWXml2;
 //		strWXml2.Format(L"<root><ImagePreview skin=\"%s\"/></root>", lpszSkin);
@@ -485,13 +572,13 @@ void CShootSystem::ClearImageOfWrap(void)
 //	}
 //}
 
-//// »ñÈ¡Ö¸¶¨Ä¿Â¼ÏÂÌØ¶¨¸ñÊ½µÄËùÓĞÎÄ¼şÂ·¾¶
+//// è·å–æŒ‡å®šç›®å½•ä¸‹ç‰¹å®šæ ¼å¼çš„æ‰€æœ‰æ–‡ä»¶è·¯å¾„
 //void CShootSystem::GetFilePathOfFmt(std::wstring dirpath, std::set<std::wstring> &filepaths, std::wstring fmt)
 //{
-//	//ÎÄ¼ş¾ä±ú
+//	//æ–‡ä»¶å¥æŸ„
 //	long hFile = 0;
 //
-//	//ÎÄ¼şĞÅÏ¢
+//	//æ–‡ä»¶ä¿¡æ¯
 //	struct _wfinddata_t fileinfo;
 //	std::wstring p;
 //	if ((hFile = _wfindfirst(p.assign(dirpath).append(L"\\*" + fmt).c_str(), &fileinfo)) != -1)
@@ -504,13 +591,13 @@ void CShootSystem::ClearImageOfWrap(void)
 //	}
 //}
 
-// »ñÈ¡Ö¸¶¨Ä¿Â¼ÏÂÌØ¶¨¸ñÊ½µÄËùÓĞÎÄ¼şÂ·¾¶
+// è·å–æŒ‡å®šç›®å½•ä¸‹ç‰¹å®šæ ¼å¼çš„æ‰€æœ‰æ–‡ä»¶è·¯å¾„
 void CShootSystem::GetFilePathOfFmt(CStringW dirpath, std::set<std::wstring> &filepaths, std::wstring fmt)
 {
-	//ÎÄ¼ş¾ä±ú
+	//æ–‡ä»¶å¥æŸ„
 	long hFile = 0;
 
-	//ÎÄ¼şĞÅÏ¢
+	//æ–‡ä»¶ä¿¡æ¯
 	struct _wfinddata_t fileinfo;
 	std::wstring p;
 	if ((hFile = _wfindfirst(p.assign(dirpath).append(L"\\*" + fmt).c_str(), &fileinfo)) != -1)

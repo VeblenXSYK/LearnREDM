@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <string>
 #include <vector>
@@ -15,15 +15,15 @@ class CShootSystem : public DMHWnd
 {
 public:
 	CShootSystem::CShootSystem(CMainWnd *);
-	void ShowImageOfWrap(std::set<std::wstring> &);
+	void ShowImageOfWrap(std::set<std::wstring> &, int default = 0);
 	void ClearImageOfWrap(void);
 	void GetFilePathOfFmt(CStringW dirpath, std::set<std::wstring> &, std::wstring);
 
-	DECLARE_MESSAGE_MAP()// ·ÂMFCÏûÏ¢Ó³Éäºê
+	DECLARE_MESSAGE_MAP()// ä»¿MFCæ¶ˆæ¯æ˜ å°„å®
 	DECLARE_EVENT_MAP()
 
 	//---------------------------------------------------
-	// Function Des: ÏûÏ¢·Ö·¢ÏµÁĞº¯Êı
+	// Function Des: æ¶ˆæ¯åˆ†å‘ç³»åˆ—å‡½æ•°
 	//---------------------------------------------------
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
 	void OnLButtonDbClick(UINT nFlags, CPoint pt);
@@ -32,7 +32,7 @@ public:
 	//void OnSize(UINT nType, CSize size);
 
 	//---------------------------------------------------
-	// Function Des: ÊÂ¼ş·Ö·¢ÏµÁĞº¯Êı
+	// Function Des: äº‹ä»¶åˆ†å‘ç³»åˆ—å‡½æ•°
 	//---------------------------------------------------
 	DMCode OnTreeSelChanged(DMEventArgs *pEvt);
 	DMCode OnLightSDChanged(DMEventArgs *pEvt);
@@ -40,6 +40,7 @@ public:
 	DMCode OnAddPreChoose();
 	DMCode OnDelPreChoose();
 	DMCode OnOneShootChoose();
+	DMCode OnAllShootChoose();
 	DMCode OnForeground();
 	DMCode OnExport();
 	DMCode OnImport();
@@ -52,15 +53,22 @@ public:
 	DMCode OnClose();
 
 	DUITreeCtrl					  *m_pTreeCtrl;
-	HDMTREEITEM					  m_hSelItem_tree;		// ±£´æÑ¡È¡µÄtreeÏî
-	ImagePreview				  *p_SelImage;			// µ±Ç°Ñ¡ÖĞµÄÍ¼Æ¬¿Ø¼ş
+	HDMTREEITEM					  m_hSelItem_tree;		// ä¿å­˜é€‰å–çš„treeé¡¹
+	ImagePreview				  *p_SelImage;			// å½“å‰é€‰ä¸­çš„å›¾ç‰‡æ§ä»¶
 
 private:
 	
 	DUIWrapLayout				  *pWrapLayout;
 	DUIListBoxEx				  *pListBoxEx;
-	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// Ö÷´°¿Ú
-	CSceneShoot					  *pSceneShoot;			// ³¡¾°ÅÄÉã¶ÔÏó
+	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// ä¸»çª—å£
+	CSceneShoot					  *pSceneShoot;			// åœºæ™¯æ‹æ‘„å¯¹è±¡
+
+	enum SHOOTMODE
+	{
+		ONE_CHOOSE,
+		ALL_CHOOSE,
+		UNDEF_CHOOSE
+	};
 
 	enum WNDTYPE
 	{
@@ -70,16 +78,19 @@ private:
 		SCENE_UNDEF
 	};
 
-	static const int PICHEIGHT_ONE = 200;				// Ã¿ÕÅÍ¼Æ¬µÄ¸ß¶È
-	static const int PICHEIGHT_AREA = 600;				// Í¼Æ¬ÇøÓòµÄ¸ß¶È
-	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// ±£´æWrapLayoutÖĞËùÓĞImagePreview×Ó¿Ø¼şµÄµØÖ·
-	std::vector<DUIWindow *> m_vecWndPtr;				// ±£´æËùÓĞµÄ´°¿ÚµÄµØÖ·
-	wchar_t m_wcPicRootDir[MAX_PATH];					// Í¼Æ¬¸ùÄ¿Â¼
+	static const int PICHEIGHT_ONE = 200;				// æ¯å¼ å›¾ç‰‡çš„é«˜åº¦
+	static const int PICHEIGHT_AREA = 600;				// å›¾ç‰‡åŒºåŸŸçš„é«˜åº¦
+	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// ä¿å­˜WrapLayoutä¸­æ‰€æœ‰ImagePreviewå­æ§ä»¶çš„åœ°å€
+	std::vector<DUIWindow *> m_vecWndPtr;				// ä¿å­˜æ‰€æœ‰çš„çª—å£çš„åœ°å€
+	wchar_t m_wcPicRootDir[MAX_PATH];					// å›¾ç‰‡æ ¹ç›®å½•
 
-	bool m_strawcolor;									// Îü¹ÜÊÇ·ñ¿ªÆô
+	bool m_strawcolor;									// å¸ç®¡æ˜¯å¦å¼€å¯
 
-	// Í¼Æ¬ĞÅÏ¢ <Í¼Æ¬Ä¿Â¼Â·¾¶Ãû£¬¸ÃÂ·¾¶ÏÂËùÓĞÎÄ¼şÂ·¾¶Ãû>
-	std::map<CStringW, std::shared_ptr<std::set<std::wstring>>> m_mapPicInfo;
+	// å›¾ç‰‡ä¿¡æ¯ <å›¾ç‰‡ç›®å½•è·¯å¾„åï¼Œè¯¥è·¯å¾„ä¸‹æ‰€æœ‰æ–‡ä»¶è·¯å¾„å>
+	std::map<CStringW, std::shared_ptr<std::set<std::wstring>>> m_mapPicInfo;								
+	std::set<std::wstring>::iterator m_ItorAllShoot;			// â€œå…¨éƒ¨æ‹æ‘„â€ä¸‹æŒ‡å‘å½“å‰åœºæ™¯çš„è¿­ä»£å™¨
+	std::shared_ptr<std::set<std::wstring>> m_pPathAllShoot;	// â€œå…¨éƒ¨æ‹æ‘„â€ä¸‹æŒ‡å‘æ‰€æœ‰psdæ–‡ä»¶ç›®å½•åçš„åœ°å€
+	int m_shootmode;											// æ‹æ‘„æ¨¡å¼ï¼ˆâ€œé€‰æ‹©æ‹æ‘„â€ä¸â€œå…¨éƒ¨æ‹æ‘„â€ï¼‰
 };
 
 

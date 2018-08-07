@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "ShootSystem.h"
 #include "PersonPreview.h"
 #include "SceneShoot.h"
@@ -8,6 +8,7 @@
 CSceneShoot::CSceneShoot(CShootSystem *pShoot)
 {
 	pShootSystem = pShoot;
+	p_Person = NULL;
 }
 
 void CSceneShoot::Init(void)
@@ -30,36 +31,38 @@ void CSceneShoot::Init(void)
 	p_StrawButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
 	p_ColorStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
 
-	// ÏÔÊ¾Ã÷°µ
+	// æ˜¾ç¤ºæ˜æš—
 	m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
-	// ÏÔÊ¾¶Ô±È¶È
+	// æ˜¾ç¤ºå¯¹æ¯”åº¦
 	m_contrastnum = ShowSDValue(p_ContrastSlider, p_ContrastStatic);
-	// ÏÔÊ¾É«ÎÂ
+	// æ˜¾ç¤ºè‰²æ¸©
 	m_colourtempnum = ShowSDValue(p_ColourtempSlider, p_ColourtempStatic);
-	// ÏÔÊ¾É«²î
+	// æ˜¾ç¤ºè‰²å·®
 	m_colourdiffnum = ShowSDValue(p_ColourdiffSlider, p_ColourdiffStatic);
 
-	// Ç°¾°¿ª
+	// å‰æ™¯å¼€
 	m_foregroundstat = FOREON;
 
-	// ÏÔÊ¾ÈËÎï
+	// æ˜¾ç¤ºäººç‰©
 	DMSmartPtrT<IDMSkin> pSkin = g_pDMApp->GetSkin(L"sceneshootperson");
 
-	PersonPreview *pChild = NULL;
-	g_pDMApp->CreateRegObj((void**)&pChild, L"PersonPreview", DMREG_Window);
-	if (pChild)
+	if (p_Person == NULL)
 	{
-		pChild->SetAttribute(L"pos", L"|0,|0,@300,@400");
-		pChild->m_pSkin = pSkin;
-		pChild->p_Parent = p_Win;
-		p_Win->DM_InsertChild(pChild);
+		g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
+		if (p_Person)
+		{
+			p_Person->SetAttribute(L"pos", L"|0,|0,@300,@400");
+			p_Person->m_pSkin = pSkin;
+			p_Person->p_Parent = p_Win;
+			p_Win->DM_InsertChild(p_Person);
+		}
+		p_Win->DV_UpdateChildLayout();
 	}
-	p_Win->DV_UpdateChildLayout();
 }
 
 int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
 {
-	// »ñÈ¡SliderCtrlµ±Ç°Öµ
+	// è·å–SliderCtrlå½“å‰å€¼
 	int value = pSlider->m_iValue;
 
 	CStringW strValue;
@@ -68,7 +71,7 @@ int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
 	else
 		strValue.Format(L"+%d", value);
 
-	// ÔÚStatic¿Ø¼şÖĞÏÔÊ¾µ±Ç°Öµ
+	// åœ¨Staticæ§ä»¶ä¸­æ˜¾ç¤ºå½“å‰å€¼
 	pStatic->DV_SetWindowText(strValue);
 
 	return value;
@@ -131,10 +134,10 @@ void CSceneShoot::HandleImport(void)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER;
 		//ofn.lpfnHook = (LPOFNHOOKPROC)OFNHookProc;
 		//ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING | OFN_NOCHANGEDIR;
-		ofn.lpstrFilter = L"Í¼ÏñÎÄ¼ş(*.bmp;*.jpg;*.png)\0*.bmp;*.jpg;*.png\0\0";
+		ofn.lpstrFilter = L"å›¾åƒæ–‡ä»¶(*.bmp;*.jpg;*.png)\0*.bmp;*.jpg;*.png\0\0";
 		ofn.hwndOwner = pShootSystem->m_hWnd;
 		if (::GetOpenFileNameW(&ofn))
-		{// todo.hgy413 note:GetOpenFileNameWµã»÷ºóWM_LBUTTTONUPÏûÏ¢»á·¢ËÍ¸ødui£¬ËùÒÔ²»ÒªËæÒâÖ»´¦ÀíWM_LBUTTONUP
+		{// todo.hgy413 note:GetOpenFileNameWç‚¹å‡»åWM_LBUTTTONUPæ¶ˆæ¯ä¼šå‘é€ç»™duiï¼Œæ‰€ä»¥ä¸è¦éšæ„åªå¤„ç†WM_LBUTTONUP
 			;
 		}
 	} while (false);

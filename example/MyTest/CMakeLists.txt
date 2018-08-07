@@ -10,7 +10,8 @@ set(EXECUTABLE_OUTPUT_PATH ${MyTest_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH  ${MyTest_BINARY_DIR}/bin)
 
 set(LIBS ${LIBRARY_OUTPUT_PATH})
-link_directories(${LIBS})
+#添加jpeg库文件目录
+link_directories(${LIBS} ${PROJDIR}/Psdump/libjpeg)		
 
 #-------------------------------------------------------------------------------------------------------------------
 # support MT
@@ -33,3 +34,7 @@ include(PrecompiledHeader)
 # add project
 add_subdirectory(${PROJDIR}/DMMain)
 add_subdirectory(${PROJDIR}/MyTest)
+add_subdirectory(${PROJDIR}/Psdump)
+
+# #附加依赖项
+# target_link_libraries(legacy_stdio_definitions.lib)

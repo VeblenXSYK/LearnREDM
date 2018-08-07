@@ -23,7 +23,9 @@ include_directories(${PROJDIR}/DmMain/inc
 					${PROJDIR}/DmMain/inc/Core/Event;
 					${PROJDIR}/DmMain/inc/IDmMain;
 					${PROJDIR}/DmMain/inc/Modules;
-					${PROJDIR}/DmMain/inc/Widgets;)
+					${PROJDIR}/DmMain/inc/Widgets;
+					${PROJDIR}/Psdump/inc;
+					${PROJDIR}/Psdump/libpsd-0.9/include;)
 		
 #-------------------------------------------------------------------------------------------------------------------		
 if(USE_ALLMT_)
@@ -37,6 +39,6 @@ add_executable(MyTest  WIN32 ${ROOT};${ROOT_HEADER};${ROOT_SOURCE};)
 set_target_properties(MyTest PROPERTIES OUTPUT_NAME "MyTest")
 
 #-------------------------------------------------------------------------------------------------------------------
-add_dependencies(MyTest  DmMain)
+add_dependencies(MyTest DmMain PsDump)
 
  
