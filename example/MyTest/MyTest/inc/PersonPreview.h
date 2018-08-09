@@ -1,9 +1,9 @@
-//-------------------------------------------------------
+О╩©//-------------------------------------------------------
 // Copyright (c) DuiMagic
 // All rights reserved.
 // 
 // File Name: PersonPreview.h 
-// File Des: т╓юю╢╟©з
+// File Des: И╒└Х╖┬Г╙≈Е▐ё
 // File Summary: 
 // Cur Version: 1.0
 // Author:
@@ -16,6 +16,7 @@
 
 #include <string>
 #include "DMResFolderImpl.h"
+#include "Gdiplus.h"
 
 class CShootSystem;
 class PersonPreview : public DUIWindow
@@ -23,6 +24,10 @@ class PersonPreview : public DUIWindow
 	DMDECLARE_CLASS_NAME(PersonPreview, L"PersonPreview", DMREG_Window);
 public:
 	PersonPreview();
+	~PersonPreview();
+	void Rotate(Gdiplus::Graphics &graphics, float angle);
+	void ModifyAngle(void);
+
 	DM_BEGIN_MSG_MAP()
 		DM_MSG_WM_PAINT(DM_OnPaint)
 		MSG_WM_LBUTTONDOWN(OnLButtonDown)
@@ -39,7 +44,7 @@ public:
 
 public:
 	//---------------------------------------------------
-	// Function Des: DUI╣доШо╒╥ж╥╒о╣ап╨╞йЩ
+	// Function Des: DUIГ └Ф╤┬Ф│╞Е┬├Е▐▒ГЁ╩Е┬≈Е┤╫Ф∙╟
 	//---------------------------------------------------
 	void DM_OnPaint(IDMCanvas* pCanvas);
 	void OnLButtonDown(UINT nFlags, CPoint pt);
@@ -48,23 +53,25 @@ public:
 
 public:
 	DMSmartPtrT<IDMSkin>          m_pSkin;
-	std::wstring				  m_picPath;			// ╠ё╢Ф╦ц©ь╪Ч╤тс╕м╪ф╛╣дб╥╬╤
-	DUIWindow					  *p_Parent;			// ╦╦╢╟©з
+	std::wstring				  m_picPath;			// Д©²Е╜≤Х╞╔Ф▌╖Д╩╤Е╞╧Е╨■Е⌡╬Г┴┤Г └Х╥╞Е╬└
+	DUIWindow					  *p_Parent;			// Г┬╤Г╙≈Е▐ё
 
-	// мо╤╞╡ывВ
-	bool						  m_bDown;				// йС╠Й╟╢об
-	int							  m_iMode;				// дёй╫
+	// Ф▀√Е┼╗Ф⌠█Д╫°
+	bool						  m_bDown;				// И╪═Ф═┤Ф▄┴Д╦▀
+	int							  m_iMode;				// Ф╗║Е╪▐
 	CPoint						  m_StartDragPt;
 	CPoint						  m_TrackDragPt;
 	CRect						  m_StartDragRc;
 
 private:
-	void OnDragLeft(CPoint pt);			// мо╤╞вС╠ъ
-	void OnDragLeftTop(CPoint pt);		// мо╤╞вСио╫г
-	void OnDragTop(CPoint pt);			// мо╤╞ио╠ъ
-	void OnDragRightTop(CPoint pt);		// мо╤╞срио╫г
-	void OnDragRight(CPoint pt);		// мо╤╞ср╠ъ
-	void OnDragRightBottom(CPoint pt);	// мо╤╞сроб╫г
-	void OnDragBottom(CPoint pt);		// мо╤╞об╠ъ
-	void OnDragLeftBottom(CPoint pt);	// мо╤╞вСоб╫г
+	void OnDragLeft(CPoint pt);			// Ф▀√Е┼╗Е╥╕Х╬╧
+	void OnDragLeftTop(CPoint pt);		// Ф▀√Е┼╗Е╥╕Д╦┼Х╖▓
+	void OnDragTop(CPoint pt);			// Ф▀√Е┼╗Д╦┼Х╬╧
+	void OnDragRightTop(CPoint pt);		// Ф▀√Е┼╗Е▐ЁД╦┼Х╖▓
+	void OnDragRight(CPoint pt);		// Ф▀√Е┼╗Е▐ЁХ╬╧
+	void OnDragRightBottom(CPoint pt);	// Ф▀√Е┼╗Е▐ЁД╦▀Х╖▓
+	void OnDragBottom(CPoint pt);		// Ф▀√Е┼╗Д╦▀Х╬╧
+	void OnDragLeftBottom(CPoint pt);	// Ф▀√Е┼╗Е╥╕Д╦▀Х╖▓
+	ULONG_PTR gdiplusToken;
+	float m_AngleOfRotation;			// Ф≈▀Х╫╛Х╖▓Е╨╕
 };

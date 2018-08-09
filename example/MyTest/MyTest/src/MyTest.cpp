@@ -1,7 +1,8 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "MainWnd.h"
 #include "ImagePreview.h"
 #include "PersonPreview.h"
+#include "CommModule.h"
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 					   HINSTANCE hPrevInstance,
@@ -9,21 +10,25 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 					   int       nCmdShow)
 {   
 	OleInitialize(NULL);
-	DMApp theApp(hInstance);												// ÉùÃ÷È«¾ÖÎ¨Ò»¶ÔÏótheApp£¬Ö®ºóÊ¹ÓÃg_pDMAppµ÷ÓÃËü 
+	DMApp theApp(hInstance);												// å£°æ˜å…¨å±€å”¯ä¸€å¯¹è±¡theAppï¼Œä¹‹åä½¿ç”¨g_pDMAppè°ƒç”¨å®ƒ 
 
-	theApp.LoadResPack((WPARAM)(L"WorldTripShootRes"),NULL,NULL);			// Â·¾¶×ÜÊÇÏà¶ÔÓÚÉú³ÉÄ¿Â¼
-	theApp.InitGlobal();													// ³õÊ¼»¯Ö¸¶¨µÄÈ«¾Öskin¡¢style¡¢Ä¬ÈÏ×ÖÌå
-	theApp.Register(DMRegHelperT<ImagePreview>(), true);					// ×¢²á×Ô¶¨Òå¿Ø¼ş
+	theApp.LoadResPack((WPARAM)(L"WorldTripShootRes"),NULL,NULL);			// è·¯å¾„æ€»æ˜¯ç›¸å¯¹äºç”Ÿæˆç›®å½•
+	theApp.InitGlobal();													// åˆå§‹åŒ–æŒ‡å®šçš„å…¨å±€skinã€styleã€é»˜è®¤å­—ä½“
+	theApp.Register(DMRegHelperT<ImagePreview>(), true);					// æ³¨å†Œè‡ªå®šä¹‰æ§ä»¶
 	theApp.Register(DMRegHelperT<PersonPreview>(), true);	
+
+	// åŠ è½½é€šç”¨æ¨¡å—èµ„æº
+	CCommModule *cm = CCommModule::GetInstance();
+	cm->LoadResource();
 
 	DMSmartPtrT<CMainWnd> pMainWnd;
 	pMainWnd.Attach(new CMainWnd());
-	pMainWnd->DM_CreateWindow(L"main",0,0,0,0,NULL,false);					// ´´½¨Ö÷´°¿Ú£¨main¶ÔÓ¦MyRes×ÊÔ´ÖĞ°üÖĞmainµÄ±êÊ¶£©
+	pMainWnd->DM_CreateWindow(L"main",0,0,0,0,NULL,false);					// åˆ›å»ºä¸»çª—å£ï¼ˆmainå¯¹åº”MyResèµ„æºä¸­åŒ…ä¸­mainçš„æ ‡è¯†ï¼‰
 
 	pMainWnd->SendMessage(WM_INITDIALOG);
 	pMainWnd->CenterWindow();
 	pMainWnd->ShowWindow(SW_SHOW);
-	theApp.Run(pMainWnd->GetSafeHwnd());								    // ÔËĞĞµ±Ç°Ïß³ÌµÄÏûÏ¢Ñ­»·£¬²¢¼ÓÈëÏûÏ¢¶ÓÁĞ¹ÜÀíÖĞ
+	theApp.Run(pMainWnd->GetSafeHwnd());								    // è¿è¡Œå½“å‰çº¿ç¨‹çš„æ¶ˆæ¯å¾ªç¯ï¼Œå¹¶åŠ å…¥æ¶ˆæ¯é˜Ÿåˆ—ç®¡ç†ä¸­
 
 	return (int) 0;
 }

@@ -27,6 +27,7 @@ void CSceneShoot::Init(void)
 	p_ColourdiffStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"colourdiffstatic");
 	p_ColourdiffSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"colourdiffslider");
 
+	p_RotateButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_rotatebtn");
 	p_ForegroundButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_forebtn");
 	p_StrawButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
 	p_ColorStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
@@ -51,8 +52,9 @@ void CSceneShoot::Init(void)
 		g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
 		if (p_Person)
 		{
-			p_Person->SetAttribute(L"pos", L"|0,|0,@300,@400");
-			p_Person->m_pSkin = pSkin;
+			p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
+			// p_Person->m_pSkin = pSkin;
+			p_Person->m_pSkin = NULL;
 			p_Person->p_Parent = p_Win;
 			p_Win->DM_InsertChild(p_Person);
 		}
@@ -86,6 +88,11 @@ void CSceneShoot::ShowStaticColor(COLORREF RGBcolor)
 	CStringW strClrbg;
 	strClrbg.Format(L"pbgra(%x,%x,%x,ff)", blue, green, red);
 	p_ColorStatic->SetAttribute(L"clrbg", strClrbg);
+}
+
+void CSceneShoot::HandleRotate(void)
+{
+	p_Person->ModifyAngle();
 }
 
 void CSceneShoot::HandleForeground(void)

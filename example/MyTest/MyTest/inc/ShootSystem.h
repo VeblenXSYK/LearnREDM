@@ -47,6 +47,7 @@ public:
 	DMCode OnSceneDetailReturn();
 	DMCode OnSceneDetailShoot();
 	DMCode OnSceneShootReturn();
+	DMCode OnSceneShootRotate();
 	DMCode OnSceneShootStraw();
 	DMCode OnPrepage();
 	DMCode OnNextpage();
@@ -82,7 +83,6 @@ private:
 	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
-	wchar_t m_wcPicRootDir[MAX_PATH];					// 图片根目录
 
 	bool m_strawcolor;									// 吸管是否开启
 

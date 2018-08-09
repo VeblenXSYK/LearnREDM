@@ -1,5 +1,5 @@
-#pragma once
-#define WIN32_LEAN_AND_MEAN             // ´Ó Windows Í·ÖĞÅÅ³ı¼«ÉÙÊ¹ÓÃµÄ×ÊÁÏ
+ï»¿#pragma once
+#define WIN32_LEAN_AND_MEAN             // ä» Windows å¤´ä¸­æ’é™¤æå°‘ä½¿ç”¨çš„èµ„æ–™
 #include <windows.h>
 #include <tchar.h> 
 
@@ -16,10 +16,12 @@
 #pragma comment(lib,"DmMain.lib")
 #endif
 
+#pragma comment(lib, "legacy_stdio_definitions.lib")
+
 /*
-* µ±libjpeg-turboÎªvs2010±àÒëÊ±£¬vs2015ÏÂ¾²Ì¬Á´½Ólibjpeg-turbo»áÁ´½Ó³ö´í:ÕÒ²»µ½__iob_func,
-* Ôö¼Ó__iob_funcµ½__acrt_iob_funcµÄ×ª»»º¯Êı½â¾ö´ËÎÊÌâ,
-* µ±libjpeg-turboÓÃvs2015±àÒëÊ±£¬²»ĞèÒª´Ë²¹¶¡ÎÄ¼ş
+* å½“libjpeg-turboä¸ºvs2010ç¼–è¯‘æ—¶ï¼Œvs2015ä¸‹é™æ€é“¾æ¥libjpeg-turboä¼šé“¾æ¥å‡ºé”™:æ‰¾ä¸åˆ°__iob_func,
+* å¢åŠ __iob_funcåˆ°__acrt_iob_funcçš„è½¬æ¢å‡½æ•°è§£å†³æ­¤é—®é¢˜,
+* å½“libjpeg-turboç”¨vs2015ç¼–è¯‘æ—¶ï¼Œä¸éœ€è¦æ­¤è¡¥ä¸æ–‡ä»¶
 */
 #if _MSC_VER >= 1900
 #include "stdio.h" 

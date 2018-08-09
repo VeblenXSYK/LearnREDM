@@ -5,6 +5,8 @@
 #include "ExportSet.h"
 #include "SceneShoot.h"
 #include "ShootSystem.h"
+#include "CommModule.h"
+
 #include <direct.h>
 #include <io.h>
 #include <fstream>
@@ -32,6 +34,7 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"scenedetail_returnbtn", OnSceneDetailReturn)
 	EVENT_NAME_COMMAND(L"scenedetail_shootbtn", OnSceneDetailShoot)
 	EVENT_NAME_COMMAND(L"sceneshoot_returnbtn", OnSceneShootReturn)
+	EVENT_NAME_COMMAND(L"sceneshoot_rotatebtn", OnSceneShootRotate)
 	EVENT_NAME_COMMAND(L"sceneshoot_strawbtn", OnSceneShootStraw)
 	EVENT_NAME_COMMAND(L"sceneshoot_forebtn", OnForeground)
 	EVENT_NAME_COMMAND(L"sceneshoot_exportbtn", OnExport)
@@ -53,13 +56,11 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	pWrapLayout = FindChildByNameT<DUIWrapLayout>(L"scenechoose_wrap", TRUE);
 	pListBoxEx = FindChildByNameT<DUIListBoxEx>(L"scenechoose_listboxex");
 
-	GetRootFullPath(L".\\WorldTripShootRes\\outimage\\", m_wcPicRootDir, MAX_PATH);
-
 	// 初始化显示“儿童-精美内景-欧式简约”图片
 	CStringW key = L"儿童\\精美内景\\欧式简约";
 	std::shared_ptr<std::set<std::wstring>> pSet(new std::set<std::wstring>);
 	m_mapPicInfo[key] = pSet;
-	CStringW strPath = m_wcPicRootDir + key;
+	CStringW strPath = CCommModule::GetPicRootDir() + key;
 	GetFilePathOfFmt(strPath, *m_mapPicInfo[key], L"png");
 	ShowImageOfWrap(*m_mapPicInfo[key]);
 
@@ -169,7 +170,7 @@ DMCode CShootSystem::OnTreeSelChanged(DMEventArgs *pEvt)
 			if (PSeltext != L"预选")
 			{
 				// 获取查找资源的路径
-				CStringW strPath = m_wcPicRootDir + total_Seltext;
+				CStringW strPath = CCommModule::GetPicRootDir() + total_Seltext;
 				GetFilePathOfFmt(strPath, *m_mapPicInfo[total_Seltext], L"psd");
 			}
 		}
@@ -405,6 +406,12 @@ DMCode CShootSystem::OnSceneShootStraw()
 {
 	m_strawcolor = true;
 
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnSceneShootRotate()
+{
+	pSceneShoot->HandleRotate();
 	return DM_ECODE_OK;
 }
 

@@ -143,6 +143,7 @@
 							<Window height="-1" skin="scenedetailbg1">
 								<Window pos="11,10,-10,@40">
 									<richedit pos="0,0,@80,@35" text="人物调节" bmultilines="1" bwordwrap="1" bautowscroll="1" bwantreturn="1" benabledrag="1" sbskin="dg:dg_scrollbar" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-19,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
+									<Button name="sceneshoot_rotatebtn" pos="87,5,@32,@30" text="" skin="sceneshootpersonbtn" />
 								</Window>
 								<Window pos="10,[5,-10,@75" skin="" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
 									<sliderctrl name="lightshadeslider" pos="44,10,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" channelskin="sceneshootsizeslide" range="-100,100" value="-5" thumbwidth="12" channelhei="15" />
