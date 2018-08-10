@@ -1,11 +1,11 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "ExportSet.h"
 #include "ShootSystem.h"
 
 BEGIN_MSG_MAP(CExportSet)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_SIZE(OnSize)
-	CHAIN_MSG_MAP(DMHWnd)// ½«Î´´¦ÀíµÄÏûÏ¢½»ÓÉDMHWnd´¦Àí
+	CHAIN_MSG_MAP(DMHWnd)// å°†æœªå¤„ç†çš„æ¶ˆæ¯äº¤ç”±DMHWndå¤„ç†
 END_MSG_MAP()
 
 BEGIN_EVENT_MAP(CExportSet)
@@ -42,7 +42,7 @@ void CExportSet::OnSize(UINT nType, CSize size)
 			pRestoreBtn->DM_SetVisible(false);
 		}
 	}
-	// ÓÉDMHWnd¼ÌÐø´¦ÀíOnSizeÏûÏ¢
+	// ç”±DMHWndç»§ç»­å¤„ç†OnSizeæ¶ˆæ¯
 	SetMsgHandled(FALSE);
 }
 
@@ -54,18 +54,6 @@ DMCode CExportSet::OnClose()
 
 DMCode CExportSet::OnConfirm()
 {
-	DUITreeCtrl *pTreeCtrl = m_pShootSystem->m_pTreeCtrl;
-	HDMTREEITEM hTree = pTreeCtrl->GetRootItem();
-	while (hTree != NULL)
-	{
-		if (pTreeCtrl->GetItemText(hTree) == L"Ô¤Ñ¡")
-		{
-			pTreeCtrl->InsertItem(L"NO----2", 1, 1, (LPARAM)-1, hTree);
-		}
-
-		hTree = pTreeCtrl->GetNextSiblingItem(hTree);
-	}
-
 	EndDialog(IDOK);
 	return DM_ECODE_OK;
 }

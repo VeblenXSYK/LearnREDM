@@ -15,6 +15,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include "DMResFolderImpl.h"
 #include "Gdiplus.h"
 
@@ -27,6 +28,7 @@ public:
 	~PersonPreview();
 	void Rotate(Gdiplus::Graphics &graphics, float angle);
 	void ModifyAngle(void);
+	void LoadImage(wchar_t *);
 
 	DM_BEGIN_MSG_MAP()
 		DM_MSG_WM_PAINT(DM_OnPaint)
@@ -74,4 +76,7 @@ private:
 	void OnDragLeftBottom(CPoint pt);	// 拖动左下角
 	ULONG_PTR gdiplusToken;
 	float m_AngleOfRotation;			// 旋转角度
+
+	// 图片数据
+	std::shared_ptr<Gdiplus::Image> m_pImgData;
 };

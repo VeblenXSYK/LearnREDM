@@ -127,6 +127,7 @@
 				<hlayout pos="4,4,-4,-4" childpaddLen="5">
 					<Window name="sceneshoot_win" text="" width="" skin="scenedetailbg1">
 						<Static text="" pos="0,0,-0,-0" skin="sceneshootstatic1bg" />
+						<Static pos="0,0,-0,-0" skin="sceneshootstatic1fg" alpha="50" />
 					</Window>
 					<Window text="" skin="" width="300">
 						<vlayout pos="0,0,-0,-0" childpaddLen="5">

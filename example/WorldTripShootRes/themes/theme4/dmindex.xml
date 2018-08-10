@@ -22,5 +22,6 @@
 		<file name="sceneshootadd" path="themes\theme4\image\sceneshootadd.png" />
 		<file name="sceneshootstatic1bg" path="themes\theme4\image\sceneshootstatic1bg.png" />
 		<file name="sceneshootperson" path="themes\theme4\image\sceneshootperson.png" />
+		<file name="sceneshootstatic1fg" path="themes\theme4\image\sceneshootstatic1fg.png" />
 	</png>
 </resource>

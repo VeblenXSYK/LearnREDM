@@ -73,6 +73,7 @@
 		<imglist id="sceneshootadd" src="png:sceneshootadd" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootstatic1bg" src="png:sceneshootstatic1bg" states="1" bvert="0" btitle="0" />
 		<imglist id="sceneshootperson" src="png:sceneshootperson" states="1" bvert="0" btitle="0" />
+		<imglist id="sceneshootstatic1fg" src="png:sceneshootstatic1fg" states="1" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duiprechoose">
 		<imglist id="addprechooseclosebtn" src="png:addprechooseclosebtn" states="1" bvert="0" btitle="0" />

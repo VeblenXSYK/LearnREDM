@@ -11,6 +11,7 @@ PersonPreview::PersonPreview()
 	m_bDown = false;
 	m_iMode = NoneMode;
 	m_AngleOfRotation = 0;
+	m_pImgData = NULL;
 
 	//初始化gdi+
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -80,6 +81,12 @@ void PersonPreview::ModifyAngle(void)
 	p_Parent->DM_Invalidate();
 }
 
+void PersonPreview::LoadImage(wchar_t *imgpath)
+{
+	// 加载图片
+	m_pImgData.reset(new Gdiplus::Image(imgpath));
+}
+
 void PersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 {
 	// 获取画布HDC
@@ -120,11 +127,7 @@ void PersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 	else
 	{
 		Rotate(graphics, m_AngleOfRotation);
-
-		CStringW imgPath;
-		imgPath.Format(L"%s\\%s", CCommModule::GetPicRootDir(), L"\\Person\\test.jpg");
-		Gdiplus::Image imgData(imgPath);
-		graphics.DrawImage(&imgData, m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
+		graphics.DrawImage(m_pImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
 	}
 
 	//重置绘图的所有变换

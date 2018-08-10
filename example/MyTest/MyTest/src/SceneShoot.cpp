@@ -47,19 +47,19 @@ void CSceneShoot::Init(void)
 	// 显示人物
 	DMSmartPtrT<IDMSkin> pSkin = g_pDMApp->GetSkin(L"sceneshootperson");
 
-	if (p_Person == NULL)
-	{
-		g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
-		if (p_Person)
-		{
-			p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
-			// p_Person->m_pSkin = pSkin;
-			p_Person->m_pSkin = NULL;
-			p_Person->p_Parent = p_Win;
-			p_Win->DM_InsertChild(p_Person);
-		}
-		p_Win->DV_UpdateChildLayout();
-	}
+	//if (p_Person == NULL)
+	//{
+	//	g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
+	//	if (p_Person)
+	//	{
+	//		p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
+	//		// p_Person->m_pSkin = pSkin;
+	//		p_Person->m_pSkin = NULL;
+	//		p_Person->p_Parent = p_Win;
+	//		p_Win->DM_InsertChild(p_Person);
+	//	}
+	//	p_Win->DV_UpdateChildLayout();
+	//}
 }
 
 int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
@@ -123,7 +123,7 @@ void CSceneShoot::HandleImport(void)
 {
 	do
 	{
-		LPWSTR lpszPath = L".\\WorldTripShootRes\\outimage\\";
+		LPWSTR lpszPath = L".\\WorldTripShootRes\\outimage\\Person\\";
 		wchar_t szPath[MAX_PATH] = { 0 };
 		GetRootFullPath(lpszPath, szPath, MAX_PATH);
 
@@ -145,7 +145,21 @@ void CSceneShoot::HandleImport(void)
 		ofn.hwndOwner = pShootSystem->m_hWnd;
 		if (::GetOpenFileNameW(&ofn))
 		{// todo.hgy413 note:GetOpenFileNameW点击后WM_LBUTTTONUP消息会发送给dui，所以不要随意只处理WM_LBUTTONUP
-			;
+			if (p_Person == NULL)
+			{
+				g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
+				if (p_Person)
+				{
+					p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
+					// p_Person->m_pSkin = pSkin;
+					p_Person->m_pSkin = NULL;
+					p_Person->p_Parent = p_Win;
+					p_Win->DM_InsertChild(p_Person);
+				}
+			}
+			p_Person->LoadImage(szFileName);
+			p_Person->m_picPath = szFileName;
+			p_Win->DV_UpdateChildLayout();
 		}
 	} while (false);
 }
