@@ -40,8 +40,6 @@
 		<imglist id="prevpagebtnskin" src="png:prevpagebtnskin" states="1" bvert="0" btitle="0" />
 		<imglist id="nextpagebtnskin" src="png:nextpagebtnskin" states="1" bvert="0" btitle="0" />
 		<imglist id="closebtnskin" src="png:closebtnskin" states="1" bvert="0" btitle="0" />
-		<imglist id="ds_tool_drag" src="png:ds_tool_drag" states="1" bvert="0" btitle="0" />
-		<imglist id="ds_tool_move" src="png:ds_tool_move" states="1" bvert="0" btitle="0" />
 	</skin>
 	<skin name="duiscenedetail">
 		<imglist id="scenedetailstatic1bg" src="png:scenedetailstatic1bg" states="1" bvert="0" btitle="0" />

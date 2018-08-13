@@ -87,6 +87,82 @@ void PersonPreview::LoadImage(wchar_t *imgpath)
 	m_pImgData.reset(new Gdiplus::Image(imgpath));
 }
 
+int PersonPreview::JudgeDragType(CPoint pt)
+{
+	CRect rcItem;
+	DV_GetClientRect(&rcItem);
+	if (pt.x < rcItem.left + 20 && pt.y < rcItem.top + 20)
+		return DragLeftTop;
+	else if (pt.x < rcItem.left + 20 && pt.y > rcItem.bottom - 20)
+		return DragLeftBottom;
+	else if (pt.x > rcItem.right - 20 && pt.y < rcItem.top + 20)
+		return DragRightTop;
+	else if (pt.x > rcItem.right - 20 && pt.y > rcItem.bottom - 20)
+		return DragRightBottom;
+	else if (pt.x < rcItem.left + 20)
+		return DragLeft;
+	else if (pt.y < rcItem.top + 20)
+		return DragTop;
+	else if (pt.x > rcItem.right - 20)
+		return DragRight;
+	else if (pt.y > rcItem.bottom - 20)
+		return DragBottom;
+	else
+		return MoveMode;
+}
+
+void PersonPreview::HandleDrag(CPoint pt, int type)
+{
+	m_TrackDragPt = pt;
+	CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
+	CRect rcWnd = m_StartDragRc;
+
+	switch (type)
+	{
+	case DragLeft:
+		rcWnd.left = rcWnd.left + ptOffset.x;
+		break;
+
+	case DragRight:
+		rcWnd.right = rcWnd.right + ptOffset.x;
+		break;
+
+	case DragTop:
+		rcWnd.top = rcWnd.top + ptOffset.y;
+		break;
+
+	case DragBottom:
+		rcWnd.bottom = rcWnd.bottom + ptOffset.y;
+		break;
+
+	case DragLeftTop:
+		rcWnd.left = rcWnd.left + ptOffset.x;
+		rcWnd.top = rcWnd.top + ptOffset.y;
+		break;
+
+	case DragLeftBottom:
+		rcWnd.left = rcWnd.left + ptOffset.x;
+		rcWnd.bottom = rcWnd.bottom + ptOffset.y;
+		break;
+
+	case DragRightTop:
+		rcWnd.right = rcWnd.right + ptOffset.x;
+		rcWnd.top = rcWnd.top + ptOffset.y;
+		break;
+
+	case DragRightBottom:
+		rcWnd.right = rcWnd.right + ptOffset.x;
+		rcWnd.bottom = rcWnd.bottom + ptOffset.y;
+		break;
+	case MoveMode:
+		rcWnd.OffsetRect(ptOffset);
+		break;
+	}
+
+	DM_FloatLayout(rcWnd);
+	p_Parent->DM_Invalidate();
+}
+
 void PersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 {
 	// 获取画布HDC
@@ -131,26 +207,12 @@ void PersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 	}
 
 	//重置绘图的所有变换
-	graphics.ResetTransform();
-	graphics.Save();
+	//graphics.ResetTransform();
+	//graphics.Save();
 }
 
 void PersonPreview::OnLButtonDown(UINT nFlags, CPoint pt)
 {
-	// 判断按下鼠标的模式
-	CRect rcItem;
-	DV_GetClientRect(&rcItem);
-	
-	if (pt.x < rcItem.left + 20 || (pt.x < rcItem.right && pt.x > rcItem.right-20)
-		|| pt.y < rcItem.top + 20 || (pt.y < rcItem.bottom && pt.y > rcItem.bottom - 20))
-	{
-		m_iMode = ZoomMode;
-	}
-	else
-	{
-		m_iMode = MoveMode;
-	}
-
 	DM_SetCapture();
 	m_bDown = true;
 	m_StartDragPt = pt;
@@ -166,114 +228,50 @@ void PersonPreview::OnLButtonUp(UINT nFlags, CPoint pt)
 
 void PersonPreview::OnMouseMove(UINT nFlags, CPoint pt)
 {
-	CRect rcItem;
-	DV_GetClientRect(&rcItem);
-	if (pt.x < rcItem.left + 20)									// 左边沿
+	// 判断拖曳类型
+	int type = JudgeDragType(pt);
+
+	switch (type)
 	{
-		::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
-		if (m_bDown)
-		{
-			OnDragLeft(pt);
-		}
+		case DragLeft:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+			break;
+
+		case DragRight:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+			break;
+
+		case DragTop:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZENS));
+			break;
+
+		case DragBottom:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZENS));
+			break;
+
+		case DragLeftTop:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZENWSE));
+			break;
+
+		case DragLeftBottom:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZENESW));
+			break;
+
+		case DragRightTop:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZENESW));
+			break;
+
+		case DragRightBottom:
+			::SetCursor(::LoadCursor(NULL, IDC_SIZENWSE));
+			break;
+
+		case MoveMode:
+			if (m_bDown) ::SetCursor(::LoadCursor(NULL, IDC_HAND));			
+			break;
 	}
-	else if (pt.x < rcItem.right && pt.x > rcItem.right - 20)		//右边沿
-	{
-		::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
-		if (m_bDown)
-		{
-			OnDragRight(pt);
-		}
-	}
-	else if (pt.y < rcItem.top + 20)								// 上边沿
-	{
-		::SetCursor(::LoadCursor(NULL, IDC_SIZENS));
-		if (m_bDown)
-		{
-			OnDragTop(pt);
-		}
-	}
-	else if (pt.y < rcItem.bottom && pt.y > rcItem.bottom - 20)		//下边沿
-	{
-		::SetCursor(::LoadCursor(NULL, IDC_SIZENS));
-		if (m_bDown)
-		{
-			OnDragBottom(pt);
-		}
-	}
-	else															// 移动
-	{
-		if (m_bDown)
-		{
-			m_TrackDragPt = pt;
-			CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
-			CRect rcWnd = m_StartDragRc;
-			rcWnd.OffsetRect(ptOffset);
-			DM_FloatLayout(rcWnd);
-			p_Parent->DM_Invalidate();
-			SetAttribute(L"cursor", L"ds_tool_move");
-		}
-	}
-}
 
-void PersonPreview::OnDragLeft(CPoint pt)
-{
-	m_TrackDragPt = pt;
-	CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
-	CRect rcWnd = m_StartDragRc;
-	rcWnd.left = rcWnd.left + ptOffset.x;
-	DM_FloatLayout(rcWnd);
-	p_Parent->DM_Invalidate();
-
-	// LOG_USER("%d,%d,%d,%d\n", rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom);
-}
-
-void PersonPreview::OnDragRight(CPoint pt)
-{
-	m_TrackDragPt = pt;
-	CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
-	CRect rcWnd = m_StartDragRc;
-	rcWnd.right = rcWnd.right + ptOffset.x;
-	DM_FloatLayout(rcWnd);
-	p_Parent->DM_Invalidate();
-}
-
-void PersonPreview::OnDragTop(CPoint pt)
-{
-	m_TrackDragPt = pt;
-	CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
-	CRect rcWnd = m_StartDragRc;
-	rcWnd.top = rcWnd.top + ptOffset.y;
-	DM_FloatLayout(rcWnd);
-	p_Parent->DM_Invalidate();
-}
-
-void PersonPreview::OnDragBottom(CPoint pt)
-{
-	m_TrackDragPt = pt;
-	CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
-	CRect rcWnd = m_StartDragRc;
-	rcWnd.bottom = rcWnd.bottom + ptOffset.y;
-	DM_FloatLayout(rcWnd);
-	p_Parent->DM_Invalidate();
-}
-
-void PersonPreview::OnDragLeftTop(CPoint pt)
-{
-
-}
-
-void PersonPreview::OnDragRightTop(CPoint pt)
-{
-
-}
-
-void PersonPreview::OnDragRightBottom(CPoint pt)
-{
-
-}
-
-void PersonPreview::OnDragLeftBottom(CPoint pt)
-{
-
+	// 处理拖曳
+	if(m_bDown)
+		HandleDrag(pt, type);
 }
 

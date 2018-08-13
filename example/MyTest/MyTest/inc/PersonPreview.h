@@ -26,9 +26,26 @@ class PersonPreview : public DUIWindow
 public:
 	PersonPreview();
 	~PersonPreview();
+
+	enum MouseAction
+	{
+		DragLeft,
+		DragLeftTop,
+		DragTop,
+		DragRightTop,
+		DragRight,
+		DragRightBottom,
+		DragBottom,
+		DragLeftBottom,
+		MoveMode,
+		NoneMode
+	};
+
 	void Rotate(Gdiplus::Graphics &graphics, float angle);
 	void ModifyAngle(void);
 	void LoadImage(wchar_t *);
+	int JudgeDragType(CPoint pt);
+	void HandleDrag(CPoint pt, int type);
 
 	DM_BEGIN_MSG_MAP()
 		DM_MSG_WM_PAINT(DM_OnPaint)
@@ -36,13 +53,6 @@ public:
 		MSG_WM_LBUTTONUP(OnLButtonUp)
 		MSG_WM_MOUSEMOVE(OnMouseMove)
 	DM_END_MSG_MAP()
-
-	enum MouseMode 
-	{ 
-		NoneMode = -1, 
-		MoveMode, 
-		ZoomMode
-	};
 
 public:
 	//---------------------------------------------------
@@ -66,17 +76,12 @@ public:
 	CRect						  m_StartDragRc;
 
 private:
-	void OnDragLeft(CPoint pt);			// 拖动左边
-	void OnDragLeftTop(CPoint pt);		// 拖动左上角
-	void OnDragTop(CPoint pt);			// 拖动上边
-	void OnDragRightTop(CPoint pt);		// 拖动右上角
-	void OnDragRight(CPoint pt);		// 拖动右边
-	void OnDragRightBottom(CPoint pt);	// 拖动右下角
-	void OnDragBottom(CPoint pt);		// 拖动下边
-	void OnDragLeftBottom(CPoint pt);	// 拖动左下角
 	ULONG_PTR gdiplusToken;
-	float m_AngleOfRotation;			// 旋转角度
+	// 旋转角度
+	float m_AngleOfRotation;
 
 	// 图片数据
 	std::shared_ptr<Gdiplus::Image> m_pImgData;
+
+	// 默认识别宽度
 };

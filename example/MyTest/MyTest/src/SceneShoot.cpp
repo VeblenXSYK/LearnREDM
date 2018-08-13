@@ -32,6 +32,9 @@ void CSceneShoot::Init(void)
 	p_StrawButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
 	p_ColorStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
 
+	// 前景控件
+	p_Staticfg = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg");
+
 	// 显示明暗
 	m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
 	// 显示对比度
@@ -100,11 +103,13 @@ void CSceneShoot::HandleForeground(void)
 	if (m_foregroundstat == FOREON)
 	{
 		p_ForegroundButton->SetAttribute(L"skin", L"sceneshootforeoff");
+		p_Staticfg->SetAttribute(L"alpha", L"0");
 		m_foregroundstat = FOREOFF;
 	}
 	else
 	{
 		p_ForegroundButton->SetAttribute(L"skin", L"sceneshootforeon");
+		p_Staticfg->SetAttribute(L"alpha", L"50");
 		m_foregroundstat = FOREON;
 	}
 }

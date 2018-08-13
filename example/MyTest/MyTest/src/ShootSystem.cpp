@@ -14,6 +14,7 @@
 
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
+	//MSG_WM_SIZE(OnSize)
 	MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
 	MSG_WM_LBUTTONUP(OnLButtonUP)
 	MSG_WM_SETCURSOR(OnSetCursor)
@@ -51,6 +52,9 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"scenedetailwin"));
 	m_vecWndPtr.push_back(FindChildByNameT<DUIWindow>(L"sceneshootwin"));
 
+	// 获取标题栏地址
+	m_pWndTitle = FindChildByNameT<DUIWindow>(L"scenechoosetitle");
+
 	// 获取控件名称
 	m_pTreeCtrl = FindChildByNameT<DUITreeCtrl>(L"scenechoose_tree");
 	pWrapLayout = FindChildByNameT<DUIWrapLayout>(L"scenechoose_wrap", TRUE);
@@ -67,13 +71,37 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
+void CShootSystem::OnSize(UINT nType, CSize size)
+{
+	DUIWindow *pWin = FindChildByName(L"sceneshoot_operatewin");
+	if (0 != size.cx && 0 != size.cy&&pWin)
+	{
+		if (SIZE_MAXIMIZED == nType)
+		{
+			pWin->SetAttribute(L"width", L"400");
+		}
+		else if (SIZE_RESTORED == nType)
+		{
+			pWin->SetAttribute(L"width", L"300");;
+		}
+	}
+	// 由DMHWnd继续处理OnSize消息
+	SetMsgHandled(FALSE);
+}
+
 void CShootSystem::OnLButtonDbClick(UINT nFlags, CPoint pt)
 {
 	do
 	{
-		SetMsgHandled(FALSE);
-		SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE);
-		SetActiveWindow();
+		CRect titleRect;
+		m_pWndTitle->DV_GetWindowRect(&titleRect);
+
+		if (titleRect.PtInRect(pt))
+		{
+			SetMsgHandled(FALSE);
+			SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE);
+			SetActiveWindow();
+		}
 	} while (false);
 }
 

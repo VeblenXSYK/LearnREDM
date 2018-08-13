@@ -38,6 +38,8 @@ private:
 	DUIStatic *p_ColourdiffStatic;
 	DUISliderCtrl *p_ColourdiffSlider;
 
+	DUIStatic *p_Staticfg;
+
 	DUIButton *p_RotateButton;			// 旋转按钮
 	DUIButton *p_ForegroundButton;		// 前景按钮
 	DUIButton *p_StrawButton;			// 吸管按钮

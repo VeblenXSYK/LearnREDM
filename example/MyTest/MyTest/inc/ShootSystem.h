@@ -26,6 +26,7 @@ public:
 	// Function Des: 消息分发系列函数
 	//---------------------------------------------------
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
+	void OnSize(UINT nType, CSize size);
 	void OnLButtonDbClick(UINT nFlags, CPoint pt);
 	void OnLButtonUP(UINT nFlags, CPoint pt);
 	bool OnSetCursor(HWND hWnd, UINT nHitTest, UINT message);
@@ -83,6 +84,7 @@ private:
 	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度
 	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
 	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
+	DUIWindow *m_pWndTitle;								// 保存标题栏的地址
 
 	bool m_strawcolor;									// 吸管是否开启
 
