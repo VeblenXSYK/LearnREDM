@@ -2,6 +2,7 @@
 
 class CShootSystem;
 class PersonPreview;
+class DUIDragFrame;
 class CSceneShoot
 {
 	// 前景状态
@@ -37,6 +38,8 @@ private:
 
 	DUIStatic *p_ColourdiffStatic;
 	DUISliderCtrl *p_ColourdiffSlider;
+
+	DUIDragFrame *m_pDragFrame;
 
 	DUIStatic *p_Staticfg;
 

@@ -2,6 +2,7 @@
 #include "MainWnd.h"
 #include "ImagePreview.h"
 #include "PersonPreview.h"
+#include "DUIDragFrame.h"
 #include "CommModule.h"
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
@@ -16,6 +17,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	theApp.InitGlobal();													// 初始化指定的全局skin、style、默认字体
 	theApp.Register(DMRegHelperT<ImagePreview>(), true);					// 注册自定义控件
 	theApp.Register(DMRegHelperT<PersonPreview>(), true);	
+	theApp.Register(DMRegHelperT<DUIDragFrame>(), true);
 
 	// 加载通用模块资源
 	CCommModule *cm = CCommModule::GetInstance();

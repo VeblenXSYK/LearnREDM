@@ -2,6 +2,7 @@
 #include "ShootSystem.h"
 #include "PersonPreview.h"
 #include "SceneShoot.h"
+#include "DUIDragFrame.h"
 #include <commdlg.h>
 
 
@@ -32,6 +33,10 @@ void CSceneShoot::Init(void)
 	p_StrawButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
 	p_ColorStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
 
+	// 拖动框
+	m_pDragFrame = pShootSystem->FindChildByNameT<DUIDragFrame>(L"ds_dragframe");
+	m_pDragFrame->p_Parent = p_Win;
+
 	// 前景控件
 	p_Staticfg = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg");
 
@@ -44,25 +49,8 @@ void CSceneShoot::Init(void)
 	// 显示色差
 	m_colourdiffnum = ShowSDValue(p_ColourdiffSlider, p_ColourdiffStatic);
 
-	// 前景开
+	// 默认前景开
 	m_foregroundstat = FOREON;
-
-	// 显示人物
-	DMSmartPtrT<IDMSkin> pSkin = g_pDMApp->GetSkin(L"sceneshootperson");
-
-	//if (p_Person == NULL)
-	//{
-	//	g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
-	//	if (p_Person)
-	//	{
-	//		p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
-	//		// p_Person->m_pSkin = pSkin;
-	//		p_Person->m_pSkin = NULL;
-	//		p_Person->p_Parent = p_Win;
-	//		p_Win->DM_InsertChild(p_Person);
-	//	}
-	//	p_Win->DV_UpdateChildLayout();
-	//}
 }
 
 int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
@@ -156,15 +144,21 @@ void CSceneShoot::HandleImport(void)
 				if (p_Person)
 				{
 					p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
-					// p_Person->m_pSkin = pSkin;
 					p_Person->m_pSkin = NULL;
 					p_Person->p_Parent = p_Win;
 					p_Win->DM_InsertChild(p_Person);
+					m_pDragFrame->DM_SetWndToTop();
 				}
 			}
 			p_Person->LoadImage(szFileName);
 			p_Person->m_picPath = szFileName;
 			p_Win->DV_UpdateChildLayout();
+
+			CRect rcFrame;
+			m_pDragFrame->InitDragFrame(p_Person, rcFrame);
+			m_pDragFrame->DM_FloatLayout(rcFrame);
+			m_pDragFrame->DM_SetVisible(true, true);
+			p_Win->DM_Invalidate();
 		}
 	} while (false);
 }
