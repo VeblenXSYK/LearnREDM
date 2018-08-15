@@ -1,23 +1,22 @@
 ﻿#pragma once
 
-#include <string>
 #include <vector>
-#include <set>
-#include <map>
-#include <memory>
-
 
 class CMainWnd;
-class ImagePreview;
-class CPreChoose;
 class CSceneShoot;
+class CSceneChoose;
 class CShootSystem : public DMHWnd
 {
 public:
+	enum WNDTYPE
+	{
+		SCENE_CHOOSE = 0,
+		SCENE_DETAIL = 1,
+		SCENE_SHOOT = 2,
+		SCENE_UNDEF
+	};
+
 	CShootSystem::CShootSystem(CMainWnd *);
-	void ShowImageOfWrap(std::set<std::wstring> &, int default = 0);
-	void ClearImageOfWrap(void);
-	void GetFilePathOfFmt(CStringW dirpath, std::set<std::wstring> &, std::wstring);
 
 	DECLARE_MESSAGE_MAP()// 仿MFC消息映射宏
 	DECLARE_EVENT_MAP()
@@ -35,64 +34,35 @@ public:
 	//---------------------------------------------------
 	// Function Des: 事件分发系列函数
 	//---------------------------------------------------
-	DMCode OnTreeSelChanged(DMEventArgs *pEvt);
-	DMCode OnLightSDChanged(DMEventArgs *pEvt);
-	DMCode OnSceneChooseReturn();
-	DMCode OnAddPreChoose();
-	DMCode OnDelPreChoose();
-	DMCode OnOneShootChoose();
-	DMCode OnAllShootChoose();
-	DMCode OnForeground();
-	DMCode OnExport();
-	DMCode OnImport();
-	DMCode OnSceneDetailReturn();
-	DMCode OnSceneDetailShoot();
-	DMCode OnSceneShootReturn();
-	DMCode OnSceneShootRotate();
-	DMCode OnSceneShootStraw();
+	DMCode OnCloseBtn();
+	DMCode OnSceneChooseTreeSelChanged(DMEventArgs *pEvt);
+	DMCode OnSceneShootLightSDChanged(DMEventArgs *pEvt);
+	DMCode OnSceneChooseReturnBtn();
+	DMCode OnSceneChooseAddPreBtn();
+	DMCode OnSceneChooseDelPreBtn();
+	DMCode OnSceneChooseOneShootBtn();
+	DMCode OnSceneChooseAllShootBtn();
+	DMCode OnForegroundBtn();
+	DMCode OnExportBtn();
+	DMCode OnImportBtn();
+	DMCode OnSceneDetailReturnBtn();
+	DMCode OnSceneDetailShootBtn();
+	DMCode OnSceneShootReturnBtn();
+	DMCode OnSceneShootRotateBtn();
+	DMCode OnSceneShootStrawBtn();
 	DMCode OnPrepage();
 	DMCode OnNextpage();
-	DMCode OnClose();
 
-	DUITreeCtrl					  *m_pTreeCtrl;
-	HDMTREEITEM					  m_hSelItem_tree;		// 保存选取的tree项
-	ImagePreview				  *p_SelImage;			// 当前选中的图片控件
+	std::vector<DUIWindow *>	  m_vecWndPtr;			// 保存所有的窗口的地址
 
 private:
-	
-	DUIWrapLayout				  *pWrapLayout;
-	DUIListBoxEx				  *pListBoxEx;
+
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口
-	CSceneShoot					  *pSceneShoot;			// 场景拍摄对象
-
-	enum SHOOTMODE
-	{
-		ONE_CHOOSE,
-		ALL_CHOOSE,
-		UNDEF_CHOOSE
-	};
-
-	enum WNDTYPE
-	{
-		SCENE_CHOOSE = 0,
-		SCENE_DETAIL = 1,
-		SCENE_SHOOT = 2,
-		SCENE_UNDEF
-	};
-
-	static const int PICHEIGHT_ONE = 200;				// 每张图片的高度
-	static const int PICHEIGHT_AREA = 600;				// 图片区域的高度
-	std::vector<ImagePreview *> m_vecChildPtr_Wrap;		// 保存WrapLayout中所有ImagePreview子控件的地址
-	std::vector<DUIWindow *> m_vecWndPtr;				// 保存所有的窗口的地址
-	DUIWindow *m_pWndTitle;								// 保存标题栏的地址
+	DUIWindow					  *m_pWndTitle;			// 保存标题栏的地址
+	CSceneChoose				  *m_pSceneChoose;		// 场景选择对象
+	CSceneShoot					  *m_pSceneShoot;		// 场景拍摄对象	
 
 	bool m_strawcolor;									// 吸管是否开启
-
-	// 图片信息 <图片目录路径名，该路径下所有文件路径名>
-	std::map<CStringW, std::shared_ptr<std::set<std::wstring>>> m_mapPicInfo;								
-	std::set<std::wstring>::iterator m_ItorAllShoot;			// “全部拍摄”下指向当前场景的迭代器
-	std::shared_ptr<std::set<std::wstring>> m_pPathAllShoot;	// “全部拍摄”下指向所有psd文件目录名的地址
-	int m_shootmode;											// 拍摄模式（“选择拍摄”与“全部拍摄”）
 };
 
 

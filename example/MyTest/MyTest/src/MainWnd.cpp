@@ -1,16 +1,15 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "MainWnd.h"
 
 BEGIN_MSG_MAP(CMainWnd)
 	MSG_WM_INITDIALOG(OnInitDialog)
-	MSG_WM_SIZE(OnSize)
-	CHAIN_MSG_MAP(DMHWnd)// ½«Î´´¦ÀíµÄÏûÏ¢½»ÓÉDMHWnd´¦Àí
+	CHAIN_MSG_MAP(DMHWnd)// å°†æœªå¤„ç†çš„æ¶ˆæ¯äº¤ç”±DMHWndå¤„ç†
 END_MSG_MAP()
 
 BEGIN_EVENT_MAP(CMainWnd)
-	EVENT_NAME_COMMAND(L"loginclosebtn",OnClose)
-	EVENT_NAME_COMMAND(L"loginshootbtn", OnShootSystem)
-	EVENT_NAME_COMMAND(L"loginuploadbtn", OnUploadSystem)
+	EVENT_NAME_COMMAND(L"closebtn",OnCloseBtn)
+	EVENT_NAME_COMMAND(L"shootsystembtn", OnShootSystemBtn)
+	EVENT_NAME_COMMAND(L"uploadsystembtn", OnUploadSystemBtn)
 END_EVENT_MAP()
 
 BOOL CMainWnd::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
@@ -18,59 +17,33 @@ BOOL CMainWnd::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
-void CMainWnd::OnSize(UINT nType, CSize size)
+DMCode CMainWnd::OnCloseBtn()
 {
-	DUIWindow* pMaxBtn = FindChildByName(L"maxbutton");
-	DUIWindow* pRestoreBtn = FindChildByName(L"restorebutton");
-	if (0 != size.cx&&0 != size.cy&&pMaxBtn&&pRestoreBtn)
-	{
-		if (SIZE_MAXIMIZED == nType)
-		{
-			pMaxBtn->DM_SetVisible(false);
-			pRestoreBtn->DM_SetVisible(true);
-		}
-		else if (SIZE_RESTORED == nType)
-		{
-			pMaxBtn->DM_SetVisible(true);
-			pRestoreBtn->DM_SetVisible(false);
-		}
-	}
-	// ÓÉDMHWnd¼ÌÐø´¦ÀíOnSizeÏûÏ¢
-	SetMsgHandled(FALSE);
-}
-
-DMCode CMainWnd::OnClose()
-{
-	// ËùÓÐ¹Ø±Õ´°¿ÚÍ³Ò»Ê¹ÓÃDestroyWindow()£¬²»ÒªÊ¹ÓÃPostMessage(WM_QUIT)
+	// æ‰€æœ‰å…³é—­çª—å£ç»Ÿä¸€ä½¿ç”¨DestroyWindow()ï¼Œä¸è¦ä½¿ç”¨PostMessage(WM_QUIT)
 	DestroyWindow();
 	return DM_ECODE_OK;
 }
 
-DMCode CMainWnd::OnShootSystem()
+DMCode CMainWnd::OnShootSystemBtn()
 {
 	do
 	{
-		if (m_pShootSystem && m_pShootSystem->IsWindow())
-		{
-			break;
-		}
-		m_pShootSystem.Release();
 		m_pShootSystem.Attach(new CShootSystem(this));
 
-		// ´´½¨ÅÄÉãÏµÍ³´°¿Ú
+		// åˆ›å»ºæ‹æ‘„ç³»ç»Ÿçª—å£
 		m_pShootSystem->DM_CreateWindow(L"shootsystem", 0, 0, 0, 0, false);
 		m_pShootSystem->SendMessage(WM_INITDIALOG);
 		m_pShootSystem->CenterWindow();
 		m_pShootSystem->ShowWindow(SW_SHOW);
 
-		// Òþ²ØÖ÷´°¿Ú
+		// éšè—ä¸»çª—å£
 		this->ShowWindow(SW_HIDE);
 	} while (false);
 
 	return DM_ECODE_OK;
 }
 
-DMCode CMainWnd::OnUploadSystem()
+DMCode CMainWnd::OnUploadSystemBtn()
 {
 	return DM_ECODE_OK;
 }

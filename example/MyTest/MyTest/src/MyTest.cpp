@@ -15,13 +15,17 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	theApp.LoadResPack((WPARAM)(L"WorldTripShootRes"),NULL,NULL);			// 路径总是相对于生成目录
 	theApp.InitGlobal();													// 初始化指定的全局skin、style、默认字体
-	theApp.Register(DMRegHelperT<ImagePreview>(), true);					// 注册自定义控件
-	theApp.Register(DMRegHelperT<PersonPreview>(), true);	
+	theApp.Register(DMRegHelperT<CImagePreview>(), true);					// 注册自定义控件
+	theApp.Register(DMRegHelperT<CPersonPreview>(), true);	
 	theApp.Register(DMRegHelperT<DUIDragFrame>(), true);
 
 	// 加载通用模块资源
 	CCommModule *cm = CCommModule::GetInstance();
 	cm->LoadResource();
+
+	// 开启工作线程
+	CWorkThread wt;
+	wt.Start();
 
 	DMSmartPtrT<CMainWnd> pMainWnd;
 	pMainWnd.Attach(new CMainWnd());

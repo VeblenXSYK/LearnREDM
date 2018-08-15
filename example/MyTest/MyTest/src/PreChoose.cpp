@@ -1,13 +1,14 @@
-#include "StdAfx.h"
-#include "PreChoose.h"
+ï»¿#include "StdAfx.h"
+#include "SceneChoose.h"
 #include "ShootSystem.h"
+#include "PreChoose.h"
 
 #include <atlconv.h>
 
 BEGIN_MSG_MAP(CPreChoose)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	MSG_WM_SIZE(OnSize)
-	CHAIN_MSG_MAP(DMHWnd)// ½«Î´´¦ÀíµÄÏûÏ¢½»ÓÉDMHWnd´¦Àí
+	CHAIN_MSG_MAP(DMHWnd)// å°†æœªå¤„ç†çš„æ¶ˆæ¯äº¤ç”±DMHWndå¤„ç†
 END_MSG_MAP()
 
 BEGIN_EVENT_MAP(CPreChoose)
@@ -19,7 +20,7 @@ END_EVENT_MAP()
 BOOL CPreChoose::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 {
 	CRect rcItem;
-	m_pShootSystem->DV_GetClientRect(&rcItem);
+	m_pSceneChoose->m_pShootSystem->DV_GetClientRect(&rcItem);
 
 	// SetWindowPos(m_pShootSystem->m_hWnd, rcItem.left + 500, rcItem.bottom - 200, 0, 0, SWP_NOSIZE);
 	MoveWindow(rcItem.left + 500, rcItem.bottom - 200, 350, 150);
@@ -46,7 +47,7 @@ void CPreChoose::OnSize(UINT nType, CSize size)
 			pRestoreBtn->DM_SetVisible(false);
 		}
 	}
-	// ÓÉDMHWnd¼ÌÐø´¦ÀíOnSizeÏûÏ¢
+	// ç”±DMHWndç»§ç»­å¤„ç†OnSizeæ¶ˆæ¯
 	SetMsgHandled(FALSE);
 }
 
@@ -58,17 +59,17 @@ DMCode CPreChoose::OnClose()
 
 DMCode CPreChoose::OnConfirm()
 {
-	DUITreeCtrl *pTreeCtrl = m_pShootSystem->m_pTreeCtrl;
+	DUITreeCtrl *pTreeCtrl = m_pSceneChoose->m_pTreeCtrl;
 	HDMTREEITEM hTree = pTreeCtrl->GetRootItem();
 	while (hTree != NULL)
 	{
-		if (pTreeCtrl->GetItemText(hTree) == L"Ô¤Ñ¡")
+		if (pTreeCtrl->GetItemText(hTree) == L"é¢„é€‰")
 		{
-			// »ñÈ¡ÉèÖÃÃû³Æ
+			// èŽ·å–è®¾ç½®åç§°
 			CStringW name = pNameEdit->GetWindowText().Trim();
-			m_preChooseName = name;
+			m_PreChooseName = name;
 
-			// ¼ì²éÊÇ·ñÒÑ¾­´æÔÚ
+			// æ£€æŸ¥æ˜¯å¦å·²ç»å­˜åœ¨
 			bool exist = false;
 			HDMTREEITEM hchild = pTreeCtrl->GetChildItem(hTree);
 			while (hchild != NULL)
@@ -82,7 +83,7 @@ DMCode CPreChoose::OnConfirm()
 				hchild = pTreeCtrl->GetNextSiblingItem(hchild);
 			}
 
-			// ²»´æÔÚÔò²åÈë
+			// ä¸å­˜åœ¨åˆ™æ’å…¥
 			if(!exist)
 				pTreeCtrl->InsertItem(name, 1, 1, (LPARAM)-1, hTree);
 		}
@@ -100,8 +101,8 @@ DMCode CPreChoose::OnCancel()
 	return DM_ECODE_OK;
 }
 
-CPreChoose::CPreChoose(CShootSystem *pShootSystem)
+CPreChoose::CPreChoose(CSceneChoose *pSceneChoose)
 {
-	m_pShootSystem = pShootSystem;
+	m_pSceneChoose = pSceneChoose;
 }
 

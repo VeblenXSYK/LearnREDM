@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-class CShootSystem;
-class PersonPreview;
 class DUIDragFrame;
+class CShootSystem;
+class CPersonPreview;
 class CSceneShoot
 {
 	// 前景状态
@@ -24,38 +24,35 @@ public:
 	void HandleSDChanged(DMEventArgs *pEvt);
 
 private:
-	DUIWindow * p_Win;
-	PersonPreview *p_Person;
+	DUIWindow				*m_pWin;
+	CShootSystem			*m_pShootSystem;
+	CPersonPreview			*m_pPerson;
 
-	DUIStatic * p_LightshadeStatic;
-	DUISliderCtrl *p_LightshadeSlider;
+	DUIStatic				*m_pLightshadeStatic;
+	DUISliderCtrl			*m_pLightshadeSlider;
 
-	DUIStatic *p_ContrastStatic;
-	DUISliderCtrl *p_ContrastSlider;
+	DUIStatic				*m_pContrastStatic;
+	DUISliderCtrl			*m_pContrastSlider;
 
-	DUIStatic *p_ColourtempStatic;
-	DUISliderCtrl *p_ColourtempSlider;
+	DUIStatic				*m_pColourtempStatic;
+	DUISliderCtrl			*m_pColourtempSlider;
 
-	DUIStatic *p_ColourdiffStatic;
-	DUISliderCtrl *p_ColourdiffSlider;
+	DUIStatic				*m_pColourdiffStatic;
+	DUISliderCtrl			*m_pColourdiffSlider;
 
-	DUIDragFrame *m_pDragFrame;
+	DUIStatic				*m_pStaticfg;				// 前景框
+	DUIButton				*m_pRotateButton;			// 旋转按钮
+	DUIButton				*m_pForegroundButton;		// 前景按钮
+	DUIButton				*m_pStrawButton;			// 吸管按钮
+	DUIStatic				*m_pColorStatic;			// 环境色
 
-	DUIStatic *p_Staticfg;
+	DUIDragFrame			*m_pDragFrame;				// 拖曳框
 
-	DUIButton *p_RotateButton;			// 旋转按钮
-	DUIButton *p_ForegroundButton;		// 前景按钮
-	DUIButton *p_StrawButton;			// 吸管按钮
-	DUIStatic *p_ColorStatic;			// 环境色
-
-private:
 	int m_lightshadenum;
 	int m_contrastnum;
 	int m_colourtempnum;
 	int m_colourdiffnum;
 	int m_foregroundstat;
-
-	CShootSystem *pShootSystem;
 };
 
 

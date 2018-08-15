@@ -12,6 +12,8 @@ set(LIBRARY_OUTPUT_PATH  ${MyTest_BINARY_DIR}/bin)
 set(LIBS ${LIBRARY_OUTPUT_PATH})
 #添加jpeg库文件目录
 link_directories(${LIBS} ${PROJDIR}/Psdump/libjpeg)		
+link_directories(${LIBS} ${PROJDIR}/PSCoreLib/lib/Debug/Dynamic)	
+include_directories(${LIBS} ${PROJDIR}/PSCoreLib/include)	
 
 #-------------------------------------------------------------------------------------------------------------------
 # support MT

@@ -1,26 +1,26 @@
-#include "StdAfx.h"
-#include "ShootSystem.h"
+﻿#include "StdAfx.h"
+#include "SceneChoose.h"
 #include "ImagePreview.h"
 
-void ImagePreview::DM_OnPaint(IDMCanvas* pCanvas)
+void CImagePreview::DM_OnPaint(IDMCanvas* pCanvas)
 {
 	if (m_pSkin)
 	{
-		// ��ȡͼƬ�ĳߴ�
+		// 获取图片的尺寸
 		CSize sz;
 		m_pSkin->GetStateSize(sz);
 
-		// ��ȡ�ؼ��ĳߴ�
+		// 获取控件的尺寸
 		CRect rcItem;
 		this->DV_GetClientRect(&rcItem);
 
-		// ��ͼƬ���տؼ��ȱ�������
+		// 把图片按照控件等比例缩放
 		MeetRect(rcItem, sz);
 
 		m_pSkin->Draw(pCanvas, rcItem, 0);
 
-		// �ж��Ƿ�Ϊ��ǰѡ�пؼ�
-		if (this == m_pShootSystem->p_SelImage)
+		// 判断是否为当前选中控件
+		if (this == m_pSceneChoose->m_pSelImage)
 		{
 			CRect rcDraw = rcItem;
 			rcDraw.DeflateRect(0, 1, 0, 1);
@@ -39,14 +39,14 @@ void ImagePreview::DM_OnPaint(IDMCanvas* pCanvas)
 	}
 }
 
-void ImagePreview::OnLButtonDown(UINT nFlags, CPoint pt)
+void CImagePreview::OnLButtonDown(UINT nFlags, CPoint pt)
 {
 	__super::OnLButtonDown(nFlags, pt);
 
-	// ����֮ǰѡ�еĿؼ�
-	if (m_pShootSystem->p_SelImage != NULL)
-		m_pShootSystem->p_SelImage->DM_Invalidate();
-	// ���õ�ǰѡ�еĿؼ�
-	m_pShootSystem->p_SelImage = this;
+	// 更新之前选中的控件
+	if (m_pSceneChoose->m_pSelImage != NULL)
+		m_pSceneChoose->m_pSelImage->DM_Invalidate();
+	// 设置当前选中的控件
+	m_pSceneChoose->m_pSelImage = this;
 }
 

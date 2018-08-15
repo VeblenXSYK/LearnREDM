@@ -51,9 +51,6 @@ public:
 	DMSmartPtrT<IDMSkin>	m_pSkin;		///< 绘制mov小图标
 };
 
-class PersonPreview;
-class ObjTreeData;
-class RightXml;
 class DUIDragFrame : public DUIWindow
 {
 	DMDECLARE_CLASS_NAME(DUIDragFrame,L"duidragframe",DMREG_Window);
@@ -109,5 +106,5 @@ public:
 	CRect									 m_StartDragRc;		///< 开始拖动时元素区域大小
 
 	// 辅助
-	DUIWindow								 *m_pData;			// PersonPreview
+	DUIWindow								 *m_pData;			// CPersonPreview
 };

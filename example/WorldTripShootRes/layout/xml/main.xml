@@ -2,12 +2,12 @@
 <dm initsize="1284,696" minsize="200,200" bresize="0" btranslucent="1">
 	<root clrbg="pbgra(3a,3a,3a,ff)" skin="loginbg">
 		<Window pos="0,0,-0,@50" text="" bdrag="1">
-			<Button name="loginclosebtn" pos="-47,13,@35,@37" text="" skin="closebtnskin" />
+			<Button name="closebtn" pos="-47,13,@35,@37" text="" skin="closebtnskin" />
 		</Window>
 		<Window pos="413,431,@470,@56" text="" skin="loginwinskin">
 			<Window pos="144,40,@0,@0" text="Window" ncmargin="1,1,1,1" clrnc="pbgra(00,00,00,ff)" clrbg="pbgra(dd,dd,dd,ff)" />
-			<Button name="loginshootbtn" pos="3,1,@238,@55" text="" skin="loginshootbtnskin" clrtext="pbgra(ff,ff,ff,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" />
-			<Button name="loginuploadbtn" pos="230,2,@238,@54" text="" skin="loginuploadbtnskin" clrtext="pbgra(ff,ff,ff,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" />
+			<Button name="shootsystembtn" pos="3,1,@238,@55" text="" skin="loginshootbtnskin" clrtext="pbgra(ff,ff,ff,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" />
+			<Button name="uploadsystembtn" pos="230,2,@238,@54" text="" skin="loginuploadbtnskin" clrtext="pbgra(ff,ff,ff,ff)" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" />
 		</Window>
 	</root>
 </dm>

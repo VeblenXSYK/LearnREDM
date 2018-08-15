@@ -1,6 +1,6 @@
 ﻿#include "StdAfx.h"
-#include "ExportSet.h"
 #include "ShootSystem.h"
+#include "ExportSet.h"
 
 BEGIN_MSG_MAP(CExportSet)
 	MSG_WM_INITDIALOG(OnInitDialog)

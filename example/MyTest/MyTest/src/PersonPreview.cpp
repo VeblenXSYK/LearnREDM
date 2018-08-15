@@ -6,7 +6,7 @@
 
 const double PI = 3.1415926535898;
 
-PersonPreview::PersonPreview()
+CPersonPreview::CPersonPreview()
 {
 	m_bDown = false;
 	m_iMode = NoneMode;
@@ -18,7 +18,7 @@ PersonPreview::PersonPreview()
 	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
-PersonPreview::~PersonPreview()
+CPersonPreview::~CPersonPreview()
 {
 	//释放gdi+
 	Gdiplus::GdiplusShutdown(gdiplusToken);
@@ -60,7 +60,7 @@ PersonPreview::~PersonPreview()
 //	graphics.Save();
 //}
 
-void PersonPreview::Rotate(Gdiplus::Graphics &graphics, float angle)
+void CPersonPreview::Rotate(Gdiplus::Graphics &graphics, float angle)
 {
 	// 获取矩形中心点
 	Gdiplus::REAL centerPosX = static_cast<Gdiplus::REAL>(m_rcWindow.left + m_rcWindow.Width() / 2);
@@ -73,7 +73,7 @@ void PersonPreview::Rotate(Gdiplus::Graphics &graphics, float angle)
 	graphics.TranslateTransform(-centerPosX, -centerPosY);
 }
 
-void PersonPreview::ModifyAngle(void)
+void CPersonPreview::ModifyAngle(void)
 {
 	m_AngleOfRotation += 45;
 	if (m_AngleOfRotation == 360)
@@ -81,13 +81,13 @@ void PersonPreview::ModifyAngle(void)
 	p_Parent->DM_Invalidate();
 }
 
-void PersonPreview::LoadImage(wchar_t *imgpath)
+void CPersonPreview::LoadImage(wchar_t *imgpath)
 {
 	// 加载图片
 	m_pImgData.reset(new Gdiplus::Image(imgpath));
 }
 
-int PersonPreview::JudgeDragType(CPoint pt)
+int CPersonPreview::JudgeDragType(CPoint pt)
 {
 	CRect rcItem;
 	DV_GetClientRect(&rcItem);
@@ -111,7 +111,7 @@ int PersonPreview::JudgeDragType(CPoint pt)
 		return MoveMode;
 }
 
-void PersonPreview::HandleDrag(CPoint pt, int type)
+void CPersonPreview::HandleDrag(CPoint pt, int type)
 {
 	m_TrackDragPt = pt;
 	CPoint ptOffset = m_TrackDragPt - m_StartDragPt;
@@ -163,7 +163,7 @@ void PersonPreview::HandleDrag(CPoint pt, int type)
 	p_Parent->DM_Invalidate();
 }
 
-void PersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
+void CPersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 {
 	// 获取画布HDC
 	HDC hDC = pCanvas->GetDC();
@@ -211,7 +211,7 @@ void PersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 	//graphics.Save();
 }
 
-void PersonPreview::OnLButtonDown(UINT nFlags, CPoint pt)
+void CPersonPreview::OnLButtonDown(UINT nFlags, CPoint pt)
 {
 	DM_SetCapture();
 	m_bDown = true;
@@ -220,13 +220,13 @@ void PersonPreview::OnLButtonDown(UINT nFlags, CPoint pt)
 	m_StartDragRc = m_rcWindow;
 }
 
-void PersonPreview::OnLButtonUp(UINT nFlags, CPoint pt)
+void CPersonPreview::OnLButtonUp(UINT nFlags, CPoint pt)
 {
 	m_bDown = false;
 	DM_ReleaseCapture();
 }
 
-void PersonPreview::OnMouseMove(UINT nFlags, CPoint pt)
+void CPersonPreview::OnMouseMove(UINT nFlags, CPoint pt)
 {
 	// 判断拖曳类型
 	int type = JudgeDragType(pt);

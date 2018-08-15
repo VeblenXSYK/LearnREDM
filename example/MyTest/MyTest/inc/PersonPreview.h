@@ -2,7 +2,7 @@
 // Copyright (c) DuiMagic
 // All rights reserved.
 // 
-// File Name: PersonPreview.h 
+// File Name: CPersonPreview.h 
 // File Des: 预览窗口
 // File Summary: 
 // Cur Version: 1.0
@@ -20,12 +20,12 @@
 #include "Gdiplus.h"
 
 class CShootSystem;
-class PersonPreview : public DUIWindow
+class CPersonPreview : public DUIWindow
 {
-	DMDECLARE_CLASS_NAME(PersonPreview, L"PersonPreview", DMREG_Window);
+	DMDECLARE_CLASS_NAME(CPersonPreview, L"PersonPreview", DMREG_Window);
 public:
-	PersonPreview();
-	~PersonPreview();
+	CPersonPreview();
+	~CPersonPreview();
 
 	enum MouseAction
 	{

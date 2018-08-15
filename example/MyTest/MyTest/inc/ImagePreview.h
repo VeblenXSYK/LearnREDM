@@ -1,9 +1,9 @@
-//-------------------------------------------------------
+ï»¿//-------------------------------------------------------
 // Copyright (c) DuiMagic
 // All rights reserved.
 // 
-// File Name: ImagePreview.h 
-// File Des: Ô¤ÀÀ´°¿Ú
+// File Name: CImagePreview.h 
+// File Des: é¢„è§ˆçª—å£
 // File Summary: 
 // Cur Version: 1.0
 // Author:
@@ -17,12 +17,12 @@
 #include <string>
 #include "DMResFolderImpl.h"
 
-class CShootSystem;
-class ImagePreview : public DUIWindow
+class CSceneChoose;
+class CImagePreview : public DUIWindow
 {
-	DMDECLARE_CLASS_NAME(ImagePreview, L"ImagePreview", DMREG_Window);
+	DMDECLARE_CLASS_NAME(CImagePreview, L"ImagePreview", DMREG_Window);
 public:
-	ImagePreview() {};
+	CImagePreview() {};
 	DM_BEGIN_MSG_MAP()
 		DM_MSG_WM_PAINT(DM_OnPaint)
 		MSG_WM_LBUTTONDOWN(OnLButtonDown)
@@ -30,13 +30,13 @@ public:
 
 public:
 	//---------------------------------------------------
-	// Function Des: DUIµÄÏûÏ¢·Ö·¢ÏµÁĞº¯Êı
+	// Function Des: DUIçš„æ¶ˆæ¯åˆ†å‘ç³»åˆ—å‡½æ•°
 	//---------------------------------------------------
 	void DM_OnPaint(IDMCanvas* pCanvas);
 	void OnLButtonDown(UINT nFlags, CPoint pt);
 
 public:
+	std::wstring				  m_picPath;			// ä¿å­˜è¯¥æ§ä»¶å¯¹åº”å›¾ç‰‡çš„è·¯å¾„
 	DMSmartPtrT<IDMSkin>          m_pSkin;
-	DMSmartPtrT<CShootSystem>	  m_pShootSystem;
-	std::wstring				  m_picPath;			// ±£´æ¸Ã¿Ø¼ş¶ÔÓ¦Í¼Æ¬µÄÂ·¾¶
+	CSceneChoose				  *m_pSceneChoose;
 };

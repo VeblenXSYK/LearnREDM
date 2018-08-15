@@ -1,53 +1,54 @@
 ﻿#include "StdAfx.h"
 #include "ShootSystem.h"
 #include "PersonPreview.h"
-#include "SceneShoot.h"
 #include "DUIDragFrame.h"
+#include "SceneShoot.h"
+
 #include <commdlg.h>
 
 
-CSceneShoot::CSceneShoot(CShootSystem *pShoot)
+CSceneShoot::CSceneShoot(CShootSystem *pShootSystem)
 {
-	pShootSystem = pShoot;
-	p_Person = NULL;
+	m_pShootSystem = pShootSystem;
+	m_pPerson = NULL;
 }
 
 void CSceneShoot::Init(void)
 {	
-	p_Win = pShootSystem->FindChildByNameT<DUIWindow>(L"sceneshoot_win");
+	m_pWin = m_pShootSystem->FindChildByNameT<DUIWindow>(L"sceneshoot_win");
 
-	p_LightshadeStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"lightshadestatic");
-	p_LightshadeSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"lightshadeslider");
+	m_pLightshadeStatic = m_pShootSystem->FindChildByNameT<DUIStatic>(L"lightshadestatic");
+	m_pLightshadeSlider = m_pShootSystem->FindChildByNameT<DUISliderCtrl>(L"sceneshoot_lightshadeslider");
 
-	p_ContrastStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"contraststatic");
-	p_ContrastSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"contrastslider");
+	m_pContrastStatic = m_pShootSystem->FindChildByNameT<DUIStatic>(L"contraststatic");
+	m_pContrastSlider = m_pShootSystem->FindChildByNameT<DUISliderCtrl>(L"sceneshoot_contrastslider");
 
-	p_ColourtempStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"colourtempstatic");
-	p_ColourtempSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"colourtempslider");
+	m_pColourtempStatic = m_pShootSystem->FindChildByNameT<DUIStatic>(L"colourtempstatic");
+	m_pColourtempSlider = m_pShootSystem->FindChildByNameT<DUISliderCtrl>(L"sceneshoot_colourtempslider");
 
-	p_ColourdiffStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"colourdiffstatic");
-	p_ColourdiffSlider = pShootSystem->FindChildByNameT<DUISliderCtrl>(L"colourdiffslider");
+	m_pColourdiffStatic = m_pShootSystem->FindChildByNameT<DUIStatic>(L"colourdiffstatic");
+	m_pColourdiffSlider = m_pShootSystem->FindChildByNameT<DUISliderCtrl>(L"sceneshoot_colourdiffslider");
 
-	p_RotateButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_rotatebtn");
-	p_ForegroundButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_forebtn");
-	p_StrawButton = pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
-	p_ColorStatic = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
+	m_pRotateButton = m_pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_rotatebtn");
+	m_pForegroundButton = m_pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_forebtn");
+	m_pStrawButton = m_pShootSystem->FindChildByNameT<DUIButton>(L"sceneshoot_strawbtn");
+	m_pColorStatic = m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_colorstatic");
 
 	// 拖动框
-	m_pDragFrame = pShootSystem->FindChildByNameT<DUIDragFrame>(L"ds_dragframe");
-	m_pDragFrame->p_Parent = p_Win;
+	m_pDragFrame = m_pShootSystem->FindChildByNameT<DUIDragFrame>(L"ds_dragframe");
+	m_pDragFrame->p_Parent = m_pWin;
 
 	// 前景控件
-	p_Staticfg = pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg");
+	m_pStaticfg = m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg");
 
 	// 显示明暗
-	m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
+	m_lightshadenum = ShowSDValue(m_pLightshadeSlider, m_pLightshadeStatic);
 	// 显示对比度
-	m_contrastnum = ShowSDValue(p_ContrastSlider, p_ContrastStatic);
+	m_contrastnum = ShowSDValue(m_pContrastSlider, m_pContrastStatic);
 	// 显示色温
-	m_colourtempnum = ShowSDValue(p_ColourtempSlider, p_ColourtempStatic);
+	m_colourtempnum = ShowSDValue(m_pColourtempSlider, m_pColourtempStatic);
 	// 显示色差
-	m_colourdiffnum = ShowSDValue(p_ColourdiffSlider, p_ColourdiffStatic);
+	m_colourdiffnum = ShowSDValue(m_pColourdiffSlider, m_pColourdiffStatic);
 
 	// 默认前景开
 	m_foregroundstat = FOREON;
@@ -78,26 +79,27 @@ void CSceneShoot::ShowStaticColor(COLORREF RGBcolor)
 
 	CStringW strClrbg;
 	strClrbg.Format(L"pbgra(%x,%x,%x,ff)", blue, green, red);
-	p_ColorStatic->SetAttribute(L"clrbg", strClrbg);
+	m_pColorStatic->SetAttribute(L"clrbg", strClrbg);
 }
 
 void CSceneShoot::HandleRotate(void)
 {
-	p_Person->ModifyAngle();
+	if(m_pPerson != NULL)
+		m_pPerson->ModifyAngle();
 }
 
 void CSceneShoot::HandleForeground(void)
 {
 	if (m_foregroundstat == FOREON)
 	{
-		p_ForegroundButton->SetAttribute(L"skin", L"sceneshootforeoff");
-		p_Staticfg->SetAttribute(L"alpha", L"0");
+		m_pForegroundButton->SetAttribute(L"skin", L"sceneshootforeoff");
+		m_pStaticfg->SetAttribute(L"alpha", L"0");
 		m_foregroundstat = FOREOFF;
 	}
 	else
 	{
-		p_ForegroundButton->SetAttribute(L"skin", L"sceneshootforeon");
-		p_Staticfg->SetAttribute(L"alpha", L"50");
+		m_pForegroundButton->SetAttribute(L"skin", L"sceneshootforeon");
+		m_pStaticfg->SetAttribute(L"alpha", L"50");
 		m_foregroundstat = FOREON;
 	}
 }
@@ -135,43 +137,43 @@ void CSceneShoot::HandleImport(void)
 		//ofn.lpfnHook = (LPOFNHOOKPROC)OFNHookProc;
 		//ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING | OFN_NOCHANGEDIR;
 		ofn.lpstrFilter = L"图像文件(*.bmp;*.jpg;*.png)\0*.bmp;*.jpg;*.png\0\0";
-		ofn.hwndOwner = pShootSystem->m_hWnd;
+		ofn.hwndOwner = m_pShootSystem->m_hWnd;
 		if (::GetOpenFileNameW(&ofn))
 		{// todo.hgy413 note:GetOpenFileNameW点击后WM_LBUTTTONUP消息会发送给dui，所以不要随意只处理WM_LBUTTONUP
-			if (p_Person == NULL)
+			if (m_pPerson == NULL)
 			{
-				g_pDMApp->CreateRegObj((void**)&p_Person, L"PersonPreview", DMREG_Window);
-				if (p_Person)
+				g_pDMApp->CreateRegObj((void**)&m_pPerson, L"PersonPreview", DMREG_Window);
+				if (m_pPerson)
 				{
-					p_Person->SetAttribute(L"pos", L"|0,|0,@288,@493");
-					p_Person->m_pSkin = NULL;
-					p_Person->p_Parent = p_Win;
-					p_Win->DM_InsertChild(p_Person);
+					m_pPerson->SetAttribute(L"pos", L"|0,|0,@288,@493");
+					m_pPerson->m_pSkin = NULL;
+					m_pPerson->p_Parent = m_pWin;
+					m_pWin->DM_InsertChild(m_pPerson);
 					m_pDragFrame->DM_SetWndToTop();
 				}
 			}
-			p_Person->LoadImage(szFileName);
-			p_Person->m_picPath = szFileName;
-			p_Win->DV_UpdateChildLayout();
+			m_pPerson->LoadImage(szFileName);
+			m_pPerson->m_picPath = szFileName;
+			m_pWin->DV_UpdateChildLayout();
 
 			CRect rcFrame;
-			m_pDragFrame->InitDragFrame(p_Person, rcFrame);
+			m_pDragFrame->InitDragFrame(m_pPerson, rcFrame);
 			m_pDragFrame->DM_FloatLayout(rcFrame);
 			m_pDragFrame->DM_SetVisible(true, true);
-			p_Win->DM_Invalidate();
+			m_pWin->DM_Invalidate();
 		}
 	} while (false);
 }
 
 void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 {
-	if(0 == _wcsicmp(pEvt->m_szNameFrom, L"lightshadeslider"))
-		m_lightshadenum = ShowSDValue(p_LightshadeSlider, p_LightshadeStatic);
-	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"contrastslider"))
-		m_contrastnum = ShowSDValue(p_ContrastSlider, p_ContrastStatic);
-	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"colourtempslider"))
-		m_colourtempnum = ShowSDValue(p_ColourtempSlider, p_ColourtempStatic);
+	if(0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_lightshadeslider"))
+		m_lightshadenum = ShowSDValue(m_pLightshadeSlider, m_pLightshadeStatic);
+	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_contrastslider"))
+		m_contrastnum = ShowSDValue(m_pContrastSlider, m_pContrastStatic);
+	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_colourtempslider"))
+		m_colourtempnum = ShowSDValue(m_pColourtempSlider, m_pColourtempStatic);
 	else
-		m_colourdiffnum = ShowSDValue(p_ColourdiffSlider, p_ColourdiffStatic);
+		m_colourdiffnum = ShowSDValue(m_pColourdiffSlider, m_pColourdiffStatic);
 }
 

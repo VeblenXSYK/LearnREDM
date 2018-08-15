@@ -6,12 +6,16 @@
 // DM
 #include "DmMainOutput.h"
 
+// PSCore
+#include "PSExport.h"
+
 // lib
 #ifdef _DEBUG
 #pragma comment(lib,"DmMain_d.lib")
 #pragma comment(lib,"PsDump_d.lib")
 #pragma comment(lib,"PsDump_d.lib")
 #pragma comment(lib,"Jpeg.lib")
+#pragma comment(lib,"PSCore.lib")
 #else
 #pragma comment(lib,"DmMain.lib")
 #endif
