@@ -1,6 +1,7 @@
 ﻿#include "StdAfx.h"
 #include "CommModule.h"
 #include "ImagePreview.h"
+#include "SceneShoot.h"
 #include "ShootSystem.h"
 #include "PreChoose.h"
 #include "SceneChoose.h"
@@ -18,35 +19,99 @@ CSceneChoose::CSceneChoose(CShootSystem *pShootSystem)
 	m_pShootSystem = pShootSystem;
 }
 
-void CSceneChoose::DefParsePsdMessage(std::wstring path)
+void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 {
-	// 将该选择场景路径传给dll中处理
-	LOG_USER("%s\n", path.c_str());
-
-	//PSOpenFile(CCommModule::PSHandle, std::string& imgFile, std::string& outMsg);
-	//CCommModule::PSHandle
-
-	/*DMSmartPtrT<IDMBitmap> pBitmap;
-	DMSmartPtrT<IDMSkin> pSkin = g_pDMApp->GetSkin(L"scenedetailstatic1bg");
-	pSkin->GetBitmap(&pBitmap);
-	if (pBitmap)
+	switch (messagetype)
 	{
-		DWORD dwSize = DM::GetFileSizeW(path.c_str());
-		if (dwSize != 0)
-		{
-			DMBufT<byte>pBuf; pBuf.Allocate(dwSize);
-			DWORD dwRead = 0;
-			DM::GetFileBufW(path.c_str(), (void**)&pBuf, dwSize, dwRead);
-			pBitmap->LoadFromMemory(pBuf, dwSize, L"");
-		}
-		m_pShootSystem->FindChildByNameT<DUIStatic>(L"scenedetail_static1bg")->DM_Invalidate();
-	}*/
+		case CGuiMessage::SECENECHOOSE_PARSEPSD_ONE:
+		case CGuiMessage::SECENECHOOSE_PARSEPSD_ALL:
+			// 打开Psd文件
+			OpenPsdFile(wpath);
+			// 获取背景图片
+			GetBackgroundLayerImageData();
+			// 获取前景图片
+			GetForegroundLayerImageData();
+			// 改变“场景详情”背景
+			m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
+			// 关闭“选择场景”窗口
+			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_CHOOSE]->DM_SetVisible(FALSE);
+			// 显示“场景详情”窗口
+			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+			break;
+		case CGuiMessage::SECENEDETAIL_PARSEPSD_PREV:
+		case CGuiMessage::SECENEDETAIL_PARSEPSD_NEXT:
+			// 打开Psd文件
+			OpenPsdFile(wpath);
+			// 获取背景图片
+			GetBackgroundLayerImageData();
+			// 获取前景图片
+			GetForegroundLayerImageData();
+			// 改变“场景详情”背景
+			m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
+			break;
+		case CGuiMessage::SECENEDETAIL_PARSEPSD_SHOOT:
+			// 更换场景拍摄背景图片
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			// 更换场景拍摄前景图片
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			// 关闭“场景详情”窗口
+			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(FALSE);
+			// 显示“场景拍摄”窗口
+			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
+			// 初始化“场景拍摄”
+			m_pShootSystem->m_pSceneShoot->Init();
+			break;
+		case CGuiMessage::SECENESHOOT_PARSEPSD_PREV:
+		case CGuiMessage::SECENESHOOT_PARSEPSD_NEXT:
+			// 打开Psd文件
+			OpenPsdFile(wpath);
+			// 获取背景图片
+			GetBackgroundLayerImageData();
+			// 获取前景图片
+			GetForegroundLayerImageData();
+			// 更换场景拍摄背景图片
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			// 更换场景拍摄前景图片
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			break;
+		default:
+			break;
+	}
+}
 
-	// 关闭“选择场景”窗口
-	m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_CHOOSE]->DM_SetVisible(FALSE);
+void CSceneChoose::ProduceParsePsdMessage(std::wstring &path, int message)
+{
+	// 保存当前路径
+	m_curImagepath = path;
 
-	// 显示“场景详情”窗口
-	m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+	// 创建消息对象
+	CGuiMessage guiMessage;
+	// 设置消息回调函数
+	guiMessage.SetMessageCallback(std::bind(&CSceneChoose::HandleParsePsdMessage, this, path, message));
+	// 加入消息队列进行处理
+	g_MessageTaskQueue.Push(guiMessage);
+}
+
+void CSceneChoose::OpenPsdFile(std::wstring &wpath)
+{
+	// 打开Psd文件
+	std::string outMsg;
+	std::string path = CCommModule::GetRawString(CCommModule::WS2S(wpath));
+	PSOpenFile(CCommModule::GetPSHandle(), path, outMsg);
+}
+
+void CSceneChoose::GetBackgroundLayerImageData(void)
+{
+	std::string outBgMsg;
+	PSGetBackgroundLayerImage(CCommModule::GetPSHandle(), 1416, 797, outBgMsg);
+	m_curBgImage = std::move(outBgMsg);
+}
+
+void CSceneChoose::GetForegroundLayerImageData(void)
+{
+	std::string outFgMsg;
+	PSGetForegroundLayerImage(CCommModule::GetPSHandle(), 1416, 797, outFgMsg);
+	m_curFgImage = std::move(outFgMsg);
 }
 
 void CSceneChoose::Init(void)
@@ -210,18 +275,7 @@ DMCode CSceneChoose::HandleOneShootChoose()
 		return DM_ECODE_FAIL;
 	}
 
-	/*
-		消息处理
-	*/
-	// 创建消息对象
-	CGuiMessage guiMessage;
-	// 设置消息回调函数
-	// guiMessage.SetMessageCallback(std::bind(&CSceneChoose::DefParsePsdMessage, this, p_SelImage->m_picPath));
-	CStringW key = L"Bg\\sceneshootstatic1fg.png";
-	std::wstring strPath = CCommModule::GetPicRootDir() + key;
-	guiMessage.SetMessageCallback(std::bind(&CSceneChoose::DefParsePsdMessage, this, strPath));
-	// 加入消息队列进行处理
-	g_MessageTaskQueue.Push(guiMessage);
+	ProduceParsePsdMessage(m_pSelImage->m_picPath, CGuiMessage::SECENECHOOSE_PARSEPSD_ONE);
 
 	return DM_ECODE_OK;
 }
@@ -251,13 +305,8 @@ DMCode CSceneChoose::HandleAllShootChoose()
 		if (m_pPathAllShoot->size() != 0)
 		{
 			m_ItorAllShoot = m_pPathAllShoot->begin();
-			LOG_USER("%s\n", m_ItorAllShoot->c_str());
-
-			// 关闭“选择场景”窗口
-			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_CHOOSE]->DM_SetVisible(FALSE);
-
-			// 显示“场景详情”窗口
-			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+			
+			ProduceParsePsdMessage(static_cast<std::wstring>(*m_ItorAllShoot), CGuiMessage::SECENECHOOSE_PARSEPSD_ALL);
 
 			m_shootmode = ALL_CHOOSE;
 		}
@@ -266,7 +315,7 @@ DMCode CSceneChoose::HandleAllShootChoose()
 	return DM_ECODE_OK;
 }
 
-DMCode CSceneChoose::HandlePrepage()
+DMCode CSceneChoose::HandlePrevpage(int wndtype)
 {
 	if (m_shootmode == ALL_CHOOSE)
 	{
@@ -279,13 +328,17 @@ DMCode CSceneChoose::HandlePrepage()
 			// 指向最后一个元素
 			m_ItorAllShoot = --(m_pPathAllShoot->end());
 		}
-		LOG_USER("%s", m_ItorAllShoot->c_str());
+
+		if (wndtype == CShootSystem::SCENE_DETAIL)
+			ProduceParsePsdMessage(static_cast<std::wstring>(*m_ItorAllShoot), CGuiMessage::SECENEDETAIL_PARSEPSD_PREV);
+		else
+			ProduceParsePsdMessage(static_cast<std::wstring>(*m_ItorAllShoot), CGuiMessage::SECENESHOOT_PARSEPSD_PREV);
 	}
 
 	return DM_ECODE_OK;
 }
 
-DMCode CSceneChoose::HandleNextpage()
+DMCode CSceneChoose::HandleNextpage(int wndtype)
 {
 	if (m_shootmode == ALL_CHOOSE)
 	{
@@ -294,7 +347,11 @@ DMCode CSceneChoose::HandleNextpage()
 		{
 			m_ItorAllShoot = m_pPathAllShoot->begin();
 		}
-		LOG_USER("%s", m_ItorAllShoot->c_str());
+
+		if(wndtype == CShootSystem::SCENE_DETAIL)
+			ProduceParsePsdMessage(static_cast<std::wstring>(*m_ItorAllShoot), CGuiMessage::SECENEDETAIL_PARSEPSD_NEXT);
+		else
+			ProduceParsePsdMessage(static_cast<std::wstring>(*m_ItorAllShoot), CGuiMessage::SECENESHOOT_PARSEPSD_NEXT);
 	}
 	return DM_ECODE_OK;
 }

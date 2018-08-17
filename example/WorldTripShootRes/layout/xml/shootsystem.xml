@@ -71,8 +71,8 @@
 			<window pos="0,0,-0,@50" bdrag="1">
 				<static pos="8,8,@115,-0" text="场景详情" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-19,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 				<Button name="closebtn" pos="-53,8,@36,@36" skin="closebtnskin" tiptext="关闭" ncmargin="0,0,0,0" />
-				<Button name="nextpagebtn" pos="-103,8,@36,@36" skin="nextpagebtnskin" tiptext="下一页" />
-				<Button name="prevpagebtn" pos="-153,7,@36,@36" skin="prevpagebtnskin" tiptext="上一页" />
+				<Button name="scenedetail_nextpagebtn" pos="-103,8,@36,@36" skin="nextpagebtnskin" tiptext="下一页" />
+				<Button name="scenedetail_prevpagebtn" pos="-153,7,@36,@36" skin="prevpagebtnskin" tiptext="上一页" />
 				<Button name="scenedetail_returnbtn" pos="-203,8,@36,@36" skin="returnbtnskin" tiptext="返回" />
 			</window>
 			<Window pos="8,50,-8,-40" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
@@ -119,14 +119,14 @@
 			<window pos="0,0,-0,@50" bdrag="1">
 				<static pos="8,8,@115,-0" text="场景拍摄" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-19,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 				<Button name="closebtn" pos="-53,8,@36,@36" skin="closebtnskin" tiptext="关闭" ncmargin="0,0,0,0" />
-				<Button name="nextpagebtn" pos="-103,8,@36,@36" skin="nextpagebtnskin" tiptext="下一页" />
-				<Button name="prevpagebtn" pos="-153,7,@36,@36" skin="prevpagebtnskin" tiptext="上一页" />
+				<Button name="sceneshoot_nextpagebtn" pos="-103,8,@36,@36" skin="nextpagebtnskin" tiptext="下一页" />
+				<Button name="sceneshoot_prevpagebtn" pos="-153,7,@36,@36" skin="prevpagebtnskin" tiptext="上一页" />
 				<Button name="sceneshoot_returnbtn" pos="-203,8,@36,@36" skin="returnbtnskin" tiptext="返回" />
 			</window>
 			<Window pos="8,50,-8,-40" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
 				<hlayout pos="4,4,-4,-4" childpaddLen="5">
 					<Window name="sceneshoot_win" text="" width="" skin="scenedetailbg1">
-						<Static text="" pos="0,0,-0,-0" skin="sceneshootstatic1bg" />
+						<Static name="sceneshoot_static1bg" text="" pos="0,0,-0,-0" skin="sceneshootstatic1bg" />
 						<Static name="sceneshoot_staticfg" pos="0,0,-0,-0" skin="sceneshootstatic1fg" alpha="50" />
 						<duidragframe name="ds_dragframe" bvisible="0" pos="0,0,@200,@300" />
 					</Window>
@@ -147,16 +147,16 @@
 								<Button name="sceneshoot_rotatebtn" pos="87,5,@32,@30" text="" skin="sceneshootpersonbtn" />
 							</Window>
 							<Window pos="10,[5,-10,%45" skin="" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
-								<sliderctrl name="sceneshoot_lightshadeslider" pos="44,|-25,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" channelskin="sceneshootsizeslide" range="-100,100" value="-5" thumbwidth="12" channelhei="15" />
-								<sliderctrl name="sceneshoot_contrastslider" pos="44,|-0,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" bShowTip="1" channelskin="sceneshootlightslide" range="-100,100" value="5" thumbwidth="12" channelhei="15" />
+								<sliderctrl name="sceneshoot_lightshadeslider" pos="44,|-25,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" channelskin="sceneshootsizeslide" range="-150,150" value="0" thumbwidth="12" channelhei="15" />
+								<sliderctrl name="sceneshoot_contrastslider" pos="44,|-0,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" bShowTip="1" channelskin="sceneshootlightslide" range="-50,100" value="0" thumbwidth="12" channelhei="15" />
 								<Static pos="0,|-30,@41,@30" text="明 暗" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								<Static pos="0,|-5,@41,@30" text="对 比" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								<Static name="lightshadestatic" pos="-0,|-30,-50,@30" text="0" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								<Static name="contraststatic" pos="-0,|-5,-50,@30" text="0" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 							</Window>
 							<Window pos="10,[5,-10,%74" text="" skin="" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
-								<sliderctrl name="sceneshoot_colourtempslider" pos="45,|-25,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" bShowTip="1" channelskin="sceneshootctslide" range="-100,100" value="2" thumbwidth="12" channelhei="15" />
-								<sliderctrl name="sceneshoot_colourdiffslider" pos="45,|-0,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" bShowTip="1" channelskin="sceneshootchslide" range="-100,100" value="-29" thumbwidth="12" channelhei="15" />
+								<sliderctrl name="sceneshoot_colourtempslider" pos="45,|-25,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" bShowTip="1" channelskin="sceneshootctslide" range="-100,100" value="0" thumbwidth="12" channelhei="15" />
+								<sliderctrl name="sceneshoot_colourdiffslider" pos="45,|-0,@178,@17" text="" bvert="0" thumbskin="sceneshootthumb" bShowTip="1" channelskin="sceneshootchslide" range="-100,100" value="0" thumbwidth="12" channelhei="15" />
 								<Static pos="0,|-30,@38,@26" text="色 温" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								<Static pos="0,|-5,@38,@24" text="色 调" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								<Static name="colourtempstatic" pos="-0,|-30,-50,@30" text="0" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />

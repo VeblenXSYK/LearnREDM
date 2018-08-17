@@ -10,7 +10,7 @@
 					<vlayout pos="0,0,-0,-0" childpaddLen="5">
 						<Window height="-1">
 							<static name="" pos="10,10,@71,@28" text="导出设置:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
-							<checkbox pos="116,12,@55,@16" text="PSD" checkskin="dg:dg_checkbtn" align="left" textoffset="0" brightbox="1" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bchecked="1" />
+							<checkbox name="exportset_psdcheckbox" pos="116,12,@55,@16" text="PSD" checkskin="dg:dg_checkbtn" align="left" textoffset="0" brightbox="1" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bchecked="1" />
 						</Window>
 						<Window height="-1">
 							<static pos="10,10,@41,@23" text="尺寸:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />
@@ -36,7 +36,7 @@
 				<Window height="-1">
 					<vlayout pos="0,0,-0,-0" childpaddLen="5">
 						<Window height="-1">
-							<checkbox pos="116,12,@55,@16" text="JPG" checkskin="dg:dg_checkbtn" align="left" textoffset="0" brightbox="1" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bchecked="1" />
+							<checkbox name="exportset_jpgcheckbox" pos="116,12,@55,@16" text="JPG" checkskin="dg:dg_checkbtn" align="left" textoffset="0" brightbox="1" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bchecked="1" />
 						</Window>
 						<Window height="-1">
 							<static pos="10,10,@41,@23" text="尺寸:" align="left" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" bdot="1" clrtext="pbgra(00,00,00,ff)" />

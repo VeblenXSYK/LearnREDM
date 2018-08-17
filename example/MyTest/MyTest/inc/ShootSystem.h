@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
+#include <string>
 
 class CMainWnd;
 class CSceneShoot;
@@ -16,7 +17,8 @@ public:
 		SCENE_UNDEF
 	};
 
-	CShootSystem::CShootSystem(CMainWnd *);
+	CShootSystem(CMainWnd *);
+	void ChangeSceneDetailBg(std::string &);
 
 	DECLARE_MESSAGE_MAP()// 仿MFC消息映射宏
 	DECLARE_EVENT_MAP()
@@ -47,21 +49,21 @@ public:
 	DMCode OnImportBtn();
 	DMCode OnSceneDetailReturnBtn();
 	DMCode OnSceneDetailShootBtn();
+	DMCode OnSceneDetailPrevpageBtn();
+	DMCode OnSceneDetailNextpageBtn();
+	DMCode OnSceneShootPrevpageBtn();
+	DMCode OnSceneShootNextpageBtn();
 	DMCode OnSceneShootReturnBtn();
 	DMCode OnSceneShootRotateBtn();
 	DMCode OnSceneShootStrawBtn();
-	DMCode OnPrepage();
-	DMCode OnNextpage();
 
 	std::vector<DUIWindow *>	  m_vecWndPtr;			// 保存所有的窗口的地址
-
+	CSceneChoose				  *m_pSceneChoose;		// 场景选择对象
+	CSceneShoot					  *m_pSceneShoot;		// 场景拍摄对象	
 private:
 
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口
 	DUIWindow					  *m_pWndTitle;			// 保存标题栏的地址
-	CSceneChoose				  *m_pSceneChoose;		// 场景选择对象
-	CSceneShoot					  *m_pSceneShoot;		// 场景拍摄对象	
-
 	bool m_strawcolor;									// 吸管是否开启
 };
 

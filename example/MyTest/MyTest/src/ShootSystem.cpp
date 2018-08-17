@@ -17,8 +17,6 @@ BEGIN_MSG_MAP(CShootSystem)
 END_MSG_MAP()
 BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"closebtn", OnCloseBtn)
-	EVENT_NAME_COMMAND(L"prevpagebtn", OnPrepage)
-	EVENT_NAME_COMMAND(L"nextpagebtn", OnNextpage)
 	EVENT_NAME_HANDLER(L"scenechoose_tree", DMEventTCSelChangedArgs::EventID, OnSceneChooseTreeSelChanged)
 	EVENT_NAME_COMMAND(L"scenechoose_returnbtn", OnSceneChooseReturnBtn)
 	EVENT_NAME_COMMAND(L"scenechoose_addprebtn", OnSceneChooseAddPreBtn)
@@ -27,10 +25,14 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"scenechoose_allshootbtn", OnSceneChooseAllShootBtn)
 	EVENT_NAME_COMMAND(L"scenedetail_returnbtn", OnSceneDetailReturnBtn)
 	EVENT_NAME_COMMAND(L"scenedetail_shootbtn", OnSceneDetailShootBtn)
+	EVENT_NAME_COMMAND(L"scenedetail_prevpagebtn", OnSceneDetailPrevpageBtn)
+	EVENT_NAME_COMMAND(L"scenedetail_nextpagebtn", OnSceneDetailNextpageBtn)
 	EVENT_NAME_HANDLER(L"sceneshoot_lightshadeslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
 	EVENT_NAME_HANDLER(L"sceneshoot_contrastslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
 	EVENT_NAME_HANDLER(L"sceneshoot_colourtempslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
 	EVENT_NAME_HANDLER(L"sceneshoot_colourdiffslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
+	EVENT_NAME_COMMAND(L"sceneshoot_prevpagebtn", OnSceneShootPrevpageBtn)
+	EVENT_NAME_COMMAND(L"sceneshoot_nextpagebtn", OnSceneShootNextpageBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_returnbtn", OnSceneShootReturnBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_rotatebtn", OnSceneShootRotateBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_strawbtn", OnSceneShootStrawBtn)
@@ -202,15 +204,29 @@ DMCode CShootSystem::OnSceneDetailReturnBtn()
 
 DMCode CShootSystem::OnSceneDetailShootBtn()
 {
-	// 关闭“场景详情”窗口
-	m_vecWndPtr[SCENE_DETAIL]->DM_SetVisible(FALSE);
-	// 显示“场景拍摄”窗口
-	m_vecWndPtr[SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
-
-	// 初始化“场景拍摄”
-	m_pSceneShoot->Init();
+	m_pSceneChoose->ProduceParsePsdMessage(m_pSceneChoose->m_curImagepath, CGuiMessage::SECENEDETAIL_PARSEPSD_SHOOT);
 
 	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnSceneDetailPrevpageBtn()
+{
+	return m_pSceneChoose->HandlePrevpage(SCENE_DETAIL);
+}
+
+DMCode CShootSystem::OnSceneDetailNextpageBtn()
+{
+	return m_pSceneChoose->HandleNextpage(SCENE_DETAIL);
+}
+
+DMCode CShootSystem::OnSceneShootPrevpageBtn()
+{
+	return m_pSceneChoose->HandlePrevpage(SCENE_SHOOT);
+}
+
+DMCode CShootSystem::OnSceneShootNextpageBtn()
+{
+	return m_pSceneChoose->HandleNextpage(SCENE_SHOOT);
 }
 
 DMCode CShootSystem::OnSceneShootReturnBtn()
@@ -236,16 +252,6 @@ DMCode CShootSystem::OnSceneShootRotateBtn()
 	return DM_ECODE_OK;
 }
 
-DMCode CShootSystem::OnPrepage()
-{
-	return m_pSceneChoose->HandlePrepage();
-}
-
-DMCode CShootSystem::OnNextpage()
-{
-	return m_pSceneChoose->HandleNextpage();
-}
-
 DMCode CShootSystem::OnCloseBtn()
 {
 	// 先关闭主窗口
@@ -265,5 +271,13 @@ CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 	m_strawcolor = false;
 	m_pSceneChoose = new CSceneChoose(this);
 	m_pSceneShoot = new CSceneShoot(this);
+}
+
+void CShootSystem::ChangeSceneDetailBg(std::string &imgBuf)
+{
+	// 更改背景图片
+	DMSmartPtrT<IDMSkin> pSkinBg = g_pDMApp->GetSkin(L"scenedetailstatic1bg");
+	pSkinBg->SetBitmap((LPBYTE)imgBuf.c_str(), imgBuf.size(), L"");
+	FindChildByNameT<DUIStatic>(L"scenedetail_static1bg")->DM_Invalidate();
 }
 

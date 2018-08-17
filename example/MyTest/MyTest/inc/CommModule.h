@@ -10,8 +10,21 @@
 */
 class CGuiMessage
 {
-public:
+private:
 	typedef std::function<void(void)> Callback;
+
+public:
+
+	enum GuiMessageType
+	{
+		SECENECHOOSE_PARSEPSD_ONE,
+		SECENECHOOSE_PARSEPSD_ALL,
+		SECENEDETAIL_PARSEPSD_PREV,
+		SECENEDETAIL_PARSEPSD_NEXT,
+		SECENEDETAIL_PARSEPSD_SHOOT,
+		SECENESHOOT_PARSEPSD_PREV,
+		SECENESHOOT_PARSEPSD_NEXT
+	};
 
 	CGuiMessage() {}
 	~CGuiMessage() {}
@@ -96,6 +109,9 @@ class CCommModule
 {
 public:
 	void LoadResource(void);
+	static std::string WS2S(const std::wstring ws);
+	static std::wstring S2WS(const std::string& s);
+	static std::string GetRawString(std::string &str);
 	static wchar_t *GetPicRootDir(void);
 	static CCommModule *GetInstance(void);
 	static void *GetPSHandle(void);

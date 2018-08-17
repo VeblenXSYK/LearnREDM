@@ -1,4 +1,5 @@
 ﻿#include "StdAfx.h"
+#include "CommModule.h"
 #include "ShootSystem.h"
 #include "ExportSet.h"
 
@@ -54,6 +55,26 @@ DMCode CExportSet::OnClose()
 
 DMCode CExportSet::OnConfirm()
 {
+	std::string outMsg;
+
+	// 导出PSD格式
+	if (FindChildByNameT<DUICheckBox>(L"exportset_psdcheckbox")->DM_IsChecked())
+	{
+		CStringW strCWPath;
+		strCWPath.Format(L"%sExport\\test.psd", CCommModule::GetPicRootDir());
+		std::wstring strWPath = (LPCWSTR)strCWPath;
+		int ret = PSExportPSDFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+	}
+
+	// 导出PNG格式
+	if (FindChildByNameT<DUICheckBox>(L"exportset_jpgcheckbox")->DM_IsChecked())
+	{
+		CStringW strCWPath;
+		strCWPath.Format(L"%sExport\\test.png", CCommModule::GetPicRootDir());
+		std::wstring strWPath = (LPCWSTR)strCWPath;
+		int ret = PSExportPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+	}
+
 	EndDialog(IDOK);
 	return DM_ECODE_OK;
 }

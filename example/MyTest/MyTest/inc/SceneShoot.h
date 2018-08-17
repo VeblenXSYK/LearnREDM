@@ -14,6 +14,8 @@ class CSceneShoot
 
 public:
 	CSceneShoot(CShootSystem *);
+	void ChangeSceneShootBg(std::string &imgBuf);
+	void ChangeSceneShootFg(std::string &imgBuf);
 
 	void Init(void);
 	int ShowSDValue(DUISliderCtrl *, DUIStatic *);

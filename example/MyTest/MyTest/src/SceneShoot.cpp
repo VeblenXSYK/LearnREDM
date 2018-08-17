@@ -2,6 +2,7 @@
 #include "ShootSystem.h"
 #include "PersonPreview.h"
 #include "DUIDragFrame.h"
+#include "CommModule.h"
 #include "SceneShoot.h"
 
 #include <commdlg.h>
@@ -11,6 +12,20 @@ CSceneShoot::CSceneShoot(CShootSystem *pShootSystem)
 {
 	m_pShootSystem = pShootSystem;
 	m_pPerson = NULL;
+}
+
+void CSceneShoot::ChangeSceneShootBg(std::string &imgBuf)
+{
+	DMSmartPtrT<IDMSkin> pSkinBg = g_pDMApp->GetSkin(L"sceneshootstatic1bg");
+	pSkinBg->SetBitmap((LPBYTE)imgBuf.c_str(), imgBuf.size(), L"");
+	m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_static1bg")->DM_Invalidate();
+}
+
+void CSceneShoot::ChangeSceneShootFg(std::string &imgBuf)
+{
+	DMSmartPtrT<IDMSkin> pSkinFg = g_pDMApp->GetSkin(L"sceneshootstatic1fg");
+	pSkinFg->SetBitmap((LPBYTE)imgBuf.c_str(), imgBuf.size(), L"");
+	m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg")->DM_Invalidate();
 }
 
 void CSceneShoot::Init(void)
@@ -140,6 +155,22 @@ void CSceneShoot::HandleImport(void)
 		ofn.hwndOwner = m_pShootSystem->m_hWnd;
 		if (::GetOpenFileNameW(&ofn))
 		{// todo.hgy413 note:GetOpenFileNameW点击后WM_LBUTTTONUP消息会发送给dui，所以不要随意只处理WM_LBUTTONUP
+
+			std::string outMsg;
+
+			// 载入图片到PS中
+			PSOpenFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(szFileName)), outMsg);
+
+			// 解锁载入的图片图层并重新命名为test
+			PSUnlockSelectLayer(CCommModule::GetPSHandle(), "test", outMsg);
+
+			// 对test图层创建亮度/对比度图层
+			PSCreateContrastLayerByName(CCommModule::GetPSHandle(), "test", outMsg);
+
+			// 对test图层创建色彩平衡图层
+			PSCreateColorBalanceLayerByName(CCommModule::GetPSHandle(), "test", outMsg);
+
+			// 创建人物控件
 			if (m_pPerson == NULL)
 			{
 				g_pDMApp->CreateRegObj((void**)&m_pPerson, L"PersonPreview", DMREG_Window);
@@ -152,10 +183,11 @@ void CSceneShoot::HandleImport(void)
 					m_pDragFrame->DM_SetWndToTop();
 				}
 			}
-			m_pPerson->LoadImage(szFileName);
-			m_pPerson->m_picPath = szFileName;
+			// 加载PS Image数据到人物控件缓存区
+			m_pPerson->LoadPsImageData();
 			m_pWin->DV_UpdateChildLayout();
 
+			// 拖拽框设置
 			CRect rcFrame;
 			m_pDragFrame->InitDragFrame(m_pPerson, rcFrame);
 			m_pDragFrame->DM_FloatLayout(rcFrame);
@@ -167,13 +199,33 @@ void CSceneShoot::HandleImport(void)
 
 void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 {
-	if(0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_lightshadeslider"))
+	std::string outMsg;
+
+	if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_lightshadeslider"))
+	{
+		// 设置亮度和对比度
 		m_lightshadenum = ShowSDValue(m_pLightshadeSlider, m_pLightshadeStatic);
-	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_contrastslider"))
+		PSSetContrastLayerByName(CCommModule::GetPSHandle(), m_lightshadenum, m_contrastnum, outMsg);
+	}
+	else if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_contrastslider"))
+	{
 		m_contrastnum = ShowSDValue(m_pContrastSlider, m_pContrastStatic);
-	else if(0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_colourtempslider"))
+		PSSetContrastLayerByName(CCommModule::GetPSHandle(), m_lightshadenum, m_contrastnum, outMsg);
+	}
+	else if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_colourtempslider"))
+	{
 		m_colourtempnum = ShowSDValue(m_pColourtempSlider, m_pColourtempStatic);
+		PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, m_colourtempnum, m_colourdiffnum, outMsg);
+	}
 	else
+	{
 		m_colourdiffnum = ShowSDValue(m_pColourdiffSlider, m_pColourdiffStatic);
+		PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, m_colourtempnum, m_colourdiffnum, outMsg);
+	}
+
+	// 重新从PS加载图片
+	m_pPerson->LoadPsImageData();
+	// 刷新画布
+	m_pPerson->DM_Invalidate();
 }
 

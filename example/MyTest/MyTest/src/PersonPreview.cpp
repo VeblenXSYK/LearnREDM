@@ -83,8 +83,82 @@ void CPersonPreview::ModifyAngle(void)
 
 void CPersonPreview::LoadImage(wchar_t *imgpath)
 {
+	m_picPath = imgpath;
 	// 加载图片
 	m_pImgData.reset(new Gdiplus::Image(imgpath));
+}
+
+void CPersonPreview::LoadPsImageData()
+{
+	// 获取当前激活图片截图
+	std::string outMsg;
+	PSGetDocumentImage(CCommModule::GetPSHandle(), 288, 493, outMsg);
+
+	// 保存图片数据
+	m_sFromPsData = std::move(outMsg);
+}
+
+Gdiplus::Image *CPersonPreview::CreateBitmapFromMemory(LPCVOID pData, SIZE_T sizeImage)
+{
+	//HGLOBAL hImageData = ::GlobalAlloc(GMEM_MOVEABLE, sizeImage);
+	//if (hImageData == NULL) 
+	//	return NULL;
+
+	//LPVOID pImgData = ::GlobalLock(hImageData);
+	//if (pImgData == NULL)
+	//{
+	//	::GlobalFree(hImageData);
+	//	return NULL;
+	//}
+
+	//::memcpy(pImgData, pData, sizeImage);
+	//::GlobalUnlock(hImageData);
+
+	//Gdiplus::Image *pImg = NULL;
+	//IStream *ps = NULL;
+	//if (::CreateStreamOnHGlobal(hImageData, TRUE, &ps) == S_OK)
+	//{
+	//	pImg = Gdiplus::Image::FromStream(ps);
+	//	// _SanUiGdiImageValid(pImg);
+	//}
+
+	//ps->Release();
+	//::GlobalFree(hImageData);
+
+	//return pImg;
+
+	//图片分配全局存储空间
+	HGLOBAL hGlobalImage = GlobalAlloc(GMEM_MOVEABLE, sizeImage);
+	LPVOID pvDataImage = NULL;
+	if (hGlobalImage == NULL)
+	{
+		return NULL;
+	}
+	//锁定分配内存块
+	if ((pvDataImage = GlobalLock(hGlobalImage)) == NULL)
+	{
+		return NULL;
+	}
+	memcpy(pvDataImage, pData, sizeImage);
+	GlobalUnlock(hGlobalImage);
+
+	//参数设置为TRUE，则hGlobalImage最终会自动释放
+	IStream *pStmImage = NULL;
+	CreateStreamOnHGlobal(hGlobalImage, FALSE, &pStmImage);
+
+	//if (::CreateStreamOnHGlobal(hImageData, TRUE, &ps) == S_OK)
+	//{
+	//	pImg = Gdiplus::Image::FromStream(ps);
+	//	// _SanUiGdiImageValid(pImg);
+	//}
+
+	//ps->Release();
+	//::GlobalFree(hImageData);
+
+	Gdiplus::Image *pImg = new Gdiplus::Image(pStmImage);
+
+	return pImg;
+	// pStmImage->Release();
 }
 
 int CPersonPreview::JudgeDragType(CPoint pt)
@@ -203,7 +277,10 @@ void CPersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 	else
 	{
 		Rotate(graphics, m_AngleOfRotation);
-		graphics.DrawImage(m_pImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
+		// graphics.DrawImage(m_pImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
+
+		Gdiplus::Image *image = CreateBitmapFromMemory(m_sFromPsData.c_str(), m_sFromPsData.size());   //把你的图像数据加载入内存
+		graphics.DrawImage(image, m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
 	}
 
 	//重置绘图的所有变换

@@ -8,6 +8,8 @@
 
 // PSCore
 #include "PSExport.h"
+//#include "../PSCore/PSExport.h"
+
 
 // lib
 #ifdef _DEBUG
@@ -49,4 +51,5 @@ using namespace DM;
 #include "DUIButton.h"
 #include "DUIScrollBase.h"
 #include "DUIFlowLayout.h"
+#include "DUICheckBox.h"
 

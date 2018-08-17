@@ -11,8 +11,10 @@ set(LIBRARY_OUTPUT_PATH  ${MyTest_BINARY_DIR}/bin)
 
 set(LIBS ${LIBRARY_OUTPUT_PATH})
 #添加jpeg库文件目录
-link_directories(${LIBS} ${PROJDIR}/Psdump/libjpeg)		
-link_directories(${LIBS} ${PROJDIR}/PSCoreLib/lib/Debug/Dynamic)	
+link_directories(${LIBS} ${PROJDIR}/Psdump/libjpeg)
+#添加pscore库文件目录
+link_directories(${LIBS} ${PROJDIR}/PSCoreLib/lib/DebugStatic/)
+#link_directories(${LIBS} ${PROJDIR}/PSCoreLib/lib/Release/Dynamic)
 include_directories(${LIBS} ${PROJDIR}/PSCoreLib/include)	
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -37,6 +39,7 @@ include(PrecompiledHeader)
 add_subdirectory(${PROJDIR}/DMMain)
 add_subdirectory(${PROJDIR}/MyTest)
 add_subdirectory(${PROJDIR}/Psdump)
+#add_subdirectory(${PROJDIR}/PSCore)
 
 # #附加依赖项
 # target_link_libraries(legacy_stdio_definitions.lib)

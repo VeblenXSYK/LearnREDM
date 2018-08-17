@@ -3,6 +3,7 @@
 
 #include <process.h>
 
+
 CTaskQueue<CGuiMessage>	g_MessageTaskQueue;
 CCommModule *CCommModule::m_pInstance = NULL;
 void *CCommModule::m_pPSHandle = NULL;
@@ -37,6 +38,7 @@ void CCommModule::LoadResource(void)
 		return;
 	}
 
+	// 登陆
 	std::string serverip = "127.0.0.1";
 	std::string passwd = "123456";
 	if (PSLogin(m_pPSHandle, serverip, passwd) != 0)
@@ -44,6 +46,48 @@ void CCommModule::LoadResource(void)
 		LOG_USER("PSLogin Failed\n");
 		return;
 	}
+}
+
+std::string CCommModule::WS2S(const std::wstring ws)
+{
+	std::string curLocale = setlocale(LC_ALL, NULL);        // curLocale = "C";
+	setlocale(LC_ALL, "chs");
+	const wchar_t* _Source = ws.c_str();
+	size_t _Dsize = 2 * ws.size() + 1;
+	char *_Dest = new char[_Dsize];
+	memset(_Dest, 0, _Dsize);
+	wcstombs(_Dest, _Source, _Dsize);
+	std::string result = _Dest;
+	delete[]_Dest;
+	setlocale(LC_ALL, curLocale.c_str());
+	return result;
+}
+
+std::wstring CCommModule::S2WS(const std::string& s)
+{
+	setlocale(LC_ALL, "chs");
+	const char* _Source = s.c_str();
+	size_t _Dsize = s.size() + 1;
+	wchar_t *_Dest = new wchar_t[_Dsize];
+	wmemset(_Dest, 0, _Dsize);
+	mbstowcs(_Dest, _Source, _Dsize);
+	std::wstring result = _Dest;
+	delete[]_Dest;
+	setlocale(LC_ALL, "C");
+	return result;
+}
+
+std::string CCommModule::GetRawString(std::string &str)
+{
+	std::string::size_type pos = 0;
+
+	while ((pos = str.find_first_of('\\', pos)) != std::string::npos)
+	{
+		str.insert(pos, "\\");
+		pos = pos + 2;
+	}
+
+	return str;
 }
 
 wchar_t *CCommModule::GetPicRootDir(void)
