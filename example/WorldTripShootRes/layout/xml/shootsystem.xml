@@ -166,7 +166,7 @@
 								<Button name="sceneshoot_strawbtn" pos="63,|-10,@24,@25" text="" skin="sceneshootstraw" />
 								<Static pos="3,|-10,@37,@21" text="环境色" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 								<Static name="sceneshoot_colorstatic" pos="117,|-10,@23,@23" text="" clrbg="pbgra(3d,67,97,ff)" ncmargin="01,01,01,01" clrnc="pbgra(ff,ff,ff,ff)" />
-								<Button name="sceneshoot_addbtn" pos="215,|-13,@30,@30" text="" skin="sceneshootadd" />
+								<Button name="sceneshoot_addenvircolorbtn" pos="215,|-13,@30,@30" text="" skin="sceneshootadd" />
 								<Static pos="163,|-10,@37,@24" text="添 加" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-12,face:微软雅黑" clrtext="pbgra(ff,ff,ff,ff)" />
 							</Window>
 						</Window>

@@ -11,7 +11,7 @@ CPersonPreview::CPersonPreview()
 	m_bDown = false;
 	m_iMode = NoneMode;
 	m_AngleOfRotation = 0;
-	m_pImgData = NULL;
+	m_pFromImgData = NULL;
 
 	//初始化gdi+
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -65,6 +65,8 @@ void CPersonPreview::Rotate(Gdiplus::Graphics &graphics, float angle)
 	// 获取矩形中心点
 	Gdiplus::REAL centerPosX = static_cast<Gdiplus::REAL>(m_rcWindow.left + m_rcWindow.Width() / 2);
 	Gdiplus::REAL centerPosY = static_cast<Gdiplus::REAL>(m_rcWindow.top + m_rcWindow.Height() / 2);
+	// 重置变化
+	graphics.ResetTransform();
 	// 原点移动到矩形中心点
 	graphics.TranslateTransform(centerPosX, centerPosY);
 	// 旋转（沿当前原点）
@@ -85,7 +87,7 @@ void CPersonPreview::LoadImage(wchar_t *imgpath)
 {
 	m_picPath = imgpath;
 	// 加载图片
-	m_pImgData.reset(new Gdiplus::Image(imgpath));
+	m_pFromImgData.reset(new Gdiplus::Image(imgpath));
 }
 
 void CPersonPreview::LoadPsImageData()
@@ -277,7 +279,7 @@ void CPersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 	else
 	{
 		Rotate(graphics, m_AngleOfRotation);
-		// graphics.DrawImage(m_pImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
+		// graphics.DrawImage(m_pFromImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
 
 		Gdiplus::Image *image = CreateBitmapFromMemory(m_sFromPsData.c_str(), m_sFromPsData.size());   //把你的图像数据加载入内存
 		graphics.DrawImage(image, m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());

@@ -36,6 +36,7 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"sceneshoot_returnbtn", OnSceneShootReturnBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_rotatebtn", OnSceneShootRotateBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_strawbtn", OnSceneShootStrawBtn)
+	EVENT_NAME_COMMAND(L"sceneshoot_addenvircolorbtn", OnSceneShootEnvirColorBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_forebtn", OnForegroundBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_exportbtn", OnExportBtn)
 	EVENT_NAME_COMMAND(L"sceneshoot_importbtn", OnImportBtn)
@@ -243,6 +244,12 @@ DMCode CShootSystem::OnSceneShootStrawBtn()
 {
 	m_strawcolor = true;
 
+	return DM_ECODE_OK;
+}
+
+DMCode CShootSystem::OnSceneShootEnvirColorBtn()
+{
+	m_pSceneShoot->HandleEnvirColor();
 	return DM_ECODE_OK;
 }
 

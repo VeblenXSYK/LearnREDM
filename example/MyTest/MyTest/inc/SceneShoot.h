@@ -21,6 +21,7 @@ public:
 	int ShowSDValue(DUISliderCtrl *, DUIStatic *);
 	void ShowStaticColor(COLORREF RGBcolor);
 	void HandleRotate(void);
+	void HandleEnvirColor(void);
 	void HandleForeground(void);
 	void HandleImport(void);
 	void HandleSDChanged(DMEventArgs *pEvt);
@@ -55,6 +56,8 @@ private:
 	int m_colourtempnum;
 	int m_colourdiffnum;
 	int m_foregroundstat;
+
+	COLORREF m_EnvirColor;								// 环境色
 };
 
 

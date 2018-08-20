@@ -66,13 +66,13 @@ DMCode CExportSet::OnConfirm()
 		int ret = PSExportPSDFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
 	}
 
-	// 导出PNG格式
+	// 导出JPG格式
 	if (FindChildByNameT<DUICheckBox>(L"exportset_jpgcheckbox")->DM_IsChecked())
 	{
 		CStringW strCWPath;
-		strCWPath.Format(L"%sExport\\test.png", CCommModule::GetPicRootDir());
+		strCWPath.Format(L"%sExport\\test.jpg", CCommModule::GetPicRootDir());
 		std::wstring strWPath = (LPCWSTR)strCWPath;
-		int ret = PSExportPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+		int ret = PSExportJPGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
 	}
 
 	EndDialog(IDOK);

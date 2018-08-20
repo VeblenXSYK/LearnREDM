@@ -56,6 +56,7 @@ public:
 	DMCode OnSceneShootReturnBtn();
 	DMCode OnSceneShootRotateBtn();
 	DMCode OnSceneShootStrawBtn();
+	DMCode OnSceneShootEnvirColorBtn();
 
 	std::vector<DUIWindow *>	  m_vecWndPtr;			// 保存所有的窗口的地址
 	CSceneChoose				  *m_pSceneChoose;		// 场景选择对象

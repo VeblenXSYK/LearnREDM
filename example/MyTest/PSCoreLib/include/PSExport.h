@@ -10,6 +10,7 @@
 #define CONTRAST_NAME		"contrast"
 #define BALANCE_NAME		"balance"
 #define SATURABILITY_NAME	"saturability"
+#define AMBIENT_NAME		"ambient"
 
 // 异步回调函数声明,暂时不用
 typedef void(CALLBACK *RecvImageCallback)(std::string imageData, int type);
@@ -50,6 +51,15 @@ PS_EXPORT_API int PSOpenFile(const void* core, std::string& imgFile, std::string
 * @return 状态码 0-成功
 */
 PS_EXPORT_API int PSCloseActiveFile(const void* core, std::string& outMsg);
+
+/**
+* @brief 导出当前激活的文档到JPG图片
+* @param [in] core 来自PSInit()返回值
+* @param [in] strSaveFileName 导出JPG文件全路径
+* @param [out] outMsg 函数执行完成后结果
+* @return 状态码 0-成功
+*/
+PS_EXPORT_API int PSExportJPGFile(const void* core, std::string& strSaveFileName, std::string& outMsg);
 
 /**
 * @brief 导出当前激活的文档到PNG图片
@@ -102,11 +112,20 @@ PS_EXPORT_API int PSGetBackgroundLayerImage(const void* core, int width, int hei
 /**
  * @brief 解锁选择的图层并重新命名
  * @param [in] core 来自PSInit()返回值
- * @param [in] 解锁后图层的名称
+ * @param [in] strNewLayerName 解锁后图层的名称
  * @param [out] outMsg 函数执行完成后结果
  * @return 状态码 0-成功
  */
 PS_EXPORT_API int PSUnlockSelectLayer(const void* core, std::string strNewLayerName, std::string& outMsg);
+
+/**
+* @brief 删除指定名称的图层
+* @param [in] core 来自PSInit()返回值
+* @param [in] strLayerName 待删除图层的名称
+* @param [out] outMsg 函数执行完成后结果
+* @return 状态码 0-成功
+*/
+PS_EXPORT_API int PSDeleteSelectLayer(const void* core, std::string strLayerName, std::string& outMsg);
 
 /**
  * @brief 对指定图层创建亮度/对比度图层
@@ -162,5 +181,17 @@ PS_EXPORT_API int PSCreateSaturabilityLayerByName(const void* core, std::string 
 * @return 状态码 0-成功
 */
 PS_EXPORT_API int PSSetSaturabilityLayerByName(const void* core, int nSatur, std::string& outMsg);
+
+/**
+* @brief 设置环境色
+* @param [in] core 来自PSInit()返回值
+* @param [in] strLayerName 需要设置环境色的图层名称
+* @param [in] fRed 红色，范围：0 ~ 255
+* @param [in] fGreen 绿色，范围：0 ~ 255
+* @param [in] fBlue 蓝色，范围：0 ~ 255
+* @param [out] outMsg 函数执行完成后结果
+* @return 状态码 0-成功
+*/
+PS_EXPORT_API int PSSetAmbientColor(const void* core, std::string strLayerName, float fRed, float fGreen, float fBlue, std::string& outMsg);
 
 #endif

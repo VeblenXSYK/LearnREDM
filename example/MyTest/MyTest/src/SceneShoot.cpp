@@ -88,6 +88,8 @@ int CSceneShoot::ShowSDValue(DUISliderCtrl *pSlider, DUIStatic *pStatic)
 
 void CSceneShoot::ShowStaticColor(COLORREF RGBcolor)
 {
+	m_EnvirColor = RGBcolor;
+
 	int red = GetRValue(RGBcolor);
 	int green = GetGValue(RGBcolor);
 	int blue = GetBValue(RGBcolor);
@@ -101,6 +103,21 @@ void CSceneShoot::HandleRotate(void)
 {
 	if(m_pPerson != NULL)
 		m_pPerson->ModifyAngle();
+}
+
+void CSceneShoot::HandleEnvirColor(void)
+{
+	int red = GetRValue(m_EnvirColor);
+	int green = GetGValue(m_EnvirColor);
+	int blue = GetBValue(m_EnvirColor);
+
+	std::string outMsg;
+	PSSetAmbientColor(CCommModule::GetPSHandle(), "test", (float)red, (float)green, (float)blue, outMsg);
+
+	// 重新从PS加载图片
+	m_pPerson->LoadPsImageData();
+	// 刷新画布
+	m_pPerson->DM_Invalidate();
 }
 
 void CSceneShoot::HandleForeground(void)
