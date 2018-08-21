@@ -2,6 +2,8 @@
 #include "PersonPreview.h"
 #include "CommModule.h"
 
+#include  <io.h>
+
 #pragma comment(lib, "Gdiplus.lib")
 
 const double PI = 3.1415926535898;
@@ -83,52 +85,46 @@ void CPersonPreview::ModifyAngle(void)
 	p_Parent->DM_Invalidate();
 }
 
-void CPersonPreview::LoadImage(wchar_t *imgpath)
+void CPersonPreview::LoadImageData(void)
 {
-	m_picPath = imgpath;
+	LoadFileImageData();
+	// LoadPsImageData()
+}
+
+void CPersonPreview::LoadFileImageData()
+{
+	// 设置导出路径
+	CStringW strCWPath;
+	strCWPath.Format(L"%sExport\\test.png", CCommModule::GetPicRootDir());
+	std::wstring strWPath = (LPCWSTR)strCWPath;
+
+	m_pFromImgData = NULL;
+
+	if (_waccess(strWPath.c_str(), 0) == 0)
+	{
+		_wremove(strWPath.c_str());
+	}
+
+	// 导出png图片
+	std::string outMsg;
+	int ret = PSExportPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+
 	// 加载图片
-	m_pFromImgData.reset(new Gdiplus::Image(imgpath));
+	m_pFromImgData.reset(new Gdiplus::Image(strWPath.c_str()));
 }
 
 void CPersonPreview::LoadPsImageData()
 {
 	// 获取当前激活图片截图
-	std::string outMsg;
-	PSGetDocumentImage(CCommModule::GetPSHandle(), 288, 493, outMsg);
+	std::string imageData;
+	PSGetDocumentImage(CCommModule::GetPSHandle(), 288, 493, imageData);
 
-	// 保存图片数据
-	m_sFromPsData = std::move(outMsg);
+	// 将图像数据加载入内存
+	m_sFromPsData.reset(CreateBitmapFromMemory(imageData.c_str(), imageData.size()));
 }
 
 Gdiplus::Image *CPersonPreview::CreateBitmapFromMemory(LPCVOID pData, SIZE_T sizeImage)
 {
-	//HGLOBAL hImageData = ::GlobalAlloc(GMEM_MOVEABLE, sizeImage);
-	//if (hImageData == NULL) 
-	//	return NULL;
-
-	//LPVOID pImgData = ::GlobalLock(hImageData);
-	//if (pImgData == NULL)
-	//{
-	//	::GlobalFree(hImageData);
-	//	return NULL;
-	//}
-
-	//::memcpy(pImgData, pData, sizeImage);
-	//::GlobalUnlock(hImageData);
-
-	//Gdiplus::Image *pImg = NULL;
-	//IStream *ps = NULL;
-	//if (::CreateStreamOnHGlobal(hImageData, TRUE, &ps) == S_OK)
-	//{
-	//	pImg = Gdiplus::Image::FromStream(ps);
-	//	// _SanUiGdiImageValid(pImg);
-	//}
-
-	//ps->Release();
-	//::GlobalFree(hImageData);
-
-	//return pImg;
-
 	//图片分配全局存储空间
 	HGLOBAL hGlobalImage = GlobalAlloc(GMEM_MOVEABLE, sizeImage);
 	LPVOID pvDataImage = NULL;
@@ -279,10 +275,8 @@ void CPersonPreview::DM_OnPaint(IDMCanvas* pCanvas)
 	else
 	{
 		Rotate(graphics, m_AngleOfRotation);
-		// graphics.DrawImage(m_pFromImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
-
-		Gdiplus::Image *image = CreateBitmapFromMemory(m_sFromPsData.c_str(), m_sFromPsData.size());   //把你的图像数据加载入内存
-		graphics.DrawImage(image, m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
+		graphics.DrawImage(m_pFromImgData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
+		// graphics.DrawImage(m_sFromPsData.get(), m_rcWindow.left, m_rcWindow.top, m_rcWindow.Width(), m_rcWindow.Height());
 	}
 
 	//重置绘图的所有变换

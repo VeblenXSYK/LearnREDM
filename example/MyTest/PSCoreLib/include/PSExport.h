@@ -11,6 +11,15 @@
 #define BALANCE_NAME		"balance"
 #define SATURABILITY_NAME	"saturability"
 #define AMBIENT_NAME		"ambient"
+#define FIGURE_NAME			"figure"
+
+enum ECUTOUTTYPE
+{
+	CT_LIGHT_BLUE,		// 浅蓝背景
+	CT_DARK_BLUE,		// 深蓝背景
+	CT_LIGHT_GREEN,		// 浅绿背景
+	CT_DARK_GREEN,		// 深绿背景
+};
 
 // 异步回调函数声明,暂时不用
 typedef void(CALLBACK *RecvImageCallback)(std::string imageData, int type);
@@ -193,5 +202,15 @@ PS_EXPORT_API int PSSetSaturabilityLayerByName(const void* core, int nSatur, std
 * @return 状态码 0-成功
 */
 PS_EXPORT_API int PSSetAmbientColor(const void* core, std::string strLayerName, float fRed, float fGreen, float fBlue, std::string& outMsg);
+
+/**
+* @brief 对指定图片进行抠图操作
+* @param [in] core 来自PSInit()返回值
+* @param [in] strLayerName 需要抠图的图层名称
+* @param [in] eCutoutType 被抠图图片的背景颜色类型
+* @param [out] outMsg 函数执行完成后结果
+* @return 状态码 0-成功
+*/
+PS_EXPORT_API int PSCutoutByName(const void* core, std::string strLayerName, ECUTOUTTYPE eCutoutType, std::string& outMsg);
 
 #endif

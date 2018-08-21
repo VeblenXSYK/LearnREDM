@@ -112,10 +112,10 @@ void CSceneShoot::HandleEnvirColor(void)
 	int blue = GetBValue(m_EnvirColor);
 
 	std::string outMsg;
-	PSSetAmbientColor(CCommModule::GetPSHandle(), "test", (float)red, (float)green, (float)blue, outMsg);
+	PSSetAmbientColor(CCommModule::GetPSHandle(), FIGURE_NAME, (float)red, (float)green, (float)blue, outMsg);
 
-	// 重新从PS加载图片
-	m_pPerson->LoadPsImageData();
+	// 重新从PS加载图片数据
+	m_pPerson->LoadImageData();
 	// 刷新画布
 	m_pPerson->DM_Invalidate();
 }
@@ -178,14 +178,17 @@ void CSceneShoot::HandleImport(void)
 			// 载入图片到PS中
 			PSOpenFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(szFileName)), outMsg);
 
-			// 解锁载入的图片图层并重新命名为test
-			PSUnlockSelectLayer(CCommModule::GetPSHandle(), "test", outMsg);
+			// 解锁载入的图片图层并重新命名为FIGURE_NAME
+			PSUnlockSelectLayer(CCommModule::GetPSHandle(), FIGURE_NAME, outMsg);
+
+			// 对指定图片进行抠图操作
+			PSCutoutByName(CCommModule::GetPSHandle(), FIGURE_NAME, CT_DARK_GREEN, outMsg);
 
 			// 对test图层创建亮度/对比度图层
-			PSCreateContrastLayerByName(CCommModule::GetPSHandle(), "test", outMsg);
+			PSCreateContrastLayerByName(CCommModule::GetPSHandle(), FIGURE_NAME, outMsg);
 
 			// 对test图层创建色彩平衡图层
-			PSCreateColorBalanceLayerByName(CCommModule::GetPSHandle(), "test", outMsg);
+			PSCreateColorBalanceLayerByName(CCommModule::GetPSHandle(), FIGURE_NAME, outMsg);
 
 			// 创建人物控件
 			if (m_pPerson == NULL)
@@ -201,7 +204,7 @@ void CSceneShoot::HandleImport(void)
 				}
 			}
 			// 加载PS Image数据到人物控件缓存区
-			m_pPerson->LoadPsImageData();
+			m_pPerson->LoadImageData();
 			m_pWin->DV_UpdateChildLayout();
 
 			// 拖拽框设置
@@ -241,7 +244,7 @@ void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 	}
 
 	// 重新从PS加载图片
-	m_pPerson->LoadPsImageData();
+	m_pPerson->LoadImageData();
 	// 刷新画布
 	m_pPerson->DM_Invalidate();
 }

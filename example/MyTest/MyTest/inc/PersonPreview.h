@@ -43,8 +43,7 @@ public:
 
 	void Rotate(Gdiplus::Graphics &graphics, float angle);
 	void ModifyAngle(void);
-	void LoadImage(wchar_t *);
-	void LoadPsImageData();
+	void LoadImageData(void);
 	Gdiplus::Image *CreateBitmapFromMemory(LPCVOID pData, SIZE_T sizeImage);
 	int JudgeDragType(CPoint pt);
 	void HandleDrag(CPoint pt, int type);
@@ -78,6 +77,9 @@ public:
 	CRect						  m_StartDragRc;
 
 private:
+	void LoadFileImageData();
+	void LoadPsImageData();
+
 	ULONG_PTR gdiplusToken;
 	// 旋转角度
 	float m_AngleOfRotation;
@@ -85,5 +87,6 @@ private:
 	// 来自图片文件的数据
 	std::shared_ptr<Gdiplus::Image> m_pFromImgData;
 	// 来自PS文件的数据
-	std::string m_sFromPsData;
+	// std::string m_sFromPsData;
+	std::shared_ptr<Gdiplus::Image> m_sFromPsData;
 };
