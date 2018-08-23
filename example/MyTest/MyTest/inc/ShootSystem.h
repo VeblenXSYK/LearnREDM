@@ -6,6 +6,7 @@
 class CMainWnd;
 class CSceneShoot;
 class CSceneChoose;
+class CBackgroundPreview;
 class CShootSystem : public DMHWnd
 {
 public:
@@ -18,7 +19,10 @@ public:
 	};
 
 	CShootSystem(CMainWnd *);
+	void SetLoadingState();
+	void ClearLoadingState();
 	void ChangeSceneDetailBg(std::string &);
+	void ChangeSceneDetailPreviewBg(std::wstring &filepath);
 
 	DECLARE_MESSAGE_MAP()// 仿MFC消息映射宏
 	DECLARE_EVENT_MAP()
@@ -61,6 +65,10 @@ public:
 	std::vector<DUIWindow *>	  m_vecWndPtr;			// 保存所有的窗口的地址
 	CSceneChoose				  *m_pSceneChoose;		// 场景选择对象
 	CSceneShoot					  *m_pSceneShoot;		// 场景拍摄对象	
+	DUIGif						  *m_pLoadingGif;		// Gif对象
+
+	CBackgroundPreview			  *m_pBackground;		// “场景详情”背景框
+	DUIWindow					  *m_pImageWin;			// “场景详情”图片窗口
 private:
 
 	DMSmartPtrT<CMainWnd>         m_pMainWnd;			// 主窗口

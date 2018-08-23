@@ -1,6 +1,8 @@
 ﻿#include "StdAfx.h"
 #include "ShootSystem.h"
 #include "PersonPreview.h"
+#include "ForegroundPreview.h"
+#include "BackgroundPreview.h"
 #include "DUIDragFrame.h"
 #include "CommModule.h"
 #include "SceneShoot.h"
@@ -12,6 +14,7 @@ CSceneShoot::CSceneShoot(CShootSystem *pShootSystem)
 {
 	m_pShootSystem = pShootSystem;
 	m_pPerson = NULL;
+	m_lastSDTime = 0;
 }
 
 void CSceneShoot::ChangeSceneShootBg(std::string &imgBuf)
@@ -21,16 +24,59 @@ void CSceneShoot::ChangeSceneShootBg(std::string &imgBuf)
 	m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_static1bg")->DM_Invalidate();
 }
 
+void CSceneShoot::ChangeSceneShootPreviewBg(std::wstring &filepath)
+{
+	const wchar_t *szFilePath = filepath.c_str();
+	size_t ulSize = DM::GetFileSizeW(szFilePath);
+
+	DWORD dwReadSize = 0;
+	DMBufT<byte>pBuf; pBuf.Allocate(ulSize);
+	DM::GetFileBufW(szFilePath, (void **)&pBuf, ulSize, dwReadSize);
+
+	// 创建预览skin
+	DMSmartPtrT<IDMSkin> pSkin;
+	g_pDMApp->CreateRegObj((void**)&pSkin, L"imglist", DMREG_Skin);
+	pSkin->SetBitmap(pBuf, ulSize, L"png");
+	m_pBackground->m_pSkin = pSkin;
+
+	// 刷新
+	m_pWin->DM_Invalidate();
+}
+
 void CSceneShoot::ChangeSceneShootFg(std::string &imgBuf)
 {
-	DMSmartPtrT<IDMSkin> pSkinFg = g_pDMApp->GetSkin(L"sceneshootstatic1fg");
+	/*DMSmartPtrT<IDMSkin> pSkinFg = g_pDMApp->GetSkin(L"sceneshootstatic1fg");
 	pSkinFg->SetBitmap((LPBYTE)imgBuf.c_str(), imgBuf.size(), L"");
-	m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg")->DM_Invalidate();
+	m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg")->DM_Invalidate();*/
+}
+
+void CSceneShoot::ChangeSceneShootPreviewFg(std::wstring &filepath)
+{
+	const wchar_t *szFilePath = filepath.c_str();
+	size_t ulSize = DM::GetFileSizeW(szFilePath);
+
+	DWORD dwReadSize = 0;
+	DMBufT<byte>pBuf; pBuf.Allocate(ulSize);
+	DM::GetFileBufW(szFilePath, (void **)&pBuf, ulSize, dwReadSize);
+
+	// 创建预览skin
+	DMSmartPtrT<IDMSkin> pSkin;
+	g_pDMApp->CreateRegObj((void**)&pSkin, L"imglist", DMREG_Skin);
+	pSkin->SetBitmap(pBuf, ulSize, L"png");
+	m_pForeground->m_pSkin = pSkin;
+
+	// 刷新
+	m_pWin->DM_Invalidate();
 }
 
 void CSceneShoot::Init(void)
 {	
 	m_pWin = m_pShootSystem->FindChildByNameT<DUIWindow>(L"sceneshoot_win");
+
+	// 前景预览
+	m_pForeground = m_pShootSystem->FindChildByNameT<CForegroundPreview>(L"sceneshoot_previewfg");
+	// 背景预览
+	m_pBackground = m_pShootSystem->FindChildByNameT<CBackgroundPreview>(L"sceneshoot_previewbg");
 
 	m_pLightshadeStatic = m_pShootSystem->FindChildByNameT<DUIStatic>(L"lightshadestatic");
 	m_pLightshadeSlider = m_pShootSystem->FindChildByNameT<DUISliderCtrl>(L"sceneshoot_lightshadeslider");
@@ -52,9 +98,6 @@ void CSceneShoot::Init(void)
 	// 拖动框
 	m_pDragFrame = m_pShootSystem->FindChildByNameT<DUIDragFrame>(L"ds_dragframe");
 	m_pDragFrame->p_Parent = m_pWin;
-
-	// 前景控件
-	m_pStaticfg = m_pShootSystem->FindChildByNameT<DUIStatic>(L"sceneshoot_staticfg");
 
 	// 显示明暗
 	m_lightshadenum = ShowSDValue(m_pLightshadeSlider, m_pLightshadeStatic);
@@ -107,6 +150,9 @@ void CSceneShoot::HandleRotate(void)
 
 void CSceneShoot::HandleEnvirColor(void)
 {
+	if (m_pPerson == NULL)
+		return;
+
 	int red = GetRValue(m_EnvirColor);
 	int green = GetGValue(m_EnvirColor);
 	int blue = GetBValue(m_EnvirColor);
@@ -125,13 +171,13 @@ void CSceneShoot::HandleForeground(void)
 	if (m_foregroundstat == FOREON)
 	{
 		m_pForegroundButton->SetAttribute(L"skin", L"sceneshootforeoff");
-		m_pStaticfg->SetAttribute(L"alpha", L"0");
+		m_pForeground->DM_SetVisible(FALSE, true);
 		m_foregroundstat = FOREOFF;
 	}
 	else
 	{
 		m_pForegroundButton->SetAttribute(L"skin", L"sceneshootforeon");
-		m_pStaticfg->SetAttribute(L"alpha", L"50");
+		m_pForeground->DM_SetVisible(TRUE, true);
 		m_foregroundstat = FOREON;
 	}
 }
@@ -251,7 +297,12 @@ void CSceneShoot::HandleImport(void)
 
 void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 {
-	std::string outMsg;
+	DWORD nowtime = GetTickCount();
+	if(nowtime - m_lastSDTime < 100)
+	{
+		return;
+	}
+	m_lastSDTime = nowtime;
 
 	if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_lightshadeslider"))
 	{
@@ -276,6 +327,18 @@ void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 	}
 }
 
+void CSceneShoot::HandleReturnBtn()
+{
+	if (m_pPerson != NULL)
+	{
+		m_pDragFrame->DM_SetVisible(false, true);
+		m_pWin->DM_DestroyChildWnd(m_pPerson);
+		m_pPerson = NULL;
+	}
+
+	return;
+}
+
 void CSceneShoot::ProduceSDMessage(int message)
 {
 	// 创建消息对象
@@ -289,6 +352,9 @@ void CSceneShoot::ProduceSDMessage(int message)
 
 void CSceneShoot::HandleSDMessage(int lightshade, int contrast, int colortemp, int colordiff, int messagetype)
 {
+	if (m_pPerson == NULL)
+		return;
+
 	std::string outMsg;
 	switch (messagetype)
 	{

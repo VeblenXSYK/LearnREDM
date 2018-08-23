@@ -24,4 +24,7 @@
 		<file name="nextpagebtnskin" path="themes\theme0\image\nextpagebtnskin.png" />
 		<file name="closebtnskin" path="themes\theme0\image\closebtnskin.png" />
 	</png>
+	<gif>
+		<file name="loading" path="themes\theme0\gif\loading.gif" />
+	</gif>
 </resource>

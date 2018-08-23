@@ -52,4 +52,5 @@ using namespace DM;
 #include "DUIScrollBase.h"
 #include "DUIFlowLayout.h"
 #include "DUICheckBox.h"
+#include "DUIGif.h"
 

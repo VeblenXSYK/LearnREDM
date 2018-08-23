@@ -21,6 +21,11 @@ CSceneChoose::CSceneChoose(CShootSystem *pShootSystem)
 
 void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 {
+	//if (CCommModule::GetPSHandle() == NULL)
+	//{
+	//	// DM_MessageBox(L"请确认已打开PS!", MB_OKCANCEL);
+	//}
+
 	switch (messagetype)
 	{
 		case CGuiMessage::SECENECHOOSE_PARSEPSD_ONE:
@@ -32,11 +37,14 @@ void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 			// 获取前景图片
 			GetForegroundLayerImageData();
 			// 改变“场景详情”背景
-			m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
+			// m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
+			m_pShootSystem->ChangeSceneDetailPreviewBg(m_curBgPreviewPath);
 			// 关闭“选择场景”窗口
 			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_CHOOSE]->DM_SetVisible(FALSE);
 			// 显示“场景详情”窗口
 			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
+			// 清除“正在加载”状态
+			m_pShootSystem->ClearLoadingState();
 			break;
 		case CGuiMessage::SECENEDETAIL_PARSEPSD_PREV:
 		case CGuiMessage::SECENEDETAIL_PARSEPSD_NEXT:
@@ -47,19 +55,23 @@ void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 			// 获取前景图片
 			GetForegroundLayerImageData();
 			// 改变“场景详情”背景
-			m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
+			// m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
+			m_pShootSystem->ChangeSceneDetailPreviewBg(m_curBgPreviewPath);
+			m_pShootSystem->ClearLoadingState();
 			break;
 		case CGuiMessage::SECENEDETAIL_PARSEPSD_SHOOT:
+			// 初始化“场景拍摄”
+			m_pShootSystem->m_pSceneShoot->Init();
 			// 更换场景拍摄背景图片
-			m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewBg(m_curBgPreviewPath);
 			// 更换场景拍摄前景图片
-			m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewFg(m_curFgPreviewPath);
 			// 关闭“场景详情”窗口
 			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(FALSE);
 			// 显示“场景拍摄”窗口
 			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
-			// 初始化“场景拍摄”
-			m_pShootSystem->m_pSceneShoot->Init();
 			break;
 		case CGuiMessage::SECENESHOOT_PARSEPSD_PREV:
 		case CGuiMessage::SECENESHOOT_PARSEPSD_NEXT:
@@ -70,9 +82,12 @@ void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 			// 获取前景图片
 			GetForegroundLayerImageData();
 			// 更换场景拍摄背景图片
-			m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewBg(m_curBgPreviewPath);
 			// 更换场景拍摄前景图片
-			m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewFg(m_curFgPreviewPath);
+			m_pShootSystem->ClearLoadingState();
 			break;
 		default:
 			break;
@@ -102,16 +117,73 @@ void CSceneChoose::OpenPsdFile(std::wstring &wpath)
 
 void CSceneChoose::GetBackgroundLayerImageData(void)
 {
-	std::string outBgMsg;
+	/*std::string outBgMsg;
 	PSGetBackgroundLayerImage(CCommModule::GetPSHandle(), 1416, 797, outBgMsg);
-	m_curBgImage = std::move(outBgMsg);
+	m_curBgImage = std::move(outBgMsg);*/
+
+	// 设置导出路径
+	CStringW strCWPath;
+	strCWPath.Format(L"%sExport\\BackPreview.png", CCommModule::GetPicRootDir());
+	std::wstring strWPath = (LPCWSTR)strCWPath;
+
+	// 删除已存在的文件
+	if (_waccess(strWPath.c_str(), 0) == 0)
+	{
+		_wremove(strWPath.c_str());
+	}
+
+	// 导出背景图片
+	std::string outMsg;
+	PSExportBackgroundPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+
+	// 确认背景图片已导出
+	int timeCount = 0;
+	while (_waccess(strWPath.c_str(), 0) != 0)
+	{
+		timeCount++;
+		if (timeCount > 60)
+			break;
+
+		Sleep(50);
+	}
+
+	m_curBgPreviewPath = strWPath;
 }
 
 void CSceneChoose::GetForegroundLayerImageData(void)
 {
-	std::string outFgMsg;
+	/*std::string outFgMsg;
 	PSGetForegroundLayerImage(CCommModule::GetPSHandle(), 1416, 797, outFgMsg);
-	m_curFgImage = std::move(outFgMsg);
+	m_curFgImage = std::move(outFgMsg);*/
+
+	// 设置导出路径
+	CStringW strCWPath;
+	strCWPath.Format(L"%sExport\\ForePreview.png", CCommModule::GetPicRootDir());
+	std::wstring strWPath = (LPCWSTR)strCWPath;
+
+	// 删除已存在的文件
+	if (_waccess(strWPath.c_str(), 0) == 0)
+	{
+		_wremove(strWPath.c_str());
+	}
+
+	// 导出前景图片
+	std::string outMsg;
+	PSExportForegroundPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+
+	// 确认前景图片已导出
+	int timeCount = 0;
+	while (_waccess(strWPath.c_str(), 0) != 0)
+	{
+		timeCount++;
+		if (timeCount > 60)
+			break;
+
+		Sleep(50);
+	}
+
+	m_curFgPreviewPath = strWPath;
+
 }
 
 void CSceneChoose::Init(void)

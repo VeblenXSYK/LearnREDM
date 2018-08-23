@@ -80,6 +80,24 @@ PS_EXPORT_API int PSExportJPGFile(const void* core, std::string& strSaveFileName
 PS_EXPORT_API int PSExportPNGFile(const void* core, std::string& strSaveFileName, std::string& outMsg);
 
 /**
+* @brief 导出当前激活的文档的前景到PNG图片
+* @param [in] core 来自PSInit()返回值
+* @param [in] strSaveFileName 导出PNG文件全路径
+* @param [out] outMsg 函数执行完成后结果
+* @return 状态码 0-成功
+*/
+PS_EXPORT_API int PSExportForegroundPNGFile(const void* core, std::string& strSaveFileName, std::string& outMsg);
+
+/**
+* @brief 导出当前激活的文档的背景到PNG图片
+* @param [in] core 来自PSInit()返回值
+* @param [in] strSaveFileName 导出PNG文件全路径
+* @param [out] outMsg 函数执行完成后结果
+* @return 状态码 0-成功
+*/
+PS_EXPORT_API int PSExportBackgroundPNGFile(const void* core, std::string& strSaveFileName, std::string& outMsg);
+
+/**
 * @brief 导出当前激活的文档到PSD文件
 * @param [in] core 来自PSInit()返回值
 * @param [in] strSaveFileName 导出PSD文件全路径

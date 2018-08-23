@@ -98,8 +98,6 @@ void CPersonPreview::LoadFileImageData()
 	strCWPath.Format(L"%sExport\\test.png", CCommModule::GetPicRootDir());
 	std::wstring strWPath = (LPCWSTR)strCWPath;
 
-	m_pFromImgData = NULL;
-
 	if (_waccess(strWPath.c_str(), 0) == 0)
 	{
 		_wremove(strWPath.c_str());
@@ -107,10 +105,29 @@ void CPersonPreview::LoadFileImageData()
 
 	// 导出png图片
 	std::string outMsg;
-	int ret = PSExportPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+	PSExportPNGFile(CCommModule::GetPSHandle(), CCommModule::GetRawString(CCommModule::WS2S(strWPath)), outMsg);
+	int timeCount = 0;
+	while(_waccess(strWPath.c_str(), 0) != 0)
+	{
+		timeCount++;
+		if (timeCount > 60)
+			break;
 
-	// 加载图片
-	m_pFromImgData.reset(new Gdiplus::Image(strWPath.c_str()));
+		Sleep(50);
+	}
+
+	if (_waccess(strWPath.c_str(), 0) == 0)
+	{
+		// 加载图片
+		const wchar_t *szFilePath = strWPath.c_str();
+		size_t ulSize = DM::GetFileSizeW(szFilePath);
+
+		DWORD dwReadSize = 0;
+		DMBufT<byte>pBuf; pBuf.Allocate(ulSize);
+		DM::GetFileBufW(szFilePath, (void **)&pBuf, ulSize, dwReadSize);
+
+		m_pFromImgData.reset(CreateBitmapFromMemory(pBuf, dwReadSize));
+	}
 }
 
 void CPersonPreview::LoadPsImageData()

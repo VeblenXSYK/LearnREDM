@@ -5,6 +5,7 @@
 #include "ExportSet.h"
 #include "SceneShoot.h"
 #include "SceneChoose.h"
+#include "BackgroundPreview.h"
 #include "ShootSystem.h"
 
 BEGIN_MSG_MAP(CShootSystem)
@@ -51,6 +52,14 @@ BOOL CShootSystem::OnInitDialog(HWND wndFocus, LPARAM lInitParam)
 
 	// 获取标题栏地址
 	m_pWndTitle = FindChildByNameT<DUIWindow>(L"scenechoosetitle");
+
+	// “正在加载”的gif对象
+	m_pLoadingGif = FindChildByNameT<DUIGif>(L"loadinggif");
+
+	// “场景详情”图片窗口
+	m_pImageWin = FindChildByNameT<DUIWindow>(L"scenedetail_imagewin");
+	// “场景详情”背景框
+	m_pBackground = FindChildByNameT<CBackgroundPreview>(L"scenedetail_previewbg");
 
 	// 初始化场景选择
 	m_pSceneChoose->Init();
@@ -144,11 +153,13 @@ DMCode CShootSystem::OnSceneChooseDelPreBtn()
 
 DMCode CShootSystem::OnSceneChooseOneShootBtn()
 {
+	SetLoadingState();
 	return m_pSceneChoose->HandleOneShootChoose();
 }
 
 DMCode CShootSystem::OnSceneChooseAllShootBtn()
 {
+	SetLoadingState();
 	return m_pSceneChoose->HandleAllShootChoose();
 }
 
@@ -212,26 +223,33 @@ DMCode CShootSystem::OnSceneDetailShootBtn()
 
 DMCode CShootSystem::OnSceneDetailPrevpageBtn()
 {
+	SetLoadingState();
 	return m_pSceneChoose->HandlePrevpage(SCENE_DETAIL);
 }
 
 DMCode CShootSystem::OnSceneDetailNextpageBtn()
 {
+	SetLoadingState();
 	return m_pSceneChoose->HandleNextpage(SCENE_DETAIL);
 }
 
 DMCode CShootSystem::OnSceneShootPrevpageBtn()
 {
+	SetLoadingState();
 	return m_pSceneChoose->HandlePrevpage(SCENE_SHOOT);
 }
 
 DMCode CShootSystem::OnSceneShootNextpageBtn()
 {
+	SetLoadingState();
 	return m_pSceneChoose->HandleNextpage(SCENE_SHOOT);
 }
 
 DMCode CShootSystem::OnSceneShootReturnBtn()
 {
+	// 释放“场景拍摄”中的人物控件
+	m_pSceneShoot->HandleReturnBtn();
+
 	// 关闭“场景拍摄”窗口
 	m_vecWndPtr[SCENE_SHOOT]->DM_SetVisible(FALSE);
 	// 显示“场景详情”窗口
@@ -280,11 +298,40 @@ CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 	m_pSceneShoot = new CSceneShoot(this);
 }
 
+void CShootSystem::SetLoadingState()
+{
+	m_pLoadingGif->DM_SetVisible(TRUE, true);
+}
+
+void CShootSystem::ClearLoadingState()
+{
+	m_pLoadingGif->DM_SetVisible(FALSE, true);
+}
+
 void CShootSystem::ChangeSceneDetailBg(std::string &imgBuf)
 {
 	// 更改背景图片
 	DMSmartPtrT<IDMSkin> pSkinBg = g_pDMApp->GetSkin(L"scenedetailstatic1bg");
 	pSkinBg->SetBitmap((LPBYTE)imgBuf.c_str(), imgBuf.size(), L"");
 	FindChildByNameT<DUIStatic>(L"scenedetail_static1bg")->DM_Invalidate();
+}
+
+void CShootSystem::ChangeSceneDetailPreviewBg(std::wstring &filepath)
+{
+	const wchar_t *szFilePath = filepath.c_str();
+	size_t ulSize = DM::GetFileSizeW(szFilePath);
+
+	DWORD dwReadSize = 0;
+	DMBufT<byte>pBuf; pBuf.Allocate(ulSize);
+	DM::GetFileBufW(szFilePath, (void **)&pBuf, ulSize, dwReadSize);
+
+	// 创建预览skin
+	DMSmartPtrT<IDMSkin> pSkin;
+	g_pDMApp->CreateRegObj((void**)&pSkin, L"imglist", DMREG_Skin);
+	pSkin->SetBitmap(pBuf, ulSize, L"png");
+	m_pBackground->m_pSkin = pSkin;
+
+	// 刷新
+	m_pImageWin->DM_Invalidate();
 }
 

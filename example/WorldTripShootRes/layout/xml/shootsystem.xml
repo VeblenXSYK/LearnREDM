@@ -79,8 +79,9 @@
 				<hlayout pos="4,4,-4,-4" childpaddLen="5">
 					<Window text="" skin="scenedetailbg1">
 						<vlayout pos="0,0,-0,-0" childpaddLen="0">
-							<Window skin="">
-								<Static name="scenedetail_static1bg" text="" pos="10,10,-10,-2" skin="scenedetailstatic1bg" />
+							<Window name="scenedetail_imagewin">
+								<Static name="scenedetail_static1bg" text="" pos="10,10,-10,-2" skin="" />
+								<BackgroundPreview name="scenedetail_previewbg" pos="10,10,-10,-2" />
 							</Window>
 							<Window height="40" text="">
 								<Button name="scenedetail_shootbtn" pos="-120,0,@83,@40" text="拍 摄" skin="scenedetailbtn" clrtext="pbgra(ff,ff,ff,ff)" ncmargin="0,0,0,0" font="weight:400,charset:0,underline:0,italic:0,strike:0,size:-14,face:微软雅黑" />
@@ -126,9 +127,10 @@
 			<Window pos="8,50,-8,-40" ncmargin="02,02,02,02" clrnc="pbgra(39,39,39,ff)">
 				<hlayout pos="4,4,-4,-4" childpaddLen="5">
 					<Window name="sceneshoot_win" text="" width="" skin="scenedetailbg1">
-						<Static name="sceneshoot_static1bg" text="" pos="0,0,-0,-0" skin="sceneshootstatic1bg" />
-						<Static name="sceneshoot_staticfg" pos="0,0,-0,-0" skin="sceneshootstatic1fg" alpha="50" />
+						<Static name="sceneshoot_static1bg" text="" pos="0,0,-0,-0" skin="" />
+						<BackgroundPreview name="sceneshoot_previewbg" pos="0,0,-0,-0" />
 						<duidragframe name="ds_dragframe" bvisible="0" pos="0,0,@200,@300" />
+						<ForegroundPreview name="sceneshoot_previewfg" pos="0,0,-0,-0" />
 					</Window>
 					<Window name="sceneshoot_operatewin" text="" skin="" width="300">
 						<Window pos="0,0,-0,%20" skin="scenedetailbg1">
@@ -189,5 +191,6 @@
 				</hlayout>
 			</Window>
 		</Window>
+		<gif name="loadinggif" pos="0,0,-0,-0" badjust="1" gifskin="gif:loading" bvisible="0" />
 	</root>
 </dm>

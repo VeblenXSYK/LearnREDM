@@ -48,9 +48,11 @@ public:
 	CImagePreview				  *m_pSelImage;			// 当前选中的图片控件
 	CShootSystem				  *m_pShootSystem;		// 拍摄系统
 	HDMTREEITEM					  m_hSelItem_tree;		// 保存选取的tree项
-	std::string					  m_curFgImage;			// 当前前景图片
-	std::string					  m_curBgImage;			// 当前背景图片
+	std::string					  m_curFgImage;			// 当前前景图片数据
+	std::string					  m_curBgImage;			// 当前背景图片数据
 	std::wstring				  m_curImagepath;		// 当前场景路径
+	std::wstring				  m_curFgPreviewPath;	// 当前前景预览图片路径
+	std::wstring				  m_curBgPreviewPath;	// 当前背景预览图片路径
 
 private:
 

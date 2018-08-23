@@ -1,6 +1,8 @@
 ﻿#include "StdAfx.h"
 #include "MainWnd.h"
 #include "ImagePreview.h"
+#include "ForegroundPreview.h"
+#include "BackgroundPreview.h"
 #include "PersonPreview.h"
 #include "DUIDragFrame.h"
 #include "CommModule.h"
@@ -16,7 +18,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	theApp.LoadResPack((WPARAM)(L"WorldTripShootRes"),NULL,NULL);			// 路径总是相对于生成目录
 	theApp.InitGlobal();													// 初始化指定的全局skin、style、默认字体
 	theApp.Register(DMRegHelperT<CImagePreview>(), true);					// 注册自定义控件
-	theApp.Register(DMRegHelperT<CPersonPreview>(), true);	
+	theApp.Register(DMRegHelperT<CForegroundPreview>(), true);
+	theApp.Register(DMRegHelperT<CBackgroundPreview>(), true);
+	theApp.Register(DMRegHelperT<CPersonPreview>(), true);
 	theApp.Register(DMRegHelperT<DUIDragFrame>(), true);
 
 	// 加载通用模块资源
