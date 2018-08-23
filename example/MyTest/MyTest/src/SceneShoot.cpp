@@ -217,6 +217,38 @@ void CSceneShoot::HandleImport(void)
 	} while (false);
 }
 
+//void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
+//{
+//	std::string outMsg;
+//
+//	if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_lightshadeslider"))
+//	{
+//		// 设置亮度和对比度
+//		m_lightshadenum = ShowSDValue(m_pLightshadeSlider, m_pLightshadeStatic);
+//		PSSetContrastLayerByName(CCommModule::GetPSHandle(), m_lightshadenum, m_contrastnum, outMsg);
+//	}
+//	else if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_contrastslider"))
+//	{
+//		m_contrastnum = ShowSDValue(m_pContrastSlider, m_pContrastStatic);
+//		PSSetContrastLayerByName(CCommModule::GetPSHandle(), m_lightshadenum, m_contrastnum, outMsg);
+//	}
+//	else if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_colourtempslider"))
+//	{
+//		m_colourtempnum = ShowSDValue(m_pColourtempSlider, m_pColourtempStatic);
+//		PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, m_colourtempnum, m_colourdiffnum, outMsg);
+//	}
+//	else
+//	{
+//		m_colourdiffnum = ShowSDValue(m_pColourdiffSlider, m_pColourdiffStatic);
+//		PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, m_colourtempnum, m_colourdiffnum, outMsg);
+//	}
+//
+//	// 重新从PS加载图片
+//	m_pPerson->LoadImageData();
+//	// 刷新画布
+//	m_pPerson->DM_Invalidate();
+//}
+
 void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 {
 	std::string outMsg;
@@ -225,22 +257,49 @@ void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 	{
 		// 设置亮度和对比度
 		m_lightshadenum = ShowSDValue(m_pLightshadeSlider, m_pLightshadeStatic);
-		PSSetContrastLayerByName(CCommModule::GetPSHandle(), m_lightshadenum, m_contrastnum, outMsg);
+		ProduceSDMessage(CGuiMessage::SECENESHOOT_SETLIGHT_SD);
 	}
 	else if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_contrastslider"))
 	{
 		m_contrastnum = ShowSDValue(m_pContrastSlider, m_pContrastStatic);
-		PSSetContrastLayerByName(CCommModule::GetPSHandle(), m_lightshadenum, m_contrastnum, outMsg);
+		ProduceSDMessage(CGuiMessage::SECENESHOOT_SETCONTRAST_SD);
 	}
 	else if (0 == _wcsicmp(pEvt->m_szNameFrom, L"sceneshoot_colourtempslider"))
 	{
 		m_colourtempnum = ShowSDValue(m_pColourtempSlider, m_pColourtempStatic);
-		PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, m_colourtempnum, m_colourdiffnum, outMsg);
+		ProduceSDMessage(CGuiMessage::SECENESHOOT_SETCOLORTEMP_SD);
 	}
 	else
 	{
 		m_colourdiffnum = ShowSDValue(m_pColourdiffSlider, m_pColourdiffStatic);
-		PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, m_colourtempnum, m_colourdiffnum, outMsg);
+		ProduceSDMessage(CGuiMessage::SECENESHOOT_SETCOLORDIFF_SD);
+	}
+}
+
+void CSceneShoot::ProduceSDMessage(int message)
+{
+	// 创建消息对象
+	CGuiMessage guiMessage;
+	// 设置消息回调函数
+	guiMessage.SetMessageCallback(std::bind(&CSceneShoot::HandleSDMessage, this, m_lightshadenum, m_contrastnum, \
+																			m_colourtempnum, m_colourdiffnum, message));
+	// 加入消息队列进行处理
+	g_MessageTaskQueue.Push(guiMessage);
+}
+
+void CSceneShoot::HandleSDMessage(int lightshade, int contrast, int colortemp, int colordiff, int messagetype)
+{
+	std::string outMsg;
+	switch (messagetype)
+	{
+		case CGuiMessage::SECENESHOOT_SETLIGHT_SD:
+		case CGuiMessage::SECENESHOOT_SETCONTRAST_SD:
+			PSSetContrastLayerByName(CCommModule::GetPSHandle(), lightshade, contrast, outMsg);
+			break;
+		case CGuiMessage::SECENESHOOT_SETCOLORTEMP_SD:
+		case CGuiMessage::SECENESHOOT_SETCOLORDIFF_SD:
+			PSSetColorBalanceLayerByName(CCommModule::GetPSHandle(), 0, colortemp, colordiff, outMsg);
+			break;
 	}
 
 	// 重新从PS加载图片
@@ -248,4 +307,3 @@ void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 	// 刷新画布
 	m_pPerson->DM_Invalidate();
 }
-

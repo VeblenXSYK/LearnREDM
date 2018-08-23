@@ -26,6 +26,10 @@ public:
 	void HandleImport(void);
 	void HandleSDChanged(DMEventArgs *pEvt);
 
+	// 自定义消息处理
+	void ProduceSDMessage(int message);
+	void HandleSDMessage(int, int, int, int, int);
+
 private:
 	DUIWindow				*m_pWin;
 	CShootSystem			*m_pShootSystem;

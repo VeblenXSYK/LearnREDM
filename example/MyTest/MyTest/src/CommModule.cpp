@@ -105,8 +105,11 @@ UINT *CWorkThread::HandleGuiMessage(void *lpParameter)
 {
 	while (1)
 	{
+		DWORD startime = GetTickCount();
+		bool hasmessage = false;
 		while (g_MessageTaskQueue.Size() > 0)
 		{
+			hasmessage = true;
 			LOG_USER("CWorkThread HandleGUIMessage\n");
 
 			// 从消息队列中取出消息
@@ -115,6 +118,10 @@ UINT *CWorkThread::HandleGuiMessage(void *lpParameter)
 			// 回调消息函数
 			gm.m_MessageCallback();
 		}
+		DWORD endtime = GetTickCount();
+
+		if(hasmessage)
+			LOG_USER("Message need %dms\n", endtime - startime);
 
 		Sleep(50);
 	}
