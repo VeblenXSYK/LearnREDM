@@ -10,8 +10,8 @@
 
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
-	//MSG_WM_SIZE(OnSize)
-	MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
+	// MSG_WM_SIZE(OnSize)
+	// MSG_WM_LBUTTONDBLCLK(OnLButtonDbClick)
 	MSG_WM_LBUTTONUP(OnLButtonUP)
 	MSG_WM_SETCURSOR(OnSetCursor)
 	CHAIN_MSG_MAP(DMHWnd)// 将未处理的消息交由DMHWnd处理
@@ -28,6 +28,10 @@ BEGIN_EVENT_MAP(CShootSystem)
 	EVENT_NAME_COMMAND(L"scenedetail_shootbtn", OnSceneDetailShootBtn)
 	EVENT_NAME_COMMAND(L"scenedetail_prevpagebtn", OnSceneDetailPrevpageBtn)
 	EVENT_NAME_COMMAND(L"scenedetail_nextpagebtn", OnSceneDetailNextpageBtn)
+	/*EVENT_NAME_HANDLER(L"sceneshoot_lightshadeslider", DMEventSDChangingArgs::EventID, OnSceneShootLightSDChanged)
+	EVENT_NAME_HANDLER(L"sceneshoot_contrastslider", DMEventSDChangingArgs::EventID, OnSceneShootLightSDChanged)
+	EVENT_NAME_HANDLER(L"sceneshoot_colourtempslider", DMEventSDChangingArgs::EventID, OnSceneShootLightSDChanged)
+	EVENT_NAME_HANDLER(L"sceneshoot_colourdiffslider", DMEventSDChangingArgs::EventID, OnSceneShootLightSDChanged)*/
 	EVENT_NAME_HANDLER(L"sceneshoot_lightshadeslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
 	EVENT_NAME_HANDLER(L"sceneshoot_contrastslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
 	EVENT_NAME_HANDLER(L"sceneshoot_colourtempslider", DMEventSDChangedArgs::EventID, OnSceneShootLightSDChanged)
@@ -154,13 +158,19 @@ DMCode CShootSystem::OnSceneChooseDelPreBtn()
 DMCode CShootSystem::OnSceneChooseOneShootBtn()
 {
 	SetLoadingState();
-	return m_pSceneChoose->HandleOneShootChoose();
+	DMCode ret = m_pSceneChoose->HandleOneShootChoose();
+	if (ret == DM_ECODE_FAIL)
+		ClearLoadingState();
+	return ret;
 }
 
 DMCode CShootSystem::OnSceneChooseAllShootBtn()
 {
 	SetLoadingState();
-	return m_pSceneChoose->HandleAllShootChoose();
+	DMCode ret = m_pSceneChoose->HandleAllShootChoose();
+	if (ret == DM_ECODE_FAIL)
+		ClearLoadingState();
+	return ret;
 }
 
 DMCode CShootSystem::OnForegroundBtn()

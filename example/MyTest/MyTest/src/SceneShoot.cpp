@@ -245,7 +245,7 @@ void CSceneShoot::HandleImport(void)
 					m_pPerson->SetAttribute(L"pos", L"|0,|0,@288,@493");
 					m_pPerson->m_pSkin = NULL;
 					m_pPerson->p_Parent = m_pWin;
-					m_pWin->DM_InsertChild(m_pPerson);
+					m_pWin->DM_InsertChild(m_pPerson, m_pBackground);
 					m_pDragFrame->DM_SetWndToTop();
 				}
 			}
@@ -297,6 +297,7 @@ void CSceneShoot::HandleImport(void)
 
 void CSceneShoot::HandleSDChanged(DMEventArgs *pEvt)
 {
+	// 筛选符合时间间隔的事件
 	DWORD nowtime = GetTickCount();
 	if(nowtime - m_lastSDTime < 100)
 	{

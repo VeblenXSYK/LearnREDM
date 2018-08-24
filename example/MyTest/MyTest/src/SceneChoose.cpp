@@ -21,10 +21,12 @@ CSceneChoose::CSceneChoose(CShootSystem *pShootSystem)
 
 void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 {
-	//if (CCommModule::GetPSHandle() == NULL)
-	//{
-	//	// DM_MessageBox(L"请确认已打开PS!", MB_OKCANCEL);
-	//}
+	if (CCommModule::GetPSHandle() == NULL)
+	{
+		m_pShootSystem->ClearLoadingState();
+		return;
+		// DM_MessageBox(L"请确认已打开PS!", MB_OKCANCEL);
+	}
 
 	switch (messagetype)
 	{
@@ -381,10 +383,12 @@ DMCode CSceneChoose::HandleAllShootChoose()
 			ProduceParsePsdMessage(static_cast<std::wstring>(*m_ItorAllShoot), CGuiMessage::SECENECHOOSE_PARSEPSD_ALL);
 
 			m_shootmode = ALL_CHOOSE;
+
+			return DM_ECODE_OK;
 		}
 	}
 
-	return DM_ECODE_OK;
+	return DM_ECODE_FAIL;
 }
 
 DMCode CSceneChoose::HandlePrevpage(int wndtype)

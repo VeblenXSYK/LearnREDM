@@ -44,6 +44,7 @@ void CCommModule::LoadResource(void)
 	if (PSLogin(m_pPSHandle, serverip, passwd) != 0)
 	{
 		LOG_USER("PSLogin Failed\n");
+		m_pPSHandle = NULL;
 		return;
 	}
 }
@@ -123,6 +124,6 @@ UINT *CWorkThread::HandleGuiMessage(void *lpParameter)
 		if(hasmessage)
 			LOG_USER("Message need %dms\n", endtime - startime);
 
-		Sleep(50);
+		Sleep(20);
 	}
 }

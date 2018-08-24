@@ -90,12 +90,12 @@ DMCode DUIDragFrame::InitDragFrame(DUIWindow* pWnd,CRect& rcLayout)
 			break;
 		}
 
-		//LOG_USER("%d,%d,%d,%d\n", rcDrag.left, rcDrag.top, rcDrag.right, rcDrag.bottom);
+		// LOG_USER("%d,%d,%d,%d\n", rcDrag.left, rcDrag.top, rcDrag.right, rcDrag.bottom);
 		InitDragMeta(rcDrag, false, false);
 
 		// 计算自身frame的区域
 		rcLayout = CalcDragFrameRect(rcDrag);
-		LOG_USER("%d,%d,%d,%d\n", rcLayout.left, rcLayout.top, rcLayout.right, rcLayout.bottom);
+		// LOG_USER("%d,%d,%d,%d\n", rcLayout.left, rcLayout.top, rcLayout.right, rcLayout.bottom);
 		m_pData = pWnd;
 
 		iErr = DM_ECODE_OK;
@@ -374,8 +374,8 @@ void DUIDragFrame::OnLButtonDown(UINT nFlags,CPoint pt)
 		m_StartDragPt = pt;
 		m_TrackDragPt = m_StartDragPt;
 		m_StartDragRc = m_dragMetas[0].m_Rect;
-		LOG_USER("m_StartDragRc: %d,%d,%d,%d\n", m_StartDragRc.left, m_StartDragRc.top, m_StartDragRc.right, m_StartDragRc.bottom);
-		LOG_USER("m_StartDragRt: %d,%d\n", m_StartDragPt.x, m_StartDragPt.y);
+		// LOG_USER("m_StartDragRc: %d,%d,%d,%d\n", m_StartDragRc.left, m_StartDragRc.top, m_StartDragRc.right, m_StartDragRc.bottom);
+		// LOG_USER("m_StartDragRt: %d,%d\n", m_StartDragPt.x, m_StartDragPt.y);
 	}
 }
 
@@ -404,7 +404,7 @@ void DUIDragFrame::OnMouseMove(UINT nFlags,CPoint pt)
 	{
 		m_pCurdragMeta->SetCurSor();
 		m_TrackDragPt = pt;
-		LOG_USER("m_TrackDragPt: %d,%d\n", m_TrackDragPt.x, m_TrackDragPt.y);
+		// LOG_USER("m_TrackDragPt: %d,%d\n", m_TrackDragPt.x, m_TrackDragPt.y);
 		if (m_TrackDragPt != m_StartDragPt)
 		{
 			m_pCurdragMeta->m_DragMetaAction(*m_pCurdragMeta,0);
