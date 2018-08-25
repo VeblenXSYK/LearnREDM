@@ -53,4 +53,8 @@ using namespace DM;
 #include "DUIFlowLayout.h"
 #include "DUICheckBox.h"
 #include "DUIGif.h"
+#include "DUITabCtrl.h"
+#include "ShootSystem.h"
+
+extern CShootSystem *g_pShootSystem;
 

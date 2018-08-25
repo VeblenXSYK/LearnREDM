@@ -4,6 +4,7 @@
 #include "SceneShoot.h"
 #include "ShootSystem.h"
 #include "PreChoose.h"
+#include "MsgBox.h"
 #include "SceneChoose.h"
 
 #include <direct.h>
@@ -21,79 +22,50 @@ CSceneChoose::CSceneChoose(CShootSystem *pShootSystem)
 
 void CSceneChoose::HandleParsePsdMessage(std::wstring wpath, int messagetype)
 {
+	// 检测与PS连接是否成功
 	if (CCommModule::GetPSHandle() == NULL)
 	{
 		m_pShootSystem->ClearLoadingState();
+		DM_MessageBox(L"未打开Photoshop CS6!", MB_OK);
 		return;
-		// DM_MessageBox(L"请确认已打开PS!", MB_OKCANCEL);
 	}
+
+	// 打开Psd文件
+	OpenPsdFile(wpath);
+	// 获取背景图片
+	GetBackgroundLayerImageData();
+	// 获取前景图片
+	GetForegroundLayerImageData();
 
 	switch (messagetype)
 	{
 		case CGuiMessage::SECENECHOOSE_PARSEPSD_ONE:
 		case CGuiMessage::SECENECHOOSE_PARSEPSD_ALL:
-			// 打开Psd文件
-			OpenPsdFile(wpath);
-			// 获取背景图片
-			GetBackgroundLayerImageData();
-			// 获取前景图片
-			GetForegroundLayerImageData();
 			// 改变“场景详情”背景
-			// m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
 			m_pShootSystem->ChangeSceneDetailPreviewBg(m_curBgPreviewPath);
 			// 关闭“选择场景”窗口
 			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_CHOOSE]->DM_SetVisible(FALSE);
 			// 显示“场景详情”窗口
 			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(TRUE, TRUE);
-			// 清除“正在加载”状态
-			m_pShootSystem->ClearLoadingState();
 			break;
 		case CGuiMessage::SECENEDETAIL_PARSEPSD_PREV:
 		case CGuiMessage::SECENEDETAIL_PARSEPSD_NEXT:
-			// 打开Psd文件
-			OpenPsdFile(wpath);
-			// 获取背景图片
-			GetBackgroundLayerImageData();
-			// 获取前景图片
-			GetForegroundLayerImageData();
 			// 改变“场景详情”背景
-			// m_pShootSystem->ChangeSceneDetailBg(m_curBgImage);
 			m_pShootSystem->ChangeSceneDetailPreviewBg(m_curBgPreviewPath);
-			m_pShootSystem->ClearLoadingState();
-			break;
-		case CGuiMessage::SECENEDETAIL_PARSEPSD_SHOOT:
-			// 初始化“场景拍摄”
-			m_pShootSystem->m_pSceneShoot->Init();
-			// 更换场景拍摄背景图片
-			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
-			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewBg(m_curBgPreviewPath);
-			// 更换场景拍摄前景图片
-			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
-			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewFg(m_curFgPreviewPath);
-			// 关闭“场景详情”窗口
-			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(FALSE);
-			// 显示“场景拍摄”窗口
-			m_pShootSystem->m_vecWndPtr[CShootSystem::SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
 			break;
 		case CGuiMessage::SECENESHOOT_PARSEPSD_PREV:
 		case CGuiMessage::SECENESHOOT_PARSEPSD_NEXT:
-			// 打开Psd文件
-			OpenPsdFile(wpath);
-			// 获取背景图片
-			GetBackgroundLayerImageData();
-			// 获取前景图片
-			GetForegroundLayerImageData();
-			// 更换场景拍摄背景图片
-			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootBg(m_curBgImage);
+			// 改变场景拍摄背景图片
 			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewBg(m_curBgPreviewPath);
-			// 更换场景拍摄前景图片
-			// m_pShootSystem->m_pSceneShoot->ChangeSceneShootFg(m_curFgImage);
+			// 改变场景拍摄前景图片
 			m_pShootSystem->m_pSceneShoot->ChangeSceneShootPreviewFg(m_curFgPreviewPath);
-			m_pShootSystem->ClearLoadingState();
 			break;
 		default:
 			break;
 	}
+
+	// 清除加载动画
+	m_pShootSystem->ClearLoadingState();
 }
 
 void CSceneChoose::ProduceParsePsdMessage(std::wstring &path, int message)
@@ -107,6 +79,9 @@ void CSceneChoose::ProduceParsePsdMessage(std::wstring &path, int message)
 	guiMessage.SetMessageCallback(std::bind(&CSceneChoose::HandleParsePsdMessage, this, path, message));
 	// 加入消息队列进行处理
 	g_MessageTaskQueue.Push(guiMessage);
+
+	// 显示加载动画
+	g_pShootSystem->SetLoadingState();
 }
 
 void CSceneChoose::OpenPsdFile(std::wstring &wpath)

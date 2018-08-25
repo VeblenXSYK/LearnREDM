@@ -8,5 +8,6 @@
 		<file name="shootsystem" path="layout\xml\shootsystem.xml" />
 		<file name="prechoose" path="layout\xml\prechoose.xml" />
 		<file name="exportset" path="layout\xml\exportset.xml" />
+		<file name="msgbox" path="layout\xml\msgbox.xml" />
 	</layout>
 </resource>

@@ -8,6 +8,8 @@
 #include "BackgroundPreview.h"
 #include "ShootSystem.h"
 
+CShootSystem *g_pShootSystem = NULL;
+
 BEGIN_MSG_MAP(CShootSystem)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	// MSG_WM_SIZE(OnSize)
@@ -157,20 +159,12 @@ DMCode CShootSystem::OnSceneChooseDelPreBtn()
 
 DMCode CShootSystem::OnSceneChooseOneShootBtn()
 {
-	SetLoadingState();
-	DMCode ret = m_pSceneChoose->HandleOneShootChoose();
-	if (ret == DM_ECODE_FAIL)
-		ClearLoadingState();
-	return ret;
+	return m_pSceneChoose->HandleOneShootChoose();
 }
 
 DMCode CShootSystem::OnSceneChooseAllShootBtn()
 {
-	SetLoadingState();
-	DMCode ret = m_pSceneChoose->HandleAllShootChoose();
-	if (ret == DM_ECODE_FAIL)
-		ClearLoadingState();
-	return ret;
+	return m_pSceneChoose->HandleAllShootChoose();
 }
 
 DMCode CShootSystem::OnForegroundBtn()
@@ -226,32 +220,39 @@ DMCode CShootSystem::OnSceneDetailReturnBtn()
 
 DMCode CShootSystem::OnSceneDetailShootBtn()
 {
-	m_pSceneChoose->ProduceParsePsdMessage(m_pSceneChoose->m_curImagepath, CGuiMessage::SECENEDETAIL_PARSEPSD_SHOOT);
+	// 初始化“场景拍摄”
+	m_pSceneShoot->Init();
+
+	// 更换场景拍摄背景图片
+	m_pSceneShoot->ChangeSceneShootPreviewBg(m_pSceneChoose->m_curBgPreviewPath);
+	// 更换场景拍摄前景图片
+	m_pSceneShoot->ChangeSceneShootPreviewFg(m_pSceneChoose->m_curFgPreviewPath);
+
+	// 关闭“场景详情”窗口
+	m_vecWndPtr[CShootSystem::SCENE_DETAIL]->DM_SetVisible(FALSE);
+	// 显示“场景拍摄”窗口
+	m_vecWndPtr[CShootSystem::SCENE_SHOOT]->DM_SetVisible(TRUE, TRUE);
 
 	return DM_ECODE_OK;
 }
 
 DMCode CShootSystem::OnSceneDetailPrevpageBtn()
 {
-	SetLoadingState();
 	return m_pSceneChoose->HandlePrevpage(SCENE_DETAIL);
 }
 
 DMCode CShootSystem::OnSceneDetailNextpageBtn()
 {
-	SetLoadingState();
 	return m_pSceneChoose->HandleNextpage(SCENE_DETAIL);
 }
 
 DMCode CShootSystem::OnSceneShootPrevpageBtn()
 {
-	SetLoadingState();
 	return m_pSceneChoose->HandlePrevpage(SCENE_SHOOT);
 }
 
 DMCode CShootSystem::OnSceneShootNextpageBtn()
 {
-	SetLoadingState();
 	return m_pSceneChoose->HandleNextpage(SCENE_SHOOT);
 }
 
@@ -303,6 +304,7 @@ DMCode CShootSystem::OnCloseBtn()
 CShootSystem::CShootSystem(CMainWnd *pMainWnd)
 {
 	m_pMainWnd = pMainWnd;
+	g_pShootSystem = this;
 	m_strawcolor = false;
 	m_pSceneChoose = new CSceneChoose(this);
 	m_pSceneShoot = new CSceneShoot(this);
