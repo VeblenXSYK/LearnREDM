@@ -74,6 +74,7 @@ DUIDragFrame::DUIDragFrame()
 	m_dragMetaCount = 10;
 	m_pData = NULL;
 	m_bDown = false;
+	m_bPressShiftKey = false;
 	m_pDUIXmlInfo->m_bFocusable = true;
 
 	LinkDragMetaEvent();
@@ -249,7 +250,7 @@ void DUIDragFrame::OnDragLeftTop(DragMeta& meta, int iAction)
 	if (meta.m_bEnable)
 	{
 		CRect rect;
-		InternalHandleDrag(rect, (int*)&rect.left, (int*)&rect.top);
+		InternalHandleDrag(rect, (int*)&rect.left, (int*)&rect.top, DragLeftTop);
 	}
 }
 
@@ -412,6 +413,24 @@ void DUIDragFrame::OnMouseMove(UINT nFlags,CPoint pt)
 	}
 }
 
+void DUIDragFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// LOG_USER("OnKeyDown: %x\n", GetAsyncKeyState(VK_LSHIFT));
+	if (VK_SHIFT == nChar)
+	{
+		m_bPressShiftKey = true;
+	}
+}
+
+void DUIDragFrame::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// LOG_USER("OnKeyUp: %x\n", GetAsyncKeyState(VK_LSHIFT));
+	if (VK_SHIFT == nChar)
+	{
+		m_bPressShiftKey = false;
+	}
+}
+
 DUIWND DUIDragFrame::HitTestPoint(CPoint pt,bool bFindNoMsg)
 {
 	//if (!m_bDown)
@@ -435,12 +454,35 @@ DUIWND DUIDragFrame::HitTestPoint(CPoint pt,bool bFindNoMsg)
 	return m_hDUIWnd;
 }
 
-void DUIDragFrame::InternalHandleDrag(CRect& rect, int* pHori, int* pVert)
+void DUIDragFrame::InternalHandleDrag(CRect& rect, int* pHori, int* pVert, DragType dType)
 {
 	do
 	{
 		int x = (pHori ? (m_TrackDragPt.x - m_StartDragPt.x) : 0);
 		int y = (pVert ? (m_TrackDragPt.y - m_StartDragPt.y) : 0);
+
+		//if (m_bPressShiftKey)
+		//{
+		//	// 根据拉伸方向确定x, y的范围
+		//	switch (dType)
+		//	{
+		//		case DragLeftTop:
+		//			if ((x > 0 && y < 0) || (x < 0 && y > 0))
+		//				x = y = 0;
+		//			break;
+		//		case DragRightTop:
+		//			if (x >= 0 || y <= 0)
+		//				x = y = 0;
+		//			break;
+		//	}
+
+		//	if (x != 0 && y != 0)
+		//	{
+		//		int v = min(abs(x), abs(y));
+		//		x = x < 0 ? -v : v;
+		//		y = y < 0 ? -v : v;
+		//	}
+		//}
 
 		rect = m_StartDragRc; // rect总是表示当前大小
 		if (pHori)

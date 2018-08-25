@@ -57,6 +57,19 @@ class DUIDragFrame : public DUIWindow
 public:
 	DUIDragFrame();
 
+	enum DragType
+	{
+		DragDefault,
+		DragLeft,
+		DragLeftTop,
+		DragTop,
+		DragRightTop,
+		DragRight,
+		DragRightBottom,
+		DragBottom,
+		DragLeftBottom
+	};
+
 	DMCode InitDragFrame(DUIWindow* pData,CRect& rcLayout);
 
 private:
@@ -84,14 +97,18 @@ public:
 		MSG_WM_LBUTTONUP(OnLButtonUp)
 		MSG_WM_RBUTTONDOWN(OnRButtonDown)
 		MSG_WM_MOUSEMOVE(OnMouseMove)
+		MSG_WM_KEYDOWN(OnKeyDown)
+		MSG_WM_KEYUP(OnKeyUp)
 	DM_END_MSG_MAP()
 	void DM_OnPaint(IDMCanvas* pCanvas);
 	void OnLButtonDown(UINT nFlags,CPoint pt);
 	void OnLButtonUp(UINT nFlags,CPoint pt);
 	void OnRButtonDown(UINT nFlags, CPoint pt);
 	void OnMouseMove(UINT nFlags,CPoint pt);
+	void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	DUIWND HitTestPoint(CPoint pt,bool bFindNoMsg);///< 过滤消息分发
-	void InternalHandleDrag(CRect& rect, int* pHori, int* pVert);
+	void InternalHandleDrag(CRect& rect, int* pHori, int* pVert, DragType dType = DragDefault);
 
 public:	
 	DUIButton								 *p_PosButton;		// 测试button
@@ -104,6 +121,8 @@ public:
 	CPoint									 m_StartDragPt;
 	CPoint									 m_TrackDragPt;
 	CRect									 m_StartDragRc;		///< 开始拖动时元素区域大小
+
+	bool									 m_bPressShiftKey;	// 是否按下Shift键
 
 	// 辅助
 	DUIWindow								 *m_pData;			// CPersonPreview
